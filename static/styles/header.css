@@ -1,0 +1,66 @@
+.header-container{
+    background-color: #dfdfdf;
+    height: 70px;
+    color: rgb(75, 75, 75);
+}
+
+@media all and (max-width:580px) { /* changing css in case width gets below 1000px */
+
+    .header-login-button-container:hover{
+        visibility: hidden;
+        background-color: transparent;
+    } 
+     
+    .header-login-button-container{
+        visibility: hidden;
+        background-color: transparent;
+    }
+    
+   
+    .menu-button-container{
+        display: none;
+    }
+}
+
+
+.title-div h2{
+    height: 40px;
+}
+
+
+.menu-button-container{
+    background-color: #dfdfdf;
+}
+
+
+.menu-button{
+    width: 100px;
+    height: 70px;
+    background-color: #dfdfdf;
+    
+}
+
+.menu-button:hover{
+    width: 100px;
+    height: 70px;
+    background-color: #c5c5c5;
+    cursor: pointer;
+}
+
+.header-login-button-container{
+    height: 70px;
+    width: 120px; 
+    background-color: #dfdfdf; 
+}
+
+.header-login-button-container:hover{
+    height: 70px;
+    background-color: #c5c5c5;
+    cursor: pointer;
+}
+
+.header-login-button-container span{
+    font-size: 18pt;
+    font-weight: 500;
+    
+}
