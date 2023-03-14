@@ -10,6 +10,15 @@
     <title>KanDo</title>
     <link rel="stylesheet" href="{% static 'styles/header.css' %}" />
     <link rel="stylesheet" href="{% static 'styles/side-menu.css' %}" />
+    <link rel="stylesheet" href="{% static 'styles/dashboard.css' %}" />
+
+      <!-- jQuery to use with drag and drop-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- jQuery UI to use with drag and drop-->
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+
     <script>
       /* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
       function openNav() {
@@ -22,6 +31,12 @@
         document.getElementById("mySidenav").style.width = "0";
         document.getElementById("main").style.marginLeft = "0";
       }
+
+      $( function() {
+        $( ".draggable" ).draggable({ axis: "x" , containment: "parent"}).sortable().css("text-align", "left");;
+        $( ".draggable"  ).disableSelection();
+      } );
+
     </script>
     
   </head>
@@ -29,10 +44,7 @@
   <body>
     <div id="mySidenav" class="sidenav">
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-      <a href="#">About</a>
-      <a href="#">Services</a>
-      <a href="#">Clients</a>
-      <a href="#">Contact</a>
+      <a href="#">Criar quadro</a>
     </div>
 
 

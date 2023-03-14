@@ -1,0 +1,31 @@
+/* .dashboard-container{
+    
+} */
+
+.list-board-container{
+    margin: 15px;
+    width: 300px;
+    height: 75vh;
+    background-color: skyblue;
+    padding: 0;
+    border-radius: 5px;
+    
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.3);;
+}
+
+.title-list-board-container{
+    width: inherit;
+    height: 10%;
+    background-color: yellowgreen;
+    border-radius: inherit;
+    /* cursor: pointer; */
+}
+
+.title-list-board-container:active{
+    /* cursor:grabbing; */
+}
+
+.title-list-board-container span{
+    font-size: 18pt;
+    font-weight: 600;
+}
