@@ -32,8 +32,20 @@
         document.getElementById("main").style.marginLeft = "0";
       }
 
-      $( function() {
-        $( ".draggable" ).draggable({ axis: "x" , containment: "parent"}).sortable().css("text-align", "left");;
+      /**
+       * source https://api.jqueryui.com/draggable
+       * */
+      
+      $( function() { // creates the effect of drag and drop to fixed positions
+        $( ".sortable" ).sortable({ revert: true });
+        $( ".draggable" ).draggable({ 
+          axis: "x" , 
+          containment: "parent", 
+          connectToSortable: ".sortable", 
+          helper: "orignial", 
+          revert: "invalid",
+      
+        }).sortable().css("text-align", "left"); //,  grid: [0, 0 ]
         $( ".draggable"  ).disableSelection();
       } );
 

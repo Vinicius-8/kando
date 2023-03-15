@@ -18,14 +18,25 @@
     height: 10%;
     background-color: yellowgreen;
     border-radius: inherit;
+    
     /* cursor: pointer; */
 }
 
-.title-list-board-container:active{
-    /* cursor:grabbing; */
+.title-list-board-container:hover{
+    cursor: grab;
 }
 
 .title-list-board-container span{
     font-size: 18pt;
     font-weight: 600;
+}
+
+
+
+.item-board{
+    width: 83%;
+    height: 40px;
+    border-radius: 4px;
+    background-color: rgb(116, 158, 106);
+    margin-top: 10px;
 }

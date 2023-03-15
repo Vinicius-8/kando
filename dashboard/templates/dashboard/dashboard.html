@@ -3,28 +3,41 @@
 {% block content %}
 
 <div>
-    <div class="dashboard-container row align-items-center justify-content-start">
+    <div class="dashboard-container row align-items-center justify-content-start sortable">
 
-        <div class="list-board-container 
-        draggable
-
-        ">
+        <div class="list-board-container draggable ">
             <div class="title-list-board-container d-flex align-items-center justify-content-center">
                 <span>To Do</span>
             </div>
+            
+            <div class="sortable list-items-board row align-items-center justify-content-center draggable">
+                <div class="item-board">Vinicius</div>
+                <div class="item-board">Vieira</div>
+            </div>
         </div>
 
-        <div class="list-board-container  draggable ui-state-default">
+        <div class="list-board-container draggable ">
             <div class="title-list-board-container d-flex align-items-center justify-content-center">
                 <span>Doing</span>
             </div>
+            
+            <div class="sortable list-items-board row align-items-center justify-content-center draggable">
+                <div class="item-board">Vinicius</div>
+                <div class="item-board">Vieira</div>
+            </div>
         </div>
 
-        <div class="list-board-container  draggable ui-state-default">
+        <div class="list-board-container draggable">
             <div class="title-list-board-container d-flex align-items-center justify-content-center">
                 <span>Done</span>
             </div>
+            
+            <div class="sortable list-items-board row align-items-center justify-content-center draggable">
+                <div class="item-board">Vinicius</div>
+                <div class="item-board">Vieira</div>
+            </div>
         </div>
+        
 
 
     </div>
