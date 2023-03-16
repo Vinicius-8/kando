@@ -33,21 +33,32 @@
       }
 
       /**
-       * source https://api.jqueryui.com/draggable
+       * source https://api.jqueryui.com/draggable              http://jsfiddle.net/wfG3L/5/ [[[read this]]]
        * */
       
       $( function() { // creates the effect of drag and drop to fixed positions
         $( ".sortable" ).sortable({ revert: true });
+        
         $( ".draggable" ).draggable({ 
           axis: "x" , 
           containment: "parent", 
-          connectToSortable: ".sortable", 
+          // connectToSortable: ".sortable", 
+          // connectToSortable: ".item-board", 
           helper: "orignial", 
           revert: "invalid",
-      
+          delay: 300,
+
         }).sortable().css("text-align", "left"); //,  grid: [0, 0 ]
         $( ".draggable"  ).disableSelection();
       } );
+
+      $( "#item-list-1" ).sortable({ revert: true });
+
+      $( ".item-board" ).draggable({
+        helper: "clone",
+        connectToSortable: "#item-list-1",
+        connectToSortable: "#item-list-2",
+      })
 
     </script>
     
