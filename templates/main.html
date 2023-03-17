@@ -37,14 +37,28 @@
        * */
       
       $( function() { // creates the effect of drag and drop to fixed positions
+        $(".item-board").draggable({      
+          
+            helper: 'original',
+            revert: "invalid"
+        });
+
         $( ".sortable" ).sortable({ revert: true });
-        
+      
+        $('.droppable').droppable({ // allows items to be dropped in
+          tolerance: "intersect",
+          accept:".item-board",
+          drop: function(event, ui) {
+            $(".droppable").append($(ui.draggable));
+          }
+        })
+
         $( ".draggable" ).draggable({ 
           axis: "x" , 
           containment: "parent", 
           // connectToSortable: ".sortable", 
           // connectToSortable: ".item-board", 
-          helper: "orignial", 
+          helper: "original", 
           revert: "invalid",
           delay: 300,
 
@@ -52,13 +66,7 @@
         $( ".draggable"  ).disableSelection();
       } );
 
-      $( "#item-list-1" ).sortable({ revert: true });
-
-      $( ".item-board" ).draggable({
-        helper: "clone",
-        connectToSortable: "#item-list-1",
-        connectToSortable: "#item-list-2",
-      })
+      
 
     </script>
     
