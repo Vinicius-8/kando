@@ -46,24 +46,28 @@
         $( ".sortable" ).sortable({ revert: true });
       
         $('.droppable').droppable({ // allows items to be dropped in
-          tolerance: "intersect",
+          tolerance: "fit",
           accept:".item-board",
-          drop: function(event, ui) {
-            $(".droppable").append($(ui.draggable));
+          drop:function(event, ui) {
+              ui.draggable.detach().appendTo($(this));
           }
+          
+          // drop: function(event, ui) {
+          //   $(".droppable").append($(ui.draggable));
+          // }
         })
 
-        $( ".draggable" ).draggable({ 
-          axis: "x" , 
-          containment: "parent", 
-          // connectToSortable: ".sortable", 
-          // connectToSortable: ".item-board", 
-          helper: "original", 
-          revert: "invalid",
-          delay: 300,
+        // $( ".draggable" ).draggable({ 
+        //   axis: "x" , 
+        //   containment: "parent", 
+        //   // connectToSortable: ".sortable", 
+        //   // connectToSortable: ".item-board", 
+        //   helper: "original", 
+        //   revert: "invalid",
+        //   delay: 300,
 
-        }).sortable().css("text-align", "left"); //,  grid: [0, 0 ]
-        $( ".draggable"  ).disableSelection();
+        // }).sortable().css("text-align", "left"); //,  grid: [0, 0 ]
+        // $( ".draggable"  ).disableSelection();
       } );
 
       
