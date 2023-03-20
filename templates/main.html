@@ -39,12 +39,11 @@
       $( function() { // creates the effect of drag and drop to fixed positions
         $(".item-board").draggable({      
           
-            // helper: 'original',
-            // revert: "invalid"
           appendTo: "body",
           cursor: "grabbing",
-          helper: 'clone',
-          revert: "invalid"
+          helper: "clone",        
+          revert: "invalid",
+          // connectToSortable: ".list-items-board"     
         });
 
         $( ".sortable" ).sortable({ revert: true });
@@ -52,10 +51,12 @@
         $('.droppable').droppable({ // allows items to be dropped in
           tolerance: "intersect",
           accept:".item-board",
-          drop:function(event, ui) {
-              //ui.draggable.detach().appendTo($(this));
+
+          drop: function(event, ui) {
               $(this).append($(ui.draggable));
+                      
           }
+          
         })
       } );
 

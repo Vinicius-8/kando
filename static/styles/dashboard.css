@@ -13,6 +13,25 @@
     padding-bottom: 15px;
     border-radius: 5px;    
     box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.3);;
+    overflow: hidden;
+}
+
+.list-board-plus{    
+    margin: 15px;
+    width: 300px;
+    /* height: 75vh; */
+    height: auto;
+    background-color: yellowgreen;
+    padding: 0;
+    border-radius: 5px;    
+    box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.3);;
+
+    font-size: 18pt;
+    font-weight: 600;
+}
+
+.list-board-plus:hover{
+    cursor: pointer;
 }
 
 
@@ -43,6 +62,7 @@
     background-color: rgb(116, 158, 106);
     margin-top: 10px;
     margin-left: 10px;
+    overflow: hidden;
 }
 
 .item-board:hover{
