@@ -39,35 +39,24 @@
       $( function() { // creates the effect of drag and drop to fixed positions
         $(".item-board").draggable({      
           
-            helper: 'original',
-            revert: "invalid"
+            // helper: 'original',
+            // revert: "invalid"
+          appendTo: "body",
+          cursor: "grabbing",
+          helper: 'clone',
+          revert: "invalid"
         });
 
         $( ".sortable" ).sortable({ revert: true });
       
         $('.droppable').droppable({ // allows items to be dropped in
-          tolerance: "fit",
+          tolerance: "intersect",
           accept:".item-board",
           drop:function(event, ui) {
-              ui.draggable.detach().appendTo($(this));
+              //ui.draggable.detach().appendTo($(this));
+              $(this).append($(ui.draggable));
           }
-          
-          // drop: function(event, ui) {
-          //   $(".droppable").append($(ui.draggable));
-          // }
         })
-
-        // $( ".draggable" ).draggable({ 
-        //   axis: "x" , 
-        //   containment: "parent", 
-        //   // connectToSortable: ".sortable", 
-        //   // connectToSortable: ".item-board", 
-        //   helper: "original", 
-        //   revert: "invalid",
-        //   delay: 300,
-
-        // }).sortable().css("text-align", "left"); //,  grid: [0, 0 ]
-        // $( ".draggable"  ).disableSelection();
       } );
 
       

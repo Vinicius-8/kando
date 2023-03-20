@@ -7,17 +7,14 @@
     width: 300px;
     /* height: 75vh; */
     height: auto;
-    min-height: 50px;
+    min-height: 100px;
     background-color: skyblue;
     padding: 0;
-    border-radius: 5px;
-    
+    padding-bottom: 15px;
+    border-radius: 5px;    
     box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.3);;
 }
 
-.fill-div{
-    height: 15px;
-}
 
 .title-list-board-container{
     width: inherit;
@@ -40,9 +37,15 @@
 
 
 .item-board{
-    width: 83%;
+    width: 280px;
     height: 40px;
     border-radius: 4px;
     background-color: rgb(116, 158, 106);
     margin-top: 10px;
+    margin-left: 10px;
+}
+
+.item-board:hover{
+    background-color: rgba(255, 255, 0, 0.404);
+
 }
