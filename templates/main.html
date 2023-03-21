@@ -41,21 +41,27 @@
           
           appendTo: "body",
           cursor: "grabbing",
-          helper: "clone",        
+          // helper: "clone",        
+          helper: "original",        
           revert: "invalid",
-          // connectToSortable: ".list-items-board"     
+          connectToSortable: ".list-items-board"     
         });
 
-        $( ".sortable" ).sortable({ revert: true });
+        $( ".sortable" ).sortable({ 
+          revert: true,
+          // connectWith: ".list-items-board",  
+          helper: "original"
+          // grid: [ 20, 10 ] 
+        });
       
         $('.droppable').droppable({ // allows items to be dropped in
           tolerance: "intersect",
           accept:".item-board",
 
-          drop: function(event, ui) {
-              $(this).append($(ui.draggable));
-                      
-          }
+          // drop: function(event, ui) {
+          //     // $(this).append($(ui.draggable));
+          //     $(this).append(ui.draggable);
+          // }
           
         })
       } );
