@@ -13,7 +13,7 @@
     padding-bottom: 15px;
     border-radius: 5px;    
     box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.3);;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 .list-board-plus{    
@@ -62,7 +62,7 @@
     background-color: rgb(116, 158, 106);
     margin-top: 10px;
     margin-left: 10px;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 /* .item-board:hover{
