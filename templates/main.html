@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="{% static 'styles/side-menu.css' %}" />
     <link rel="stylesheet" href="{% static 'styles/dashboard.css' %}" />
 
+    <script src="https://unpkg.com/interactjs/dist/interact.min.js"></script> <!-- interact.js -->
+
       <!-- jQuery to use with drag and drop-->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -32,44 +34,56 @@
         document.getElementById("main").style.marginLeft = "0";
       }
 
-      /**
-       * source https://api.jqueryui.com/draggable              http://jsfiddle.net/wfG3L/5/ [[[read this]]]
-       * */
       
-      $( function() { // creates the effect of drag and drop to fixed positions
-        $(".item-board").draggable({      
-          
-          appendTo: "body",
-          cursor: "grabbing",
-          helper: "clone",        
-          // helper: "original",        
-          revert: "invalid",
-          connectToSortable: ".list-items-board"     
-        });
+      //* interact js*/
+        // target elements with the "draggable" class
+        interact('.draggable')
+          .draggable({
+            // enable inertial throwing
+            inertia: true,
+            // keep the element within the area of it's parent
+            modifiers: [
+              interact.modifiers.restrictRect({
+                restriction: 'parent',
+                endOnly: true
+              })
+            ],
+            // enable autoScroll
+            autoScroll: true,
 
-        $( ".sortable" ).sortable({ 
-          revert: true,
-          // connectWith: ".list-board-container",  
-          change: function(event, ui) {
-                // $(ui.placeholder).css('visibility', 'visible');
-                $(ui.placeholder).css('visibility', 'invisible');
-          }
-        });
-      
-        $('.droppable').droppable({ // allows items to be dropped in
-          tolerance: "intersect",
-          accept:".item-board",
+            listeners: {
+              // call this function on every dragmove event
+              move: dragMoveListener,
 
-          drop: function(event, ui) {
-              // $(this).append($(ui.draggable));
-              $(this).append(ui.draggable);
-          }
-          
-        })
-      } );
+              // call this function on every dragend event
+              end (event) {
+                var textEl = event.target.querySelector('p')
 
-      
+                textEl && (textEl.textContent =
+                  'moved a distance of ' +
+                  (Math.sqrt(Math.pow(event.pageX - event.x0, 2) +
+                            Math.pow(event.pageY - event.y0, 2) | 0))
+                    .toFixed(2) + 'px')
+              }
+            }
+          })
 
+        function dragMoveListener (event) {
+          var target = event.target
+          // keep the dragged position in the data-x/data-y attributes
+          var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
+          var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
+
+          // translate the element
+          target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
+
+          // update the posiion attributes
+          target.setAttribute('data-x', x)
+          target.setAttribute('data-y', y)
+        }
+
+        // this function is used later in the resizing and gesture demos
+        window.dragMoveListener = dragMoveListener
     </script>
     
   </head>
