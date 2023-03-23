@@ -1,6 +1,7 @@
-/* .dashboard-container{
-    
-} */
+.dashboard-container{
+    color: wheat;
+    padding-left: 30px;
+}   
 
 .list-board-container{ 
     margin: 15px;
@@ -65,33 +66,8 @@
     /* overflow: hidden; */
 }
 
-/* .item-board:hover{
-    background-color: rgba(255, 255, 0, 0.404);
-
-} */
-
+.hidden-placeholder{
+    visibility: hidden;
+}
 
 
-
-
-
-/* interact JS */
-#drag-1, #drag-2 {
-    width: 98%;
-    min-height: 10px;
-    background-color: #29e;
-    color: white;
-    border-radius: 0.75em;
-    padding: 4%;
-    touch-action: none;
-    user-select: none; /*- prevent user select text -*/
-    transform: translate(0px, 0px);
-    margin: 5px;
-  }
-
-
-  .items-list{
-    width: 250px;
-    min-height: 80px;
-    background-color: rgb(101, 102, 102);
-  }

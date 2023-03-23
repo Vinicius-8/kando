@@ -12,15 +12,6 @@
     <link rel="stylesheet" href="{% static 'styles/side-menu.css' %}" />
     <link rel="stylesheet" href="{% static 'styles/dashboard.css' %}" />
 
-    <script src="https://unpkg.com/interactjs/dist/interact.min.js"></script> <!-- interact.js -->
-
-      <!-- jQuery to use with drag and drop-->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <!-- jQuery UI to use with drag and drop-->
-    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-
     <script>
       /* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
       function openNav() {
@@ -34,56 +25,9 @@
         document.getElementById("main").style.marginLeft = "0";
       }
 
+
+
       
-      //* interact js*/
-        // target elements with the "draggable" class
-        interact('.draggable')
-          .draggable({
-            // enable inertial throwing
-            inertia: true,
-            // keep the element within the area of it's parent
-            modifiers: [
-              interact.modifiers.restrictRect({
-                restriction: 'parent',
-                endOnly: true
-              })
-            ],
-            // enable autoScroll
-            autoScroll: true,
-
-            listeners: {
-              // call this function on every dragmove event
-              move: dragMoveListener,
-
-              // call this function on every dragend event
-              end (event) {
-                var textEl = event.target.querySelector('p')
-
-                textEl && (textEl.textContent =
-                  'moved a distance of ' +
-                  (Math.sqrt(Math.pow(event.pageX - event.x0, 2) +
-                            Math.pow(event.pageY - event.y0, 2) | 0))
-                    .toFixed(2) + 'px')
-              }
-            }
-          })
-
-        function dragMoveListener (event) {
-          var target = event.target
-          // keep the dragged position in the data-x/data-y attributes
-          var x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx
-          var y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy
-
-          // translate the element
-          target.style.transform = 'translate(' + x + 'px, ' + y + 'px)'
-
-          // update the posiion attributes
-          target.setAttribute('data-x', x)
-          target.setAttribute('data-y', y)
-        }
-
-        // this function is used later in the resizing and gesture demos
-        window.dragMoveListener = dragMoveListener
     </script>
     
   </head>
@@ -102,7 +46,50 @@
 
       {% endblock %}
     </div>
+   
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD" crossorigin="anonymous"></script>
+    
+    <!-- SortableJS for sorting elements as boards and items -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script> 
+    
+    <!-- references
+    https://github.com/SortableJS/Sortable
+    https://sortablejs.github.io/Sortable/ 
+    -->
+
+
+    <script>
+    
+    var listBoardContainers = document.getElementsByClassName('dashboard-container');  // getting the list container
+
+
+    // defining all boards lodaded as draggable 
+    for (let index = 0; index <= listBoardContainers.length-1; index++) { 
+
+        Sortable.create(listBoardContainers[index], { 
+          animation: 150,
+          group: 'shared-boards',
+          ghostClass: 'hidden-placeholder'
+        });
+        
+      }
+    
+
+      
+      var listItemsBoard = document.getElementsByClassName('list-items-board');    // getting the items list container
+      
+    // defining all items lodaded as draggable 
+      for (let index = 0; index <= listItemsBoard.length-1; index++) {
+        Sortable.create(listItemsBoard[index], { 
+          animation: 150,
+          group: 'shared-items',
+          ghostClass: 'hidden-placeholder'
+        });
+        
+      }
+      
+      
+    </script>
   </body>
 </html>
