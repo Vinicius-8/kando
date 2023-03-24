@@ -61,30 +61,27 @@
 
     <script>
     
-    var listBoardContainers = document.getElementsByClassName('dashboard-container');  // getting the list container
-
-
-    // defining all boards lodaded as draggable 
-    for (let index = 0; index <= listBoardContainers.length-1; index++) { 
-
-        Sortable.create(listBoardContainers[index], { 
-          animation: 150,
-          group: 'shared-boards',
-          ghostClass: 'hidden-placeholder'
-        });
-        
-      }
-    
-
+      // var listBoardContainer = document.getElementsByClassName('dashboard-container');  // getting THE list container
+      var listBoardContainer = document.getElementsByClassName('dashboard-container')[0].firstElementChild;  // getting THE list container
+      console.log(listBoardContainer)
+      const sortContainer = Sortable.create(listBoardContainer, { 
+            animation: 150,
+            group: 'shared-boards',
+            ghostClass: 'hidden-placeholder',
+            filter: ".list-board-plus",
+                                   
+          });
+          
       
       var listItemsBoard = document.getElementsByClassName('list-items-board');    // getting the items list container
       
     // defining all items lodaded as draggable 
-      for (let index = 0; index <= listItemsBoard.length-1; index++) {
+      for (let index = 0; index < listItemsBoard.length; index++) {
         Sortable.create(listItemsBoard[index], { 
           animation: 150,
           group: 'shared-items',
-          ghostClass: 'hidden-placeholder'
+          ghostClass: 'hidden-placeholder',
+          
         });
         
       }

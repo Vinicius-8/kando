@@ -6,6 +6,10 @@ body{
     background-color: #dfdfdf;
     height: 70px;
     color: rgb(75, 75, 75);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 101%;
 }
 
 @media all and (max-width:580px) { /* changing css in case width gets below 1000px */
