@@ -1,4 +1,5 @@
 .dashboard-container{
+    width: max-content;
     margin-top: 80px;
     color: wheat;
     padding-left: 30px;
@@ -11,8 +12,7 @@
 
 #parent-container{
     position: relative;
-    /* background-color: beige; */
-    width: auto;
+    max-height: 100px;
 }
 
 

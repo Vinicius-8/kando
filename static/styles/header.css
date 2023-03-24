@@ -5,8 +5,9 @@ body{
 .header-container{
     background-color: #dfdfdf;
     height: 70px;
-    color: rgb(75, 75, 75);
+    color: rgb(0, 0, 0);
     position: fixed;
+    z-index: 999;
     top: 0;
     left: 0;
     width: 101%;
