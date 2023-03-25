@@ -7,10 +7,14 @@ body{
     height: 70px;
     color: rgb(0, 0, 0);
     position: fixed;
-    z-index: 999;
+    z-index: 1;
     top: 0;
     left: 0;
     width: 101%;
+}
+
+#sidenav{
+    z-index: 2;
 }
 
 @media all and (max-width:580px) { /* changing css in case width gets below 1000px */
