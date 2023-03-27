@@ -11,26 +11,36 @@
     <link rel="stylesheet" href="{% static 'styles/header.css' %}" />
     <link rel="stylesheet" href="{% static 'styles/side-menu.css' %}" />
     <link rel="stylesheet" href="{% static 'styles/dashboard.css' %}" />
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js" ></script>
     <script>
+      
+      
       var inputModalContent = ""
+      var context = "";
+      const NONE = 0;
+      const BOARD = 1;
+      const ITEM = 2;
+      const LIST = 3;
+
+      var creating = NONE;
 
       /* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
       function openNav() {
         document.getElementById("sidenav").style.width = "250px";
-        document.getElementById("main").style.marginLeft = "250px";
+        // document.getElementById("main").style.marginLeft = "250px";
       }
-
+    
       /* Set the width of the side navigation to 0 and the left margin of the page content to 0 */
       function closeNav() {
         document.getElementById("sidenav").style.width = "0";
-        document.getElementById("main").style.marginLeft = "0";
+        // document.getElementById("main").style.marginLeft = "0";
       }
+    
 
       /**
        * Opens modal
        * */
-      function openModal(message, smallMessage){                          
+      function openModal(){                          
         $('#modal').modal('show');       
       }
 
@@ -41,42 +51,113 @@
         $('#modal').modal('hide');      
       }
 
-
-      /* configuring the modal for board creation */
-      function createNewBoard(){
-        document.getElementById("exampleModalLabel").textContent="Board Name"             
-        document.getElementById("modalSmallMessage").textContent="Name the new board"  
-        openModal();        
-      }
-
-      function saveNewBoard(){
-        saveModalContent()
-        const newBoard = inputModalContent // using the content from the modal
-      }
-
-      /* reseting the modal and saving the new board */
+      
+      /* GENERIC - reseting the modal and saving the new board */
       function saveModalContent(){
         closeModal();
         document.getElementById("exampleModalLabel").textContent=""
         document.getElementById("modalSmallMessage").textContent=""
         inputModalContent = document.getElementById("modalInput").value;
-        console.log(inputModalContent)
         document.getElementById("modalInput").value="";
+
+        switch (creating) {
+          case BOARD:
+            saveNewBoard();
+            break;
+
+          case ITEM:
+            saveNewItem();
+            break;
+
+          case LIST:
+          
+            break;
+        
+          default:
+            break;
+        }
+
+        context = "";
+        creating = NONE;
       }
 
-      function createNewList(){
-        document.getElementById("exampleModalLabel").textContent="List Name"             
-        document.getElementById("modalSmallMessage").textContent="Name the new List"
-        openModal();
 
+      /* Board */
+      function openNewBoarCreation(){
+        document.getElementById("exampleModalLabel").textContent="Board Name"             
+        document.getElementById("modalSmallMessage").textContent="Name the new board"  
+        openModal();   
+        creating = BOARD;     
       }
 
-      function saveNewList(){
-        saveModalContent()
-        const newList = inputModalContent // using the content from the modal
+
+      /* Board */ 
+      function saveNewBoard(){
+        const newBoardName = inputModalContent // using the content from the modal
+        if(""=== newBoardName){
+          alert("Can't be empty");
+          return          
+        }
+
+        /* get container parent */
+        const boardParent = document.getElementById("parent-container");
+
+
+        /* Clone board element */
+        const element = document.getElementsByClassName('list-board-container')[0];
+        const BoardClone = element.cloneNode(true);
+
+        /* define element title */ 
+        BoardClone.getElementsByClassName("title-list-board-container")[0].querySelector("span").textContent = newBoardName
+        
+        /* define as a sortable */ 
+        // Sortable.create(BoardClone.getElementsByClassName("list-items-board")[0], { 
+        Sortable.create(BoardClone.getElementsByClassName("list-items-board-child")[0], { 
+          animation: 150,
+          group: 'shared-items',
+          ghostClass: 'hidden-placeholder',          
+        });
+
+
+        BoardClone.style.display = 'block';
+        boardParent.append(BoardClone);
+
       }
 
       
+      /* item */
+      function openNewItemCreation(item){
+        document.getElementById("exampleModalLabel").textContent="Item Name"             
+        document.getElementById("modalSmallMessage").textContent="Name the new Item"
+        openModal();
+        
+        context = item;
+        creating = ITEM;
+      }
+
+      /* item */
+      function saveNewItem(){        
+        const newBoardItemName = inputModalContent // using the content from the modal
+        
+        if(""=== newBoardItemName){
+          alert("Can't be empty");
+          return          
+        }
+
+        /* get item parent */
+        const itemParent = context.parentElement.getElementsByClassName("list-items-board-child")[0]         
+
+        /* Clone item element */      
+        const element = document.getElementsByClassName('simple-item')[0];
+        const itemClone = element.cloneNode(true);
+
+        /* define element title */ 
+        itemClone.textContent = newBoardItemName;
+
+        itemParent.append(itemClone);
+      
+      }
+    
     </script>
     
   </head>
@@ -84,10 +165,10 @@
   <body>
 
     <!-- Side bar menu -->
-    <div id="sidenav" class="sidenav">
+    <!-- <div id="sidenav" class="sidenav">
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
       <a href="#" onclick="createNewList()">Criar quadro</a>
-    </div>
+    </div> -->
 
     <!-- Modal -->
     <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -105,7 +186,7 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal()">Close</button>
-            <button type="button" class="btn btn-primary" onclick="saveNewBoard()">Save changes</button>
+            <button type="button" class="btn btn-primary" onclick="saveModalContent()">Save changes</button>
           </div>
         </div>
       </div>
@@ -132,7 +213,7 @@
     -->
 
 
-    <script>
+    <script >
     
       // var listBoardContainer = document.getElementsByClassName('dashboard-container');  // getting THE list container
       var listBoardContainer = document.getElementsByClassName('dashboard-container')[0].firstElementChild;  // getting THE list container
@@ -140,12 +221,12 @@
             animation: 150,
             group: 'shared-boards',
             ghostClass: 'hidden-placeholder',
-            filter: ".list-board-plus",
-                                   
+            filter: ".list-board-plus",                                   
           });
           
       
-      var listItemsBoard = document.getElementsByClassName('list-items-board');    // getting the items list container
+      // var listItemsBoard = document.getElementsByClassName('list-items-board');    // getting the items list container
+      var listItemsBoard = document.getElementsByClassName("list-items-board-child");    // getting the items list container - for plus
       
     // defining all items lodaded as draggable 
       for (let index = 0; index < listItemsBoard.length; index++) {
@@ -153,6 +234,7 @@
           animation: 150,
           group: 'shared-items',
           ghostClass: 'hidden-placeholder',
+          filter: ".plus-item-board",
           
         });
         

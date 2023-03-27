@@ -30,6 +30,11 @@
     /* overflow: hidden; */
 }
 
+.list-items-board{
+    min-height: 50px;
+   
+}
+
 .list-board-plus{
     position: absolute;    
     right: -315px;
@@ -69,6 +74,9 @@
     font-weight: 600;
 }
 
+.simple-item{
+    padding-left: 10px;
+}
 
 
 .item-board{
@@ -78,6 +86,8 @@
     background-color: rgb(116, 158, 106);
     margin-top: 10px;
     margin-left: 10px;
+    align-self: center;
+    font-size: 15pt;
     /* overflow: hidden; */
 }
 
@@ -85,4 +95,14 @@
     visibility: hidden;
 }
 
+
+.plus-item-board{
+    height: 35px;
+    position: relative;
+    bottom: -20;
+    font-size: 17pt;
+    font-weight: 700;
+    cursor: pointer;
+    background-color: rgb(58, 80, 53);
+}
 

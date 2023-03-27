@@ -6,23 +6,53 @@
     <div class="dashboard-container  align-items-start justify-content-start">
        
         <div id="parent-container" class="row align-items-start justify-content-start" >
-
-            <div class="list-board-container">
-                <div class="title-list-board-container d-flex align-items-center justify-content-center">
-                    <span>AAA</span>
+            
+            <!-- board model -->
+            <div class="list-board-container" style="display: none"> 
+                <div class="title-list-board-container d-flex align-items-center justify-content-center" >
+                    <span></span>
                 </div>
                 
                 <div class="list-items-board flex-row align-items-center justify-content-center">
-                    <div class="item-board">Carlos</div>
-                    <div class="item-board">Vieira</div>
-                    <div class="item-board">Antonmo</div>
-                    <div class="item-board">fiSH</div>
+                    <div class="list-items-board-child">
+                    </div>
+                    <div class="item-board text-center plus-item-board" onclick="openNewItemCreation(this)">+</div>
+                </div>
+            </div>
+
+            <div class="list-board-container">
+                <div class="title-list-board-container d-flex align-items-center justify-content-center">
+                    <span>To Do</span>
+                </div>
+                
+                <div class="list-items-board flex-row align-items-center justify-content-center">
+                    <div class="list-items-board-child">
+                        <div class="item-board simple-item d-flex align-items-center">Build</div>
+                        
+                    </div>
+
+                    <div class="item-board text-center plus-item-board" onclick="openNewItemCreation(this)">+</div>
+                </div>
+            </div>
+
+            <div class="list-board-container">
+                <div class="title-list-board-container d-flex align-items-center justify-content-center">
+                    <span>Done</span>
+                </div>
+                
+                <div class="list-items-board flex-row align-items-center justify-content-center">
+                    <div class="list-items-board-child">
+                        <div class="item-board simple-item d-flex align-items-center">Testing</div>
+                        
+                    </div>
+
+                    <div class="item-board text-center plus-item-board" onclick="openNewItemCreation(this)">+</div>
                 </div>
             </div>
  
                       
             
-            <div class="list-board-plus" onclick="createNewBoard()">
+            <div class="list-board-plus" onclick="openNewBoarCreation()">
                 <div class="d-flex align-items-center justify-content-center">
                     <span>+</span>
                 </div>
