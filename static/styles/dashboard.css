@@ -82,13 +82,15 @@
 .item-board{
     width: 280px;
     height: 40px;
+    max-height: 40px;
     border-radius: 4px;
     background-color: rgb(116, 158, 106);
     margin-top: 10px;
     margin-left: 10px;
     align-self: center;
     font-size: 15pt;
-    /* overflow: hidden; */
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .hidden-placeholder{
