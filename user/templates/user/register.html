@@ -36,7 +36,7 @@
 								{% if form.email.required %}required{% endif %}
 								
 								id="email" class="form-control form-control-sm" />							
-							<label class="form-label" >Your Email</label>
+							<label class="form-label">Your Email</label>
 						</div>
 
 						<div class="form-outline mb-3">
@@ -45,16 +45,16 @@
 								name="{{ form.password1.name }}"
 								class="form-control form-control-sm" />
 
-							<label class="form-label" for="form3Example4cg">Password</label>
+							<label class="form-label" >Password</label>
 						</div>
 
 						<div class="form-outline mb-3">
 							<input 
-								type="{{ form.password1.field.widget.input_type }}"
-								name="{{ form.password1.name }}"
+								type="{{ form.password2.field.widget.input_type }}"
+								name="{{ form.password2.name }}"
 								
 								class="form-control form-control-sm" />
-							<label class="form-label" for="form3Example4cdg">Repeat your password</label>
+							<label class="form-label" >Repeat your password</label>
 						</div>
 
 
