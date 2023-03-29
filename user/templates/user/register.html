@@ -10,43 +10,56 @@
 					<div class="card-body p-5">
 					<h2 class="text-uppercase text-center register-title mb-4">Create an account</h2>
 
-					<form>
+					<form method="POST">
 						{% csrf_token %}
 						
 						<div class="form-outline mb-3">
-						<input type="{{ form.name.field.widget.input_type }}" 
-							name="{{ form.name.name }}"
-							id="{{ form.name.id_for_label }}"
-							value="{{ form.name.value }}"
-							class="form-control form-control-sm"
-							{% if form.name.required %}required{% endif %} />
-						<label class="form-label" for="{{ form.name.id_for_label }}">Your Name</label>
+							<input 
+								type="{{ form.name.field.widget.input_type }}" 
+								name="{{ form.name.name }}"
+								{% if form.name.value %} value="{{ form.name.value }}" {% endif %}							
+								{% if form.name.required %} required {% endif %} 
+								
+								class="form-control form-control-sm"
+								/>
+
+								
+
+							<label class="form-label" for="{{ form.name.id_for_label }}">Your Name</label>
 						</div>
 
 						<div class="form-outline mb-3">
-						<input type="{{ form.email.field.widget.input_type }}"
-							name="{{ form.email.name }}"
-							id="{{ form.email.id_for_label }}"
-							value="{{ form.email.value }}"
-							{% if form.email.required %}required{% endif %}
-							
-							id="email" class="form-control form-control-sm" />
-						<label class="form-label" >Your Email</label>
+							<input 
+								type="{{ form.email.field.widget.input_type }}"
+								name="{{ form.email.name }}"
+								{% if form.email.value %} value="{{ form.email.value }}" {% endif %}
+								{% if form.email.required %}required{% endif %}
+								
+								id="email" class="form-control form-control-sm" />							
+							<label class="form-label" >Your Email</label>
 						</div>
 
 						<div class="form-outline mb-3">
-						<input type="password" id="form3Example4cg" class="form-control form-control-sm" />
-						<label class="form-label" for="form3Example4cg">Password</label>
+							<input 
+								type="{{ form.password1.field.widget.input_type }}"
+								name="{{ form.password1.name }}"
+								class="form-control form-control-sm" />
+
+							<label class="form-label" for="form3Example4cg">Password</label>
 						</div>
 
 						<div class="form-outline mb-3">
-						<input type="password" id="form3Example4cdg" class="form-control form-control-sm" />
-						<label class="form-label" for="form3Example4cdg">Repeat your password</label>
+							<input 
+								type="{{ form.password1.field.widget.input_type }}"
+								name="{{ form.password1.name }}"
+								
+								class="form-control form-control-sm" />
+							<label class="form-label" for="form3Example4cdg">Repeat your password</label>
 						</div>
 
 
 						<div class="d-flex justify-content-center">
-						<button type="button"
+						<button type="submit" 
 							class="btn btn-success btn-block btn-md gradient-custom-4 text-body">Register</button>
 						</div>
 
