@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth import login
+from django.contrib.auth import login as auth_login, authenticate, logout as auth_logout
+from django.contrib.auth.decorators import login_required
 
 from .forms import UserForm
 from .models import User
 
-def register(request):
+def register(request): # ! todo: change the password to encrypted
     form = UserForm()
 
     if request.method == 'POST':
@@ -17,7 +18,7 @@ def register(request):
             user = form.save(commit=False)
             user.username = user.username.lower()
             user.save()
-            login(request, user)
+            auth_login(request, user)
 
             return redirect('user-dashboard')
         else:
@@ -40,7 +41,51 @@ def register(request):
     return render(request, "user/register.html", context)
 
 
-def user_dashboard(request):
+'''
+    Gets the user's email and password and verifies for existence in db,
+    if so, creates a session in the browser 
 
+    parameter: request
+
+    return: None
+'''
+
+def login(request):
+    page = 'login'
+
+    if request.user.is_authenticated:
+        return redirect('user-dashboard')
+
+    if request.method == 'POST':
+        email = request.POST.get('email').lower().strip()
+        password = request.POST.get('password').strip()
+
+
+        try: 
+            user = User.objects.get(email=email)
+        except:
+            messages.warning(request, 'User does not exist')
+
+        user = authenticate(request, email=email, password=password)
+
+        if user is not None:
+            auth_login(request, user) # add session to browser
+            return redirect('user-dashboard')
+        else:
+            messages.warning(request, 'Username or password don\'t match')
+
+    context = {'page':page}
+    return render(request, 'user/login.html', context)
+
+
+
+@login_required(login_url='register')
+def user_dashboard(request):
     context = {}
     return render(request, 'user/user_dashboard.html', context)
+
+
+@login_required(login_url='login')
+def logout(request):
+    auth_logout(request)
+    return redirect('dashboard')
