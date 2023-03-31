@@ -1,0 +1,18 @@
+.toast-box{
+    position: fixed;    
+    width: 300px;
+    height: 60px;
+    z-index: 999;
+    top: 100px;
+    left: 5px;
+    border-radius: 4px;
+    display: none;
+}
+
+.toast-green{
+    background-color: rgba(173, 255, 47, .5);
+}
+
+.toast-red{
+    
+}

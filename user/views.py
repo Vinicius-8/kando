@@ -21,11 +21,15 @@ def register(request):
             return redirect('user-dashboard')
         else:
             print('fail to register')
-            for field, errors in form.errors.items():
-                    for error in errors:
-                        print(f"Erro no campo {field}: {error}")
+            # messages.add_message(request, 50, 'A sersssious error occurred.')
+            # for field, errors in form.errors.items():
+            #         for error in errors:
+            #             print(f"Erro no campo {field}: {error}")
             # messages.error(request, 'Fail! too easy password')
-
+            messages.set_level(request, messages.WARNING)
+            messages.success(request, 'Your profile was updated.') # ignored
+            messages.warning(request, 'Your account is about to expire.') # recorded
+     
     context = {'form': form}
     return render(request, "user/register.html", context)
 
