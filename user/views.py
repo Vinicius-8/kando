@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+
+
 from .forms import UserForm
 from .models import User
 # Create your views here.
@@ -20,15 +22,20 @@ def register(request):
 
             return redirect('user-dashboard')
         else:
-            print('fail to register')
-            # messages.add_message(request, 50, 'A sersssious error occurred.')
-            # for field, errors in form.errors.items():
-            #         for error in errors:
-            #             print(f"Erro no campo {field}: {error}")
-            # messages.error(request, 'Fail! too easy password')
-            messages.set_level(request, messages.WARNING)
-            messages.success(request, 'Your profile was updated.') # ignored
-            messages.warning(request, 'Your account is about to expire.') # recorded
+            # success toast
+            #messages.set_level(request, messages.SUCCESS)
+            #messages.success(request, 'Your profile was updated.')
+
+            # fail toast
+            messages.set_level(request, messages.WARNING)    
+            # messages.warning(request, 'Your account is about to expire.')
+
+            for field, errors in form.errors.items():
+                    for error in errors:
+                        #print(f"Error {field}: {error}")
+                        messages.warning(request, f'Error: {error} (\'{field}\' )')
+
+             
      
     context = {'form': form}
     return render(request, "user/register.html", context)

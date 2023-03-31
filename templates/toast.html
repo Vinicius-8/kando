@@ -1,6 +1,39 @@
+<!-- 
 <div id="toast"
-class="toast-box toast-green" 
+class="toast-box toast-green animate__animated animate__fadeInLeft"
 
 >
+{% for message in messages %} 
+toastr.{{ message.tags }}("{{ message }}");
+{% endfor %} 
+<span>Ronaldo</span>
+</div> -->
 
-</div>
+
+
+{% if messages %}
+    <div class="toast-container d-flex flex-column" id="hideMe">
+        {% for message in messages %}
+            <div id="toast"
+                class="
+                toast-box 
+                animate__animated animate__fadeInLeft
+                {{message.tags}}-toast
+                "
+
+                >
+                <span>{{message}}</span>
+            </div>
+        {% endfor %}
+        
+        <script>
+            setTimeout(function(){
+                var elements = document.getElementsByClassName('toast-box');
+                for (let index = 0; index < elements.length; index++) {
+                    elements[index].classList.add("animate__fadeOutLeft");                    
+                }
+
+            }, 5000);
+        </script>
+    </div>
+{% endif %}

@@ -1,18 +1,59 @@
-.toast-box{
-    position: fixed;    
-    width: 300px;
-    height: 60px;
-    z-index: 999;
+.toast-container {
+    position: fixed; 
     top: 100px;
-    left: 5px;
-    border-radius: 4px;
-    display: none;
+    left: 15px;   
+    /* background-color: aqua; */
 }
 
-.toast-green{
+.toast-box{
+    position: relative;
+    width: 350px;
+    height: auto;
+    z-index: 999;
+   
+    border-radius: 4px;
+    display: block;
+
+
+    color: white;
+    font-size: 15pt;
+    margin-top: 10px;
+    padding: 2px 2px 3px 10px;
+}
+
+.success-toast{
     background-color: rgba(173, 255, 47, .5);
 }
 
-.toast-red{
-    
+.warning-toast{
+    background-color: rgba(255, 0, 0, 0.5);
 }
+
+
+/* #hideMe {
+    -moz-animation: cssAnimation 0s ease-in 5s forwards;
+    /* Firefox */
+    -webkit-animation: cssAnimation 0s ease-in 5s forwards;
+    /* Safari and Chrome */
+    -o-animation: cssAnimation 0s ease-in 5s forwards;
+    /* Opera */
+    animation: cssAnimation 0s ease-in 5s forwards;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+}
+
+
+@keyframes cssAnimation {
+    to {
+        width:0;
+        height:0;
+        overflow:hidden;
+    }
+}
+@-webkit-keyframes cssAnimation {
+    to {
+        width:0;
+        height:0;
+        visibility:hidden;
+    }
+} */

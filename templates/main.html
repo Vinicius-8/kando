@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="{% static 'styles/dashboard.css' %}" />
     <link rel="stylesheet" href="{% static 'styles/register.css' %}" />
     <link rel="stylesheet" href="{% static 'styles/toast.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js" ></script>
     <script>
       
@@ -199,11 +201,12 @@
 
     <div class="container-fluid">
       {% include 'header.html' %}
-      {% include 'toast.html' %}
+    
 
       {% block content %}
 
       {% endblock %}
+      {% include 'toast.html' %}
     </div>
    
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
