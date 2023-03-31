@@ -1,10 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-
+from django.contrib.auth import login
 
 from .forms import UserForm
 from .models import User
-# Create your views here.
 
 def register(request):
     form = UserForm()
@@ -18,15 +17,15 @@ def register(request):
             user = form.save(commit=False)
             user.username = user.username.lower()
             user.save()
-            # login(request, user)
+            login(request, user)
 
             return redirect('user-dashboard')
         else:
-            # success toast
-            #messages.set_level(request, messages.SUCCESS)
-            #messages.success(request, 'Your profile was updated.')
+            """
+            calling the toast to inform the reason the user was not created
+            
+            """
 
-            # fail toast
             messages.set_level(request, messages.WARNING)    
             # messages.warning(request, 'Your account is about to expire.')
 

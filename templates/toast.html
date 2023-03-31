@@ -1,15 +1,3 @@
-<!-- 
-<div id="toast"
-class="toast-box toast-green animate__animated animate__fadeInLeft"
-
->
-{% for message in messages %} 
-toastr.{{ message.tags }}("{{ message }}");
-{% endfor %} 
-<span>Ronaldo</span>
-</div> -->
-
-
 
 {% if messages %}
     <div class="toast-container d-flex flex-column" id="hideMe">
@@ -27,12 +15,13 @@ toastr.{{ message.tags }}("{{ message }}");
         {% endfor %}
         
         <script>
+            var elements = document.getElementsByClassName('toast-box');
             setTimeout(function(){
-                var elements = document.getElementsByClassName('toast-box');
-                for (let index = 0; index < elements.length; index++) {
-                    elements[index].classList.add("animate__fadeOutLeft");                    
-                }
+                
+                for (let index = 0; index < elements.length; index++ ) {
+                        elements[index].classList.add("animate__fadeOutLeft");                                       
 
+                }
             }, 5000);
         </script>
     </div>
