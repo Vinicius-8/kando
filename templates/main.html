@@ -24,7 +24,7 @@
       const NONE = 0;
       const BOARD = 1;
       const ITEM = 2;
-      const LIST = 3;
+      const PROJECT = 3;
 
       var creating = NONE;
 
@@ -73,8 +73,8 @@
             saveNewItem();
             break;
 
-          case LIST:
-          
+          case PROJECT:
+            saveNewProject();
             break;
         
           default:
@@ -149,7 +149,7 @@
         }
 
         /* get item parent */
-        const itemParent = context.parentElement.getElementsByClassName("list-items-board-child")[0]         
+        const projectParent = context.parentElement.getElementsByClassName("list-items-board-child")[0]         
 
         /* Clone item element */      
         const element = document.getElementsByClassName('simple-item')[0];
@@ -157,11 +157,50 @@
 
         /* define element title */ 
         itemClone.textContent = newBoardItemName;
-
+        itemClone.style.display="block";
         itemParent.append(itemClone);
       
       }
       
+
+      /* project */
+      function openNewProjectCreation(){
+        document.getElementById("exampleModalLabel").textContent="List Name"             
+        document.getElementById("modalSmallMessage").textContent="Name the new list"
+        openModal();
+
+        creating = PROJECT;
+      }
+
+      /* project  */
+      function saveNewProject(){        
+        const newProjectName = inputModalContent // using the content from the modal
+        
+        if(""=== newProjectName){
+          alert("Can't be empty");
+          return          
+        }
+
+        /* get item parent */
+        const projectParent = document.getElementsByClassName("dashboard-container")[0]         
+
+        /* Clone item element */     
+        const modelElement = document.getElementById('parent-container-model');
+        const elementClone = modelElement.cloneNode(true);
+
+
+        /* removes old element */
+        document.getElementById('parent-container').remove()
+
+        elementClone.style.display = 'block';
+        elementClone.id = 'parent-container'
+
+        /* define element title */ 
+        //elementClone.textContent = newProjectName;                
+        projectParent.append(elementClone);
+        closeNav();
+      }
+
     </script>
     
   </head>
@@ -171,8 +210,20 @@
     <!-- Side bar menu -->
     
     <div id="sidenav" class="sidenav" >
+      {% if request.user.is_authenticated %}
+        <a>
+          <span style="
+        color: grey; 
+        font-size: 15pt;
+        border-bottom: solid 1px grey;
+        margin-top: -15px;
+        "
+        >User: {{user.name}}</span> 
+      </a>
+        
+      {% endif %}
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-      <a href="#" onclick="createNewList()">Criar quadro</a>
+      <a href="#" onclick="openNewProjectCreation()">Create Project</a>
     </div>
 
     <!-- Modal -->

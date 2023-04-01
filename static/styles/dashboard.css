@@ -1,6 +1,6 @@
 .dashboard-container{
     width: max-content;
-    margin-top: 80px;
+    margin-top: 10px;
     color: wheat;
     padding-left: 30px;
     position: relative;
@@ -40,6 +40,7 @@
     right: -315px;
     margin: 15px;
     width: 300px;
+    min-width: 250px;
     /* height: 75vh; */
     height: auto;
     background-color: yellowgreen;
@@ -108,3 +109,14 @@
     background-color: rgb(58, 80, 53);
 }
 
+.container-title-user-dashboard{
+
+    margin-top: 75px;
+    border-bottom: 1px solid white;
+    padding-left: 100px;
+}
+
+.span-title-user-dashboard{
+    color: whitesmoke;
+    font-size: 20pt;
+}

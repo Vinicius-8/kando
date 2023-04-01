@@ -1,5 +1,96 @@
 {% extends 'main.html' %}
 
 {% block content %}
-<h1 style="color: whitesmoke; margin-top: 300px;">Registrado {{user.name}}</h1>
+<div>
+    <div class="container-title-user-dashboard">
+        <span class="span-title-user-dashboard">Example project</span>
+    </div>
+    <div class="dashboard-container  align-items-start justify-content-start">
+        
+       
+        <div id="parent-container" class="row align-items-start justify-content-start" >
+            
+            <!-- board model -->
+            <div class="list-board-container" style="display: none"> 
+                <div class="title-list-board-container d-flex align-items-center justify-content-center" >
+                    <span></span>
+                </div>
+                
+                <div class="list-items-board flex-row align-items-center justify-content-center">
+                    <div class="list-items-board-child">
+                    </div>
+                    <div class="item-board text-center plus-item-board" onclick="openNewItemCreation(this)">+</div>
+                </div>
+            </div>
+
+            <div class="list-board-container">
+                <div class="title-list-board-container d-flex align-items-center justify-content-center">
+                    <span>To Do</span>
+                </div>
+                
+                <div class="list-items-board flex-row align-items-center justify-content-center">
+                    <div class="list-items-board-child">
+                        <div class="item-board simple-item d-flex align-items-center">Build</div>
+                        <div class="item-board simple-item d-flex align-items-center">Build format it copy delete burn paste</div>
+                        
+                    </div>
+
+                    <div class="item-board text-center plus-item-board" onclick="openNewItemCreation(this)">+</div>
+                </div>
+            </div>
+
+            <div class="list-board-container">
+                <div class="title-list-board-container d-flex align-items-center justify-content-center">
+                    <span>Done</span>
+                </div>
+                
+                <div class="list-items-board flex-row align-items-center justify-content-center">
+                    <div class="list-items-board-child">
+                        <div class="item-board simple-item d-flex align-items-center">Testing</div>
+                        
+                    </div>
+
+                    <div class="item-board text-center plus-item-board" onclick="openNewItemCreation(this)">+</div>
+                </div>
+            </div>
+ 
+                      
+            
+            <div class="list-board-plus" onclick="openNewBoarCreation()">
+                <div class="d-flex align-items-center justify-content-center">
+                    <span>+</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- parent model -->
+        <div id="parent-container-model" class="row align-items-start justify-content-start" style="display: none">
+            
+            <!-- board model -->
+            <div class="list-board-container" style="display: none"> 
+                <div class="title-list-board-container d-flex align-items-center justify-content-center" >
+                    <span></span>
+                </div>
+                
+                <div class="list-items-board flex-row align-items-center justify-content-center">
+                    <div class="list-items-board-child">
+                        <!-- item model (without the d-flex)-->
+                        <div class="item-board simple-item  align-items-center" style="display: none; "></div>
+                    </div>
+                    <div class="item-board text-center plus-item-board" onclick="openNewItemCreation(this)">+</div>
+                </div>
+            </div>             
+            
+            <div class="list-board-plus" onclick="openNewBoarCreation()">
+                <div class="d-flex align-items-center justify-content-center">
+                    <span>+</span>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+    
+</div>
 {% endblock content %}
