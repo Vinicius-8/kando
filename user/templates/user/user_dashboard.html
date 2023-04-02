@@ -6,8 +6,7 @@
         <span class="span-title-user-dashboard">Example project</span>
     </div>
     <div class="dashboard-container  align-items-start justify-content-start">
-        
-       
+               
         <div id="parent-container" class="row align-items-start justify-content-start" >
             
             <!-- board model -->
@@ -69,19 +68,23 @@
             
             <!-- board model -->
             <div class="list-board-container" style="display: none"> 
+                <!-- title Model -->
                 <div class="title-list-board-container d-flex align-items-center justify-content-center" >
                     <span></span>
                 </div>
                 
                 <div class="list-items-board flex-row align-items-center justify-content-center">
+                    
                     <div class="list-items-board-child">
                         <!-- item model (without the d-flex)-->
                         <div class="item-board simple-item  align-items-center" style="display: none; "></div>
                     </div>
+                    <!-- plus button for new item -->
                     <div class="item-board text-center plus-item-board" onclick="openNewItemCreation(this)">+</div>
                 </div>
             </div>             
             
+            <!-- plus button for new board -->
             <div class="list-board-plus" onclick="openNewBoarCreation()">
                 <div class="d-flex align-items-center justify-content-center">
                     <span>+</span>

@@ -112,11 +112,11 @@
         const BoardClone = element.cloneNode(true);
 
         /* define element title */ 
-        BoardClone.getElementsByClassName("title-list-board-container")[0].querySelector("span").textContent = newBoardName
+        BoardClone.getElementsByClassName("title-list-board-container")[0].querySelector("span").textContent = newBoardName  // the box with title, items and plus button, then setting an specific span inside 
         
         /* define as a sortable */ 
         // Sortable.create(BoardClone.getElementsByClassName("list-items-board")[0], { 
-        Sortable.create(BoardClone.getElementsByClassName("list-items-board-child")[0], { 
+        Sortable.create(BoardClone.getElementsByClassName("list-items-board-child")[0], {  // box just with the items
           animation: 150,
           group: 'shared-items',
           ghostClass: 'hidden-placeholder',          
@@ -157,8 +157,8 @@
 
         /* define element title */ 
         itemClone.textContent = newBoardItemName;
-        itemClone.style.display="block";
-        itemParent.append(itemClone);
+        itemClone.style.display="flex";
+        projectParent.append(itemClone);
       
       }
       
@@ -192,8 +192,15 @@
         /* removes old element */
         document.getElementById('parent-container').remove()
 
-        elementClone.style.display = 'block';
+        elementClone.style.display = 'flex';
         elementClone.id = 'parent-container'
+
+        const sortContainer = Sortable.create(elementClone, { // defining the boards inside the parent-container (boards list) as soartables
+              animation: 150,
+              group: 'shared-boards',
+              ghostClass: 'hidden-placeholder', 
+              filter: ".list-board-plus", // bypass the plus button                                   
+        }); 
 
         /* define element title */ 
         //elementClone.textContent = newProjectName;                
@@ -282,7 +289,7 @@
             group: 'shared-boards',
             ghostClass: 'hidden-placeholder',
             filter: ".list-board-plus",                                   
-          });
+      });
           
       
       // var listItemsBoard = document.getElementsByClassName('list-items-board');    // getting the items list container
