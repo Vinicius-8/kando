@@ -18,6 +18,7 @@
                 
                 <div class="list-items-board flex-row align-items-center justify-content-center">
                     <div class="list-items-board-child">
+                        {% include 'dashboard/item.html' with id='mdl' text='mdl' %}
                     </div>
                     <div class="item-board text-center plus-item-board" onclick="openNewItemCreation(this)">+</div>
                 </div>
@@ -31,11 +32,9 @@
                 <div class="list-items-board flex-row align-items-center justify-content-center">
                     <div class="list-items-board-child">
 
-                        {% with data={'id':'menu1','text': 'Build'} %}
-                            {% include 'dashboard/item.html' %} 
-                        {% endwith %}
+                        {% include 'dashboard/item.html' with id='menu1' text='Build' %}
                         
-                        {% include 'dashboard/item.html' with data={'id':'menu2', 'text': 'Burn it, fix it, trash it'} %}
+                        {% include 'dashboard/item.html' with id='menu2' text='Burn it, fix it, trash it' %}
                         
                                                                                                                            
 
@@ -55,7 +54,7 @@
                     <div class="list-items-board-child">
                         <!-- simple item of an board -->
                         
-                        {% include 'dashboard/item.html' with data={'id':'menu2', 'text': 'Crack it, Copy it, Paste it'} %}
+                        {% include 'dashboard/item.html' with id='menu3' text='Crack it, Copy it, Paste it' %}
                         
                     </div>
 

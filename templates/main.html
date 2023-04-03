@@ -157,12 +157,18 @@
         const projectParent = context.parentElement.getElementsByClassName("list-items-board-child")[0]         
 
         /* Clone item element */      
-        const element = document.getElementsByClassName('simple-item')[0];
+        // const element = document.getElementsByClassName('simple-item')[0]; 1
+        const element = document.getElementsByClassName('simple-item-box')[0];
         const itemClone = element.cloneNode(true);
 
         /* define element title */ 
-        itemClone.textContent = newBoardItemName;
+        // itemClone.textContent = newBoardItemName; 1
+        itemClone.getElementsByClassName('simple-item')[0].textContent = newBoardItemName; 
         itemClone.style.display="flex";
+
+        // itemClone.id=newBoardItemName; //
+        // document.getElementById('mdl').id=newBoardItemName;
+        
         projectParent.append(itemClone);
       
       }

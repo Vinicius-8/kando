@@ -1,9 +1,10 @@
+{% load static %}
  <!-- simple item of an board -->
  <div class="item-board simple-item-box row">
-    <div class="simple-item col-sm-10 d-flex align-items-center" style="overflow: hidden;">{{data.text}}</div>
+    <div class="simple-item col-sm-10 d-flex align-items-center" style="overflow: hidden;">{{text}}</div>
     
     <!-- the ids and arguments should be created dinamically -->
-    <div class="dropdown col-sm-2" id="{{data.id}}" onclick="toggleDropdown('{{data.id}}')">
+    <div class="dropdown col-sm-2" id="{{id}}" onclick="toggleDropdown(this.id)">
         <button class="btn">
             {% include 'icons/config_icon.html' %}
         </button>
@@ -13,7 +14,7 @@
                     {% include 'icons/edit_icon.html' %}
                 </div>
             </a>
-            <a href="#" onclick="deleteItem('{{data.id}}')">
+            <a href="#" onclick="deleteItem('{{id}}')">
                 <div class="col-sm-2 d-flex align-items-center item-board-delete-button">
                     {% include 'icons/delete_icon.html' %}
                 </div>
@@ -21,5 +22,5 @@
 
         </div>
     </div>
-                        
+                   
 </div>
