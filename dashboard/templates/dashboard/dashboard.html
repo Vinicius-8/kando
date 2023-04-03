@@ -5,6 +5,7 @@
 <div>
     <div class="container-title-user-dashboard" style="border-bottom: none;">
     </div>
+    
     <div class="dashboard-container  align-items-start justify-content-start">
        
         <div id="parent-container" class="row align-items-start justify-content-start" >
@@ -21,7 +22,7 @@
                     <div class="item-board text-center plus-item-board" onclick="openNewItemCreation(this)">+</div>
                 </div>
             </div>
-
+            
             <div class="list-board-container">
                 <div class="title-list-board-container d-flex align-items-center justify-content-center">
                     <span>To Do</span>
@@ -29,9 +30,16 @@
                 
                 <div class="list-items-board flex-row align-items-center justify-content-center">
                     <div class="list-items-board-child">
-                        <div class="item-board simple-item d-flex align-items-center">Build</div>
-                        <div class="item-board simple-item d-flex align-items-center">Build format it copy delete burn paste</div>
+
+                        {% with data={'id':'menu1','text': 'Build'} %}
+                            {% include 'dashboard/item.html' %} 
+                        {% endwith %}
                         
+                        {% include 'dashboard/item.html' with data={'id':'menu2', 'text': 'Burn it, fix it, trash it'} %}
+                        
+                                                                                                                           
+
+                      
                     </div>
 
                     <div class="item-board text-center plus-item-board" onclick="openNewItemCreation(this)">+</div>
@@ -45,7 +53,9 @@
                 
                 <div class="list-items-board flex-row align-items-center justify-content-center">
                     <div class="list-items-board-child">
-                        <div class="item-board simple-item d-flex align-items-center">Testing</div>
+                        <!-- simple item of an board -->
+                        
+                        {% include 'dashboard/item.html' with data={'id':'menu2', 'text': 'Crack it, Copy it, Paste it'} %}
                         
                     </div>
 
@@ -64,6 +74,11 @@
         </div>
 
     </div>
+   
+    
+	
+	
+   
     
 </div>
 

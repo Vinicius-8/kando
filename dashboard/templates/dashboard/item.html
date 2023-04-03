@@ -1,0 +1,25 @@
+ <!-- simple item of an board -->
+ <div class="item-board simple-item-box row">
+    <div class="simple-item col-sm-10 d-flex align-items-center" style="overflow: hidden;">{{data.text}}</div>
+    
+    <!-- the ids and arguments should be created dinamically -->
+    <div class="dropdown col-sm-2" id="{{data.id}}" onclick="toggleDropdown('{{data.id}}')">
+        <button class="btn">
+            {% include 'icons/config_icon.html' %}
+        </button>
+        <div class="dropdown-content">
+            <a href="#" >
+                <div class="col-sm-2 d-flex align-items-center item-board-delete-button">
+                    {% include 'icons/edit_icon.html' %}
+                </div>
+            </a>
+            <a href="#" onclick="deleteItem('{{data.id}}')">
+                <div class="col-sm-2 d-flex align-items-center item-board-delete-button">
+                    {% include 'icons/delete_icon.html' %}
+                </div>
+            </a>
+
+        </div>
+    </div>
+                        
+</div>
