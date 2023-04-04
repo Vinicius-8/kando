@@ -1,6 +1,7 @@
     //show the dropdown when clicked
     function toggleDropdown(id) {        
-        var dropdown = document.querySelector("#" + id);
+        var dropdown = document.querySelector("#" + id);    
+        
         dropdown.classList.toggle("show");
     }
 

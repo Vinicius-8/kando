@@ -13,12 +13,18 @@
             <!-- board model -->
             <div class="list-board-container" style="display: none"> 
                 <div class="title-list-board-container d-flex align-items-center justify-content-center" >
-                    <span></span>
+                    <div class="col-sm-2">
+                        
+                    </div>
+                    <span class="col-sm-8 d-flex align-items-center justify-content-center">To Do</span>
+                    <div class="col-sm-1">
+                        {% include 'icons/delete_icon.html' %}
+                    </div>
                 </div>
                 
                 <div class="list-items-board flex-row align-items-center justify-content-center">
                     <div class="list-items-board-child">
-                        {% include 'dashboard/item.html' with id='mdl' text='mdl' %}
+                        {% include 'dashboard/item.html' with id='random' text='random' %}
                     </div>
                     <div class="item-board text-center plus-item-board" onclick="openNewItemCreation(this)">+</div>
                 </div>
@@ -26,7 +32,13 @@
             
             <div class="list-board-container">
                 <div class="title-list-board-container d-flex align-items-center justify-content-center">
-                    <span>To Do</span>
+                    <div class="col-sm-2">
+                        
+                    </div>
+                    <span class="col-sm-8 d-flex align-items-center justify-content-center">To Do</span>
+                    <div class="col-sm-1">
+                        {% include 'icons/delete_icon.html' %}
+                    </div>
                 </div>
                 
                 <div class="list-items-board flex-row align-items-center justify-content-center">

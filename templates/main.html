@@ -30,6 +30,7 @@
       const BOARD = 1;
       const ITEM = 2;
       const PROJECT = 3;
+      const EDIT_ITEM = 4; 
 
       var creating = NONE;
 
@@ -81,7 +82,11 @@
           case PROJECT:
             saveNewProject();
             break;
-        
+          
+          case EDIT_ITEM:
+            saveEditedItem();
+            break;
+
           default:
             break;
         }
@@ -110,7 +115,7 @@
 
         /* get container parent */
         const boardParent = document.getElementById("parent-container");
-
+        boardParent.getElementsByClassName("list-items-board-child")[0].textContent = ""; // cleaning the items
 
         /* Clone board element */
         const element = document.getElementsByClassName('list-board-container')[0];
@@ -166,8 +171,7 @@
         itemClone.getElementsByClassName('simple-item')[0].textContent = newBoardItemName; 
         itemClone.style.display="flex";
 
-        // itemClone.id=newBoardItemName; //
-        // document.getElementById('mdl').id=newBoardItemName;
+        itemClone.getElementsByClassName('dropdown')[0].id =newBoardItemName.split(' ').join(''); // set a new id for a child, with that the related function can find it
         
         projectParent.append(itemClone);
       
@@ -175,11 +179,29 @@
       
 
       /* item */
-      function deleteItem(id){
+      function deleteItem(element){
+        var id = element.parentElement.parentElement.id;
         var item = document.querySelector("#" + id);
         item.parentElement.remove();
       }
 
+
+      /* item */
+      function openEditItem(item){
+        document.getElementById("exampleModalLabel").textContent="Edit item"             
+        document.getElementById("modalSmallMessage").textContent="Change the item's name"
+        openModal();
+
+        context = item;
+        creating = EDIT_ITEM;
+      }
+
+      /* item */
+      function saveEditedItem(){
+        const editedItemName = inputModalContent
+
+        context.parentElement.parentElement.parentElement.getElementsByClassName('simple-item')[0].textContent=editedItemName
+      }
 
       /* project */
       function openNewProjectCreation(){
