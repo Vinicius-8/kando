@@ -5,7 +5,8 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon" />
+    <!-- <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon" /> -->
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <title>KanDo</title>
     <link rel="stylesheet" href="{% static 'styles/header.css' %}" />
@@ -13,9 +14,13 @@
     <link rel="stylesheet" href="{% static 'styles/dashboard.css' %}" />
     <link rel="stylesheet" href="{% static 'styles/register.css' %}" />
     <link rel="stylesheet" href="{% static 'styles/toast.css' %}" />
+    <link rel="stylesheet" href="{% static 'styles/dropdown.css' %}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
+    
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js" ></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
     <script>
       
       
@@ -25,8 +30,10 @@
       const BOARD = 1;
       const ITEM = 2;
       const PROJECT = 3;
+      const EDIT_ITEM = 4; 
+      const EDIT_BOARD = 5; 
 
-      var creating = NONE;
+      var type = NONE;
 
       /* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
       function openNav() {
@@ -64,7 +71,7 @@
         inputModalContent = document.getElementById("modalInput").value;
         document.getElementById("modalInput").value="";
 
-        switch (creating) {
+        switch (type) {
           case BOARD:
             saveNewBoard();
             break;
@@ -76,13 +83,21 @@
           case PROJECT:
             saveNewProject();
             break;
-        
+          
+          case EDIT_ITEM:
+            saveEditedItem();
+            break;
+
+          case EDIT_BOARD:
+            saveEditedBoard();
+            break;
+
           default:
             break;
         }
 
         context = "";
-        creating = NONE;
+        type = NONE;
       }
 
 
@@ -91,7 +106,7 @@
         document.getElementById("exampleModalLabel").textContent="Board Name"             
         document.getElementById("modalSmallMessage").textContent="Name the new board"  
         openModal();   
-        creating = BOARD;     
+        type = BOARD;     
       }
 
 
@@ -105,30 +120,62 @@
 
         /* get container parent */
         const boardParent = document.getElementById("parent-container");
-
+        boardParent.getElementsByClassName("list-items-board-child")[0].textContent = ""; // cleaning the items
 
         /* Clone board element */
         const element = document.getElementsByClassName('list-board-container')[0];
-        const BoardClone = element.cloneNode(true);
+        const boardClone = element.cloneNode(true);
 
         /* define element title */ 
-        BoardClone.getElementsByClassName("title-list-board-container")[0].querySelector("span").textContent = newBoardName  // the box with title, items and plus button, then setting an specific span inside 
+        boardClone.getElementsByClassName("title-list-board-container")[0].querySelector("span").textContent = newBoardName  // the box with title, items and plus button, then setting an specific span inside 
         
+  
+
         /* define as a sortable */ 
-        // Sortable.create(BoardClone.getElementsByClassName("list-items-board")[0], { 
-        Sortable.create(BoardClone.getElementsByClassName("list-items-board-child")[0], {  // box just with the items
+        // Sortable.create(boardClone.getElementsByClassName("list-items-board")[0], { 
+        Sortable.create(boardClone.getElementsByClassName("list-items-board-child")[0], {  // box just with the items
           animation: 150,
           group: 'shared-items',
           ghostClass: 'hidden-placeholder',          
         });
 
 
-        BoardClone.style.display = 'block';
-        boardParent.append(BoardClone);
+        
+        /* generating id for dropdown*/
+        boardClone.getElementsByClassName('dropdown')[0].id = (Math.random() + 1).toString(36).substring(7)
+
+
+        boardClone.style.display = 'block';
+        boardParent.append(boardClone);
 
       }
 
-      
+      /* Board */
+      function openEditBoard(board){
+        document.getElementById("exampleModalLabel").textContent="Edit Board"             
+        document.getElementById("modalSmallMessage").textContent="Change the board's name"
+        openModal();
+
+        context = board;
+        type = EDIT_BOARD;
+      }
+
+      /* Board */
+      function saveEditedBoard(){
+        const editedBoardName = inputModalContent
+        if(""=== editedBoardName){
+          alert("Can't be empty");
+          return          
+        }
+
+        context.parentElement.parentElement.parentElement.querySelector("span").textContent = editedBoardName
+      }
+
+      /* Board */
+      function deleteBoard(board){
+        board.parentElement.parentElement.parentElement.parentElement.remove()      
+      }
+
       /* item */
       function openNewItemCreation(item){
         document.getElementById("exampleModalLabel").textContent="Item Name"             
@@ -136,7 +183,7 @@
         openModal();
         
         context = item;
-        creating = ITEM;
+        type = ITEM;
       }
 
       /* item */
@@ -152,16 +199,51 @@
         const projectParent = context.parentElement.getElementsByClassName("list-items-board-child")[0]         
 
         /* Clone item element */      
-        const element = document.getElementsByClassName('simple-item')[0];
+        // const element = document.getElementsByClassName('simple-item')[0]; 1
+        const element = document.getElementsByClassName('simple-item-box')[0];
         const itemClone = element.cloneNode(true);
 
         /* define element title */ 
-        itemClone.textContent = newBoardItemName;
+        // itemClone.textContent = newBoardItemName; 1
+        itemClone.getElementsByClassName('simple-item')[0].textContent = newBoardItemName; 
         itemClone.style.display="flex";
+
+        itemClone.getElementsByClassName('dropdown')[0].id = newBoardItemName.split(' ').join(''); // set a new id for a child, with that the related function can find it
+        
         projectParent.append(itemClone);
       
       }
       
+
+      /* item */
+      function deleteItem(element){
+        var id = element.parentElement.parentElement.id;
+        var item = document.querySelector("#" + id);
+        item.parentElement.remove();
+      }
+
+
+      /* item */
+      function openEditItem(item){
+        document.getElementById("exampleModalLabel").textContent="Edit item"             
+        document.getElementById("modalSmallMessage").textContent="Change the item's name"
+        openModal();
+
+        context = item;
+        type = EDIT_ITEM;
+      }
+
+      /* item */
+      function saveEditedItem(){
+        const editedItemName = inputModalContent
+        if(""=== editedItemName){
+          alert("Can't be empty");
+          return          
+        }
+
+        context.parentElement.parentElement.parentElement.getElementsByClassName('simple-item')[0].textContent=editedItemName
+      }
+
 
       /* project */
       function openNewProjectCreation(){
@@ -169,7 +251,7 @@
         document.getElementById("modalSmallMessage").textContent="Name the new list"
         openModal();
 
-        creating = PROJECT;
+        type = PROJECT;
       }
 
       /* project  */
@@ -208,6 +290,8 @@
         closeNav();
       }
 
+
+      
     </script>
     
   </head>
@@ -266,14 +350,20 @@
 
       {% endblock %}
       {% include 'toast.html' %}
+      
     </div>
-   
+
+  
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-mQ93GR66B00ZXjt0YO5KlohRA5SY2XofN4zfuZxLkoj1gXtW8ANNCe9d5Y3eG5eD" crossorigin="anonymous"></script>
     
     <!-- SortableJS for sorting elements as boards and items -->
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script> 
     
+    
+    <script src="{% static 'js/dropdown.js' %}"></script> 
+    
+
     <!-- references
     https://github.com/SortableJS/Sortable
     https://sortablejs.github.io/Sortable/ 
@@ -306,7 +396,7 @@
         });
         
       }
-      
+ 
       
     </script>
   </body>
