@@ -90,8 +90,23 @@
     margin-left: 10px;
     align-self: center;
     font-size: 15pt;
-    overflow: hidden;
     white-space: nowrap;
+}
+.item-board:hover{
+    cursor: grab;
+}
+
+.item-board:active{
+    cursor: grabbing;
+}
+
+.item-board-delete-button{
+    min-width: 30px ;
+}
+
+.item-board-delete-button:hover{
+    /* background-color: rgb(101, 138, 92); */
+    cursor: pointer;
 }
 
 .hidden-placeholder{
@@ -110,10 +125,10 @@
 }
 
 .container-title-user-dashboard{
-
     margin-top: 75px;
     border-bottom: 1px solid white;
     padding-left: 100px;
+    overflow: hidden;
 }
 
 .span-title-user-dashboard{
