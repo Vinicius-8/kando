@@ -11,25 +11,28 @@
         <div id="parent-container" class="row align-items-start justify-content-start" >
             
             <!-- board model -->
-            <div class="list-board-container" style="display: none"> 
+            {% include 'dashboard/board.html' with boardTitle='random' id='random' %}
+            <!-- <div class="list-board-container" style="display: none"> 
                 <div class="title-list-board-container d-flex align-items-center justify-content-center" >
                     <div class="col-sm-2">
                         
                     </div>
                     <span class="col-sm-8 d-flex align-items-center justify-content-center">To Do</span>
                     <div class="col-sm-1">
-                        {% include 'icons/delete_icon.html' %}
+                        {/*% include 'icons/delete_icon.html' %*/}
                     </div>
                 </div>
                 
                 <div class="list-items-board flex-row align-items-center justify-content-center">
                     <div class="list-items-board-child">
-                        {% include 'dashboard/item.html' with id='random' text='random' %}
+                        {/*% include 'dashboard/item.html' with id='random' text='random' %*/}
                     </div>
                     <div class="item-board text-center plus-item-board" onclick="openNewItemCreation(this)">+</div>
                 </div>
-            </div>
+            </div> -->
             
+
+            <!-- board element  -->
             <div class="list-board-container">
                 <div class="title-list-board-container d-flex align-items-center justify-content-center">
                     <div class="col-sm-2">
@@ -57,24 +60,33 @@
                 </div>
             </div>
 
-            <div class="list-board-container">
+            <!-- board element, argument with id from db to retrieve data from related board  -->
+
+            {% include 'dashboard/board.html' with boardTitle='Doing' id='bor2' %}
+
+
+            <!-- <div class="list-board-container">
                 <div class="title-list-board-container d-flex align-items-center justify-content-center">
                     <span>Done</span>
                 </div>
                 
                 <div class="list-items-board flex-row align-items-center justify-content-center">
                     <div class="list-items-board-child">
-                        <!-- simple item of an board -->
+                          simple item of an board  
                         
-                        {% include 'dashboard/item.html' with id='menu3' text='Crack it, Copy it, Paste it' %}
+                        {/*% include 'dashboard/item.html' with id='menu3' text='Crack it, Copy it, Paste it' %*/}
+                        
                         
                     </div>
 
                     <div class="item-board text-center plus-item-board" onclick="openNewItemCreation(this)">+</div>
                 </div>
-            </div>
+            </div> -->
 
-            {% include 'dashboard/board.html' with boardTitle='Doing' id='bor1' %}
+            <!-- board element  -->
+            
+            {% include 'dashboard/board.html' with boardTitle='Done' id='bor3' %}
+            
 
                       
             
@@ -87,10 +99,6 @@
         </div>
 
     </div>
-   
-    
-	
-	
    
     
 </div>

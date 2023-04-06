@@ -90,10 +90,15 @@
     margin-left: 10px;
     align-self: center;
     font-size: 15pt;
-    /* overflow: hidden; */
     white-space: nowrap;
 }
+.item-board:hover{
+    cursor: grab;
+}
 
+.item-board:active{
+    cursor: grabbing;
+}
 
 .item-board-delete-button{
     min-width: 30px ;

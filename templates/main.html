@@ -31,8 +31,9 @@
       const ITEM = 2;
       const PROJECT = 3;
       const EDIT_ITEM = 4; 
+      const EDIT_BOARD = 5; 
 
-      var creating = NONE;
+      var type = NONE;
 
       /* Set the width of the side navigation to 250px and the left margin of the page content to 250px */
       function openNav() {
@@ -70,7 +71,7 @@
         inputModalContent = document.getElementById("modalInput").value;
         document.getElementById("modalInput").value="";
 
-        switch (creating) {
+        switch (type) {
           case BOARD:
             saveNewBoard();
             break;
@@ -87,12 +88,16 @@
             saveEditedItem();
             break;
 
+          case EDIT_BOARD:
+            saveEditedBoard();
+            break;
+
           default:
             break;
         }
 
         context = "";
-        creating = NONE;
+        type = NONE;
       }
 
 
@@ -101,7 +106,7 @@
         document.getElementById("exampleModalLabel").textContent="Board Name"             
         document.getElementById("modalSmallMessage").textContent="Name the new board"  
         openModal();   
-        creating = BOARD;     
+        type = BOARD;     
       }
 
 
@@ -119,26 +124,58 @@
 
         /* Clone board element */
         const element = document.getElementsByClassName('list-board-container')[0];
-        const BoardClone = element.cloneNode(true);
+        const boardClone = element.cloneNode(true);
 
         /* define element title */ 
-        BoardClone.getElementsByClassName("title-list-board-container")[0].querySelector("span").textContent = newBoardName  // the box with title, items and plus button, then setting an specific span inside 
+        boardClone.getElementsByClassName("title-list-board-container")[0].querySelector("span").textContent = newBoardName  // the box with title, items and plus button, then setting an specific span inside 
         
+  
+
         /* define as a sortable */ 
-        // Sortable.create(BoardClone.getElementsByClassName("list-items-board")[0], { 
-        Sortable.create(BoardClone.getElementsByClassName("list-items-board-child")[0], {  // box just with the items
+        // Sortable.create(boardClone.getElementsByClassName("list-items-board")[0], { 
+        Sortable.create(boardClone.getElementsByClassName("list-items-board-child")[0], {  // box just with the items
           animation: 150,
           group: 'shared-items',
           ghostClass: 'hidden-placeholder',          
         });
 
 
-        BoardClone.style.display = 'block';
-        boardParent.append(BoardClone);
+        
+        /* generating id for dropdown*/
+        boardClone.getElementsByClassName('dropdown')[0].id = (Math.random() + 1).toString(36).substring(7)
+
+
+        boardClone.style.display = 'block';
+        boardParent.append(boardClone);
 
       }
 
-      
+      /* Board */
+      function openEditBoard(board){
+        document.getElementById("exampleModalLabel").textContent="Edit Board"             
+        document.getElementById("modalSmallMessage").textContent="Change the board's name"
+        openModal();
+
+        context = board;
+        type = EDIT_BOARD;
+      }
+
+      /* Board */
+      function saveEditedBoard(){
+        const editedBoardName = inputModalContent
+        if(""=== editedBoardName){
+          alert("Can't be empty");
+          return          
+        }
+
+        context.parentElement.parentElement.parentElement.querySelector("span").textContent = editedBoardName
+      }
+
+      /* Board */
+      function deleteBoard(board){
+        board.parentElement.parentElement.parentElement.parentElement.remove()      
+      }
+
       /* item */
       function openNewItemCreation(item){
         document.getElementById("exampleModalLabel").textContent="Item Name"             
@@ -146,7 +183,7 @@
         openModal();
         
         context = item;
-        creating = ITEM;
+        type = ITEM;
       }
 
       /* item */
@@ -171,7 +208,7 @@
         itemClone.getElementsByClassName('simple-item')[0].textContent = newBoardItemName; 
         itemClone.style.display="flex";
 
-        itemClone.getElementsByClassName('dropdown')[0].id =newBoardItemName.split(' ').join(''); // set a new id for a child, with that the related function can find it
+        itemClone.getElementsByClassName('dropdown')[0].id = newBoardItemName.split(' ').join(''); // set a new id for a child, with that the related function can find it
         
         projectParent.append(itemClone);
       
@@ -193,15 +230,20 @@
         openModal();
 
         context = item;
-        creating = EDIT_ITEM;
+        type = EDIT_ITEM;
       }
 
       /* item */
       function saveEditedItem(){
         const editedItemName = inputModalContent
+        if(""=== editedItemName){
+          alert("Can't be empty");
+          return          
+        }
 
         context.parentElement.parentElement.parentElement.getElementsByClassName('simple-item')[0].textContent=editedItemName
       }
+
 
       /* project */
       function openNewProjectCreation(){
@@ -209,7 +251,7 @@
         document.getElementById("modalSmallMessage").textContent="Name the new list"
         openModal();
 
-        creating = PROJECT;
+        type = PROJECT;
       }
 
       /* project  */
