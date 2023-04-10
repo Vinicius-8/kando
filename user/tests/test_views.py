@@ -10,6 +10,13 @@ class UserTestCase(TestCase):
 
 
     def test_user_login_view(self):
+        '''
+            Testing the login page/template
+            -   testing if the correct template is used
+            -   testing if login
+            -   testing if the user is redirect correctly
+
+        '''
         url = reverse('login')
         response = self.client.get(url)
 
@@ -18,13 +25,19 @@ class UserTestCase(TestCase):
 
          
         # login the user 
-        url_login = reverse('login')
-        response_login = self.client.post(url_login, {'email': 'testuser@gmail.com', 'password': 'testuser'})
+        response_login = self.client.post(url, {'email': 'testuser@gmail.com', 'password': 'testuser'})
         self.assertTrue(response_login)
         self.assertRedirects(response_login, reverse('user-dashboard'))
     
 
     def test_user_register_view(self):
+        '''
+            Testing the register page/template
+            -   testing if the correct template is used
+            -   testing if the registered user exists
+            -   testing if the user is redirect properly
+        '''
+
         url = reverse('register')
         response = self.client.get(url)
 
@@ -32,31 +45,29 @@ class UserTestCase(TestCase):
         self.assertTemplateUsed(response, 'user/register.html')
 
         # register the user
-        url_register = reverse('register')
-        response_register = self.client.post(url_register, {
-            'name':'test user',
-            'username':'testuser@gmail.com', 
-            'email': 'testuser@gmail.com', 
-            'password1': 'testuser', 
-            'password2': 'testuser'
-            })
+        data = {
+            'name': 'john doe',
+            'email': 'johndoe334@example.com',      
+            'password1': '0i9u9gy987y',             # the password can't be easy, otherwise the test won't pass (and won't say why)
+            'password2': '0i9u9gy987y',
+        }
 
-        print(response_register)
-
-        self.assertTrue(response_register)
-        self.assertRedirects(response_register, reverse('user-dashboard'))
-
+        response = self.client.post(url, data)
+        self.assertTrue(User.objects.filter(email='johndoe334@example.com').exists())
+        self.assertRedirects(response, reverse('user-dashboard'))
 
 
     def test_user_dashboard_view(self):
+        '''
+            testing the user-dashboard page/template , 
+            -   trying to access without session 
+            -   trying to access after login
+
+        '''
         url = reverse('user-dashboard')
         response = self.client.get(url)
 
-        self.assertEqual(response.status_code, 302) # not loged user
-        
-
-       
-
+        self.assertEqual(response.status_code, 302) # not loged user        
 
         loged_user = self.client.login(email='testuser@gmail.com', password='testuser') # email is used to log in because is set in the login view instead of username
         self.assertTrue(loged_user)
@@ -66,4 +77,25 @@ class UserTestCase(TestCase):
         self.assertEqual(response_authenticated.status_code, 200)
         self.assertTemplateUsed(response_authenticated, 'user/user_dashboard.html')
 
+
+    def test_user_logout(self):
+        '''
+            Testing the logout view
+            -   login the user
+            -   logout
+            -   checks if the user was redirected
+            -   checks if the user was redirected to the correct page
+            -   checks for id of the user in the session
+            
+        '''
+        # login    
+        loged_user = self.client.login(email='testuser@gmail.com', password='testuser') # email is used to log in because is set in the login view instead of username
+        self.assertTrue(loged_user)
+
+        # logout
+        url = reverse('logout') 
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('dashboard'))
+        self.assertFalse('_auth_user_id' in self.client.session) # checks for id in the session
 
