@@ -2,55 +2,52 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import login as auth_login, authenticate, logout as auth_logout
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 
 from .forms import UserForm
 from .models import User
 
+
+@csrf_exempt # dev only---------------
 def register(request): # ! todo: change the password to encrypted
     form = UserForm()
 
     if request.method == 'POST':
         form = UserForm(request.POST)
-
         if form.is_valid():
             
-
             user = form.save(commit=False)
             user.username = user.username.lower()
             user.save()
+            
             auth_login(request, user)
-
             return redirect('user-dashboard')
+            
         else:
             """
             calling the toast to inform the reason the user was not created
             
             """
-
             messages.set_level(request, messages.WARNING)    
-            # messages.warning(request, 'Your account is about to expire.')
-
             for field, errors in form.errors.items():
                     for error in errors:
-                        #print(f"Error {field}: {error}")
                         messages.warning(request, f'Error: {error} (\'{field}\' )')
-
-             
-     
+        
     context = {'form': form}
     return render(request, "user/register.html", context)
 
 
-'''
-    Gets the user's email and password and verifies for existence in db,
-    if so, creates a session in the browser 
 
-    parameter: request
-
-    return: None
-'''
 
 def login(request):
+    '''
+        Gets the user's email and password and verifies for existence in db,
+        if so, creates a session in the browser 
+
+        parameter: request
+
+        return: None
+    '''
     page = 'login'
 
     if request.user.is_authenticated:
