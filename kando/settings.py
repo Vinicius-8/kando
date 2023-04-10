@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "dashboard",
-    "user"
+    "user",
+    "board"
 ]
 
 AUTH_USER_MODEL = 'user.User'  # to use the user class
