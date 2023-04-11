@@ -6,4 +6,7 @@ from django.http import HttpResponse
 # Create your views here.
 @login_required(login_url='login')
 def create_project(request):
-    return HttpResponse("Olá, mundo!")
+    if request.method == 'POST':
+        print('--------',request.POST)
+    else:
+        print('nothing -----------')

@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="{% static 'styles/dropdown.css' %}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
-    
+    <script src="{% static 'js/project.js' %}"></script> 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js" ></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
@@ -287,8 +287,11 @@
         /* define element title */ 
         //elementClone.textContent = newProjectName;                
         projectParent.append(elementClone);
+        createNewProject(1, newProjectName);
         closeNav();
       }
+
+      
 
 
       
@@ -314,6 +317,9 @@
         
       {% endif %}
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+      <div id="createProjectEndpoint" data-endpoint="{% url 'create-project' %}">
+        
+      </div>
       <a href="#" onclick="openNewProjectCreation()">Create Project</a>
     </div>
 
@@ -362,6 +368,7 @@
     
     
     <script src="{% static 'js/dropdown.js' %}"></script> 
+
     
 
     <!-- references
