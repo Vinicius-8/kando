@@ -287,7 +287,7 @@
         /* define element title */ 
         //elementClone.textContent = newProjectName;                
         projectParent.append(elementClone);
-        createNewProject(1, newProjectName);
+        createNewProject(newProjectName);
         closeNav();
       }
 
@@ -317,9 +317,11 @@
         
       {% endif %}
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-      <div id="createProjectEndpoint" data-endpoint="{% url 'create-project' %}">
+
+      <div id="createProjectEndpoint" data-endpoint="{% url 'create-project' %}"></div>
+      <div id="csrfToken" data-token="{{csrf_token}}"></div>
+      <div id="userId" data-user="{{user.id}}"></div>
         
-      </div>
       <a href="#" onclick="openNewProjectCreation()">Create Project</a>
     </div>
 
