@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .forms import UserForm
 from .models import User
-
+from board.models import Project
 
 @csrf_exempt # dev only---------------
 def register(request): # ! todo: change the password to encrypted
@@ -78,7 +78,8 @@ def login(request):
 
 @login_required(login_url='register')
 def user_dashboard(request):
-    context = {}
+    projects = Project.objects.filter(user=request.user)
+    context = {'projects':projects}
     return render(request, 'user/user_dashboard.html', context)
 
 
