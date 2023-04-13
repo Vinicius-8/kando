@@ -41,7 +41,19 @@ def get_projects(request):
             projects_list.append(project_dict)
 
         return JsonResponse({'projects': projects_list})
+
+    return HttpResponse('Can\'t fetch projects', status_code=500)
+
+
+@login_required(login_url='login')
+def get_project(request, pk):
+    if request.method == 'POST':
+        # project_id = request.POST.get('projectId')
+        if not pk:
+            return HttpResponseBadRequest("Not enough data provided")
         
-    
+        project = get_object_or_404(Project, pk=pk)
+
+        return JsonResponse({'project': model_to_dict(project)})
 
     return HttpResponse('Can\'t fetch projects', status_code=500)

@@ -327,7 +327,7 @@
         <div id="projectsListContainer">
         <!-- <a  href="#">Macaco</a> -->
           {% for project in projects %}
-          <a  href="#">{{ project.name }}</a>
+          <a  href="#" key="{{project.id}}" onclick="selectProject(this)">{{ project.name }}</a>
           {% empty %}
               <!-- ------------- test user without project -->
               <span>Empty</span>  

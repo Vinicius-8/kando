@@ -55,29 +55,52 @@ function fetchProjects(){
             'userId':userId
         }
                 
-    }).done(function(data) {
-        // $('#article-table').html(data.html_table);
-        // change parent and
-        console.log(data);        
+    }).done(function(data) {        
+        return data;
     });
 }
 
-// function changeProjectsListHtml(projects){
-//     const projectsContainer = getElementById("projectsListContainer");
-    
-//     for (let index = 0; index < projects.length; index++) {
-//         var aElement = document.createElement("a");
-//         aElement.textContent = projects[index].name;
-//         projectsContainer.append(aElement)
-//     }
-        
-// }
 
 function appendNewProjectToHTML(project){
     const projectsContainer = document.getElementById("projectsListContainer");
     var aElement = document.createElement("a");
     aElement.setAttribute('href', "#") // adding this makes the item color change to white ??
+    aElement.setAttribute('key', project.id)
     aElement.textContent = project.name;
     projectsContainer.append(aElement)
 
+}
+
+
+function selectProject(project){
+    const proj = fetchProject(project.getAttribute("key"));    
+    document.getElementById("selectedProjectTitle").textContent = project.textContent;
+    // sessionStorage.setItem("selectedProject", {id: project.key, name: project.textContent});
+    //sessionStorage.setItem("selectedProject", {id: proj.id, name: proj.name});
+    proj.then(resp=>{
+        sessionStorage.setItem("selectedProject", {id: resp.project.id, name: resp.project.name});
+    })
+    closeNav();
+    
+}
+
+function fetchProject(projectId){
+    const endpoint = document.getElementById('getProjectsEndpoint').getAttribute('data-endpoint');
+    var csrfToken = document.getElementById('csrfToken').getAttribute('data-token');
+
+    $.ajaxSetup({
+        headers: { "X-CSRFToken": csrfToken }
+      });
+
+    return $.ajax({
+        type: "POST",
+        url: endpoint+'/'+projectId,
+        headers: {
+            'csrfmiddlewaretoken': csrfToken,           
+        },
+        data:{
+            'projectId':projectId
+        }
+                
+    });
 }
