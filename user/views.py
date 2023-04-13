@@ -4,6 +4,8 @@ from django.contrib.auth import login as auth_login, authenticate, logout as aut
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 
+
+
 from .forms import UserForm
 from .models import User
 from board.models import Project

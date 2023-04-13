@@ -18,5 +18,31 @@ function createNewProject(projectName){
     data.append('action', 'POST');
 
     request.send(data)
+    fetchProjects();
+}
 
+function fetchProjects(){
+    const endpoint = document.getElementById('getProjectsEndpoint').getAttribute('data-endpoint');
+    var csrfToken = document.getElementById('csrfToken').getAttribute('data-token');
+    var userId = document.getElementById('userId').getAttribute('data-user');
+
+    $.ajaxSetup({
+        headers: { "X-CSRFToken": csrfToken }
+      });
+
+    $.ajax({
+        type: "POST",
+        url: endpoint,
+        headers: {
+            'csrfmiddlewaretoken': csrfToken,           
+        },
+        data:{
+            'userId':userId
+        }
+                
+    }).done(function(data) {
+        // $('#article-table').html(data.html_table);
+        // change parent and
+        console.log(data);
+    });
 }
