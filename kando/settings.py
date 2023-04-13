@@ -131,4 +131,5 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CSRF_TRUSTED_ORIGINS=[
     'https://8000-vinicius8-kando-c34a0b7kzva.ws-us92.gitpod.io',
     'https://8000-vinicius8-kando-42wp3jkwfvn.ws-us93.gitpod.io',
-    'https://8000-vinicius8-kando-ya1qj27zt9g.ws-us93.gitpod.io']
+    'https://8000-vinicius8-kando-ya1qj27zt9g.ws-us93.gitpod.io',
+    'https://8000-vinicius8-kando-ya1qj27zt9g.ws-us94.gitpod.io']

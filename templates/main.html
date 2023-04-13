@@ -324,14 +324,15 @@
       <div id="userId" data-user="{{user.id}}"></div>
         
       <a href="#" onclick="openNewProjectCreation()" style="border-bottom: 1px solid;">Create Project</a>
-
-      <!-- <a  href="#">Macaco</a> -->
-        {% for project in projects %}
-        <a  href="#">{{ project.name }}</a>
-        {% empty %}
-            <!-- ------------- test user without project -->
-            <span>Nenhum projeto encontrado.</span>  
-        {% endfor %}
+        <div id="projectsListContainer">
+        <!-- <a  href="#">Macaco</a> -->
+          {% for project in projects %}
+          <a  href="#">{{ project.name }}</a>
+          {% empty %}
+              <!-- ------------- test user without project -->
+              <span>Empty</span>  
+          {% endfor %}
+        </div>
 
     </div>
 

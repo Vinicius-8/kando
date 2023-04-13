@@ -17,7 +17,7 @@ def create_project(request):
             name = request.POST.get('projectName'),
         )
 
-        return HttpResponse('Project created', status=201)
+        return JsonResponse({'project': model_to_dict(project)})
         
     
 
@@ -39,7 +39,8 @@ def get_projects(request):
         for project in projects:
             project_dict = model_to_dict(project)
             projects_list.append(project_dict)
-            return JsonResponse({'projects': projects_list})
+
+        return JsonResponse({'projects': projects_list})
         
     
 
