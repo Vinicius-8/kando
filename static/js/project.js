@@ -104,7 +104,7 @@ function selectProject(project){
     const proj = fetchProject(project.getAttribute("key"));    
     document.getElementById("selectedProjectTitle").textContent = project.textContent;
     proj.then(resp=>{
-        sessionStorage.setItem("selectedProject", {id: resp.project.id, name: resp.project.name});
+        sessionStorage.setItem("selectedProject", JSON.stringify({id: resp.project.id, name: resp.project.name}));
     })
     closeNav();
     

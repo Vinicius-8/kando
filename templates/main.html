@@ -118,7 +118,18 @@
           alert("Can't be empty");
           return          
         }
+        
+        /* creating into the database */
+        var newBoard = createNewBoard(newBoardName);
 
+        newBoard.then(function(response) {
+          console.log(response);
+
+
+        
+        
+        /*
+        
         /* get container parent */
         const boardParent = document.getElementById("parent-container");
         boardParent.getElementsByClassName("list-items-board-child")[0].textContent = ""; // cleaning the items
@@ -149,7 +160,10 @@
         boardClone.style.display = 'block';
         boardParent.append(boardClone);
 
-        createNewBoard('jum');
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
       }
 
       /* Board */

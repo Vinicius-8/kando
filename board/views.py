@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
 
-from .models import Project, User
+from .models import Project, User, Board
 
 
 
@@ -60,4 +60,14 @@ def get_project(request, pk):
 
 
 def create_board(request):
-    pass
+    if request.method == 'POST':
+        project = Project.objects.get(id=1)
+        board = Board.objects.create(
+            project = project,
+            name = request.POST.get('boardName'),
+        )
+
+        return JsonResponse({'board': model_to_dict(board)})
+            
+
+    return HttpResponse('Cant create project', status_code=500)
