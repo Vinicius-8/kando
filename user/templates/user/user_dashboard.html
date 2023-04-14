@@ -2,13 +2,14 @@
 
 {% block content %}
 <div>
+    <div id="createBoardEndpoint" data-endpoint="{% url 'create-board' %}"></div>
     <div class="container-title-user-dashboard">        
         <span class="span-title-user-dashboard" id="selectedProjectTitle">Example project</span>
     </div>
     <div class="dashboard-container  align-items-start justify-content-start">
                
         <div id="parent-container" class="row align-items-start justify-content-start" >
-            
+            {% include 'dashboard/board.html' with boardTitle='random' id='random' %}         
             <!-- board model -->
             <div class="list-board-container" style="display: none"> 
                 <div class="title-list-board-container d-flex align-items-center justify-content-center" >
@@ -53,7 +54,7 @@
                 </div>
             </div>
  
-                      
+            
             
             <div class="list-board-plus" onclick="openNewBoarCreation()">
                 <div class="d-flex align-items-center justify-content-center">

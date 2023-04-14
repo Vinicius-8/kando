@@ -57,3 +57,7 @@ def get_project(request, pk):
         return JsonResponse({'project': model_to_dict(project)})
 
     return HttpResponse('Can\'t fetch projects', status_code=500)
+
+
+def create_board(request):
+    pass
