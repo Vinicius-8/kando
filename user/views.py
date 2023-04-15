@@ -79,10 +79,7 @@ def login(request):
 def user_dashboard(request):
     projects = Project.objects.filter(user=request.user)
 
-    for project in projects:
-        project.boards = Board.objects.filter(project=project)
 
-    print(projects)
     context = {'projects':projects}
     return render(request, 'user/user_dashboard.html', context)
 

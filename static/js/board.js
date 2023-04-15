@@ -22,7 +22,7 @@ function createNewBoard(boardName){
     var project = JSON.parse(sessionStorage.getItem("selectedProject"));
 
     if(!project){
-      alert('No session storage found');
+      console.log('No session storage found');
       return none;
     }
     
