@@ -76,11 +76,21 @@ def login(request):
 
 
 @login_required(login_url='register')
-def user_dashboard(request):
+def user_dashboard(request):    
     projects = Project.objects.filter(user=request.user)
 
+    project_list = []
+    for project in projects:
+        data = model_to_dict(project)
+        data['boards'] = list(Board.objects.filter(project=project).values())
+        project_list.append(data)
+    
+    
+    for i in project_list:
+        print(i)
+        print('-'*20)
 
-    context = {'projects':projects}
+    context = {'projects' : project_list}
     return render(request, 'user/user_dashboard.html', context)
 
 

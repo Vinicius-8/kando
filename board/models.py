@@ -9,9 +9,6 @@ class Project(models.Model):
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)
 
-    def boards(self):
-        return list(self.board_set.all())
-
     
 class Board(models.Model):
     name = models.CharField(max_length=205)
