@@ -75,6 +75,7 @@ function fetchProjects(){
         }
                 
     }).done(function(data) {        
+        console.log(data)
         return data;
     });
 }

@@ -3,12 +3,12 @@ from django.contrib import messages
 from django.contrib.auth import login as auth_login, authenticate, logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
-
+from django.forms.models import model_to_dict
 
 
 from .forms import UserForm
 from .models import User
-from board.models import Project
+from board.models import Project, Board
 
 @csrf_exempt # dev only---------------
 def register(request): # ! todo: change the password to encrypted
@@ -37,8 +37,6 @@ def register(request): # ! todo: change the password to encrypted
         
     context = {'form': form}
     return render(request, "user/register.html", context)
-
-
 
 
 def login(request):
@@ -77,10 +75,14 @@ def login(request):
     return render(request, 'user/login.html', context)
 
 
-
 @login_required(login_url='register')
 def user_dashboard(request):
     projects = Project.objects.filter(user=request.user)
+
+    for project in projects:
+        project.boards = Board.objects.filter(project=project)
+
+    print(projects)
     context = {'projects':projects}
     return render(request, 'user/user_dashboard.html', context)
 

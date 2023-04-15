@@ -42,12 +42,20 @@ function createNewBoard(boardName){
           
           const data = JSON.parse(request.response);             
           // function that appends the new board to the list of projecs in the navbar              
-          return data;   
+          //return data;   
+          resolve(data)
           
         } else {
           console.log(`Error: ${request.status}`);
         }
-      };
+    };
+
+    request.onerror = function () {
+      reject({
+        status: xhr.status,
+        statusText: xhr.statusText
+      });
+    };
 
   });
 }
