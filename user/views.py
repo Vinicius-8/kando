@@ -4,6 +4,7 @@ from django.contrib.auth import login as auth_login, authenticate, logout as aut
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.forms.models import model_to_dict
+import json
 
 
 from .forms import UserForm
@@ -79,18 +80,25 @@ def login(request):
 def user_dashboard(request):    
     projects = Project.objects.filter(user=request.user)
 
-    project_list = []
+    projects_list = []
     for project in projects:
-        data = model_to_dict(project)
-        data['boards'] = list(Board.objects.filter(project=project).values())
-        project_list.append(data)
+        data = model_to_dict(project)        
+        boards_list = list(Board.objects.filter(project=project).values())
+        
+        for board in boards_list:
+            board.pop("updated")
+            board.pop("created")
+
+        data['boards'] = boards_list                
+        projects_list.append(data)
     
     
-    for i in project_list:
+
+    for i in projects_list:
         print(i)
         print('-'*20)
 
-    context = {'projects' : project_list}
+    context = {'projects' : json.dumps(projects_list)}
     return render(request, 'user/user_dashboard.html', context)
 
 

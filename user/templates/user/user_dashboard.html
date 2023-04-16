@@ -19,6 +19,11 @@
             <div id="bag" style="color: white;">
                 {% for project in projects %}
                 <h2>{{ project.name }}</h2>
+                    {% if project == projects[0] %}
+                        <script>
+                            selectProject("{{project}}", attribute=false);
+                        </script>
+                    {% endif%}
                 {% endfor %}
             
             </div>

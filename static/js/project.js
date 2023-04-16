@@ -100,13 +100,19 @@ function appendNewProjectToHTML(project){
 }
 
 
-function selectProject(project){    
 
-    const proj = fetchProject(project.getAttribute("key"));    
-    document.getElementById("selectedProjectTitle").textContent = project.textContent;
-    proj.then(resp=>{
-        sessionStorage.setItem("selectedProject", JSON.stringify({id: resp.project.id, name: resp.project.name}));
-    })
+function selectProject(project, attribute=true){
+    if(attribute){
+        const proj = fetchProject(project.getAttribute("key"));    
+        document.getElementById("selectedProjectTitle").textContent = project.textContent;
+        proj.then(resp=>{
+            sessionStorage.setItem("selectedProject", JSON.stringify({id: resp.project.id, name: resp.project.name}));
+        })
+    }else{
+        console.log(project);
+        parsed_project = JSON.parse(project);
+    }        
+    
     closeNav();
     
 }
