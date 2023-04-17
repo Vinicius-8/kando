@@ -25,8 +25,7 @@ function createNewBoard(boardName){
       console.log('No session storage found');
       return none;
     }
-    console.log('project in session', project)
-    return []
+    
     request.open('POST', createBoardEndpoint, true);
 
     const data = new FormData();

@@ -75,7 +75,6 @@ function fetchProjects(){
         }
                 
     }).done(function(data) {        
-        console.log(data)
         return data;
     });
 }
@@ -100,22 +99,35 @@ function appendNewProjectToHTML(project){
 }
 
 
-
 function selectProject(project, attribute=true){
     if(attribute){
-        const proj = fetchProject(project.getAttribute("key"));    
+        const proj = loadProjectFromSession(project.getAttribute("key"));    
         document.getElementById("selectedProjectTitle").textContent = project.textContent;
-        proj.then(resp=>{
-            sessionStorage.setItem("selectedProject", JSON.stringify({id: resp.project.id, name: resp.project.name}));
-        })
-    }else{
-        console.log(project);
-        parsed_project = JSON.parse(project);
+        sessionStorage.setItem("selectedProject", JSON.stringify({id: proj.id, name: proj.name}));
+
+        // proj.then(resp=>{
+        //     sessionStorage.setItem("selectedProject", JSON.stringify({id: resp.project.id, name: resp.project.name}));
+        // })
+    }else{       
+        //gets a var called project, wich is a string and replace all the single apostrofe to a double apostrofe
+        var replacedProject = project.replace(/'/g, "\"");
+        
+        parsed_project = JSON.parse(replacedProject);
+        sessionStorage.setItem("selectedProject", JSON.stringify({id: parsed_project.id, name: parsed_project.name}));
+        document.getElementById("selectedProjectTitle").textContent = parsed_project.name;        
     }        
-    
+
+    loadSelectedProject(loadProjectFromSession(project.getAttribute("key")));
     closeNav();
     
 }
+
+function loadProjectFromSession(idProject){    
+    var projects = JSON.parse(sessionStorage.getItem("projects"))    
+    return projects.find(proj => proj.id === parseInt(idProject));
+}
+
+
 
 function fetchProject(projectId){
     /**
@@ -143,4 +155,87 @@ function fetchProject(projectId){
         }
                 
     });
+}
+
+function saveProjectsInSession(projects){
+    var replacedProject = projects.replace(/'/g, "\"");
+    
+    parsed_projects = JSON.parse(replacedProject);
+    sessionStorage.setItem("projects", JSON.stringify(parsed_projects));
+}
+
+function loadSelectedProject(project){ 
+    
+    /**
+     * This function resets the canva for another project take place
+     */
+
+    /* get item parent */
+    const projectParent = document.getElementsByClassName("dashboard-container")[0]         
+
+    /* Clone item element */     
+    const modelElement = document.getElementById('parent-container-model');
+    const elementClone = modelElement.cloneNode(true);
+
+
+    /* removes old element */
+    document.getElementById('parent-container').remove()
+
+    elementClone.style.display = 'flex';
+    elementClone.id = 'parent-container'
+
+    const sortContainer = Sortable.create(elementClone, { // defining the boards inside the parent-container (boards list) as soartables
+            animation: 150,
+            group: 'shared-boards',
+            ghostClass: 'hidden-placeholder', 
+            filter: ".list-board-plus", // bypass the plus button                                   
+    }); 
+
+    /* define element title */ 
+    //elementClone.textContent = newProjectName;                
+    projectParent.append(elementClone);
+
+    project.boards.forEach(board => {
+        loadBoardsOnHTML(board, elementClone)
+    })
+
+}
+
+function loadBoardsOnHTML(board, container){
+    
+        /* creating into the database */
+           
+          
+          /* get container parent */
+          const boardParent = container
+          boardParent.getElementsByClassName("list-items-board-child")[0].textContent = ""; // cleaning the items
+
+          /* Clone board element */
+        //   const element = document.getElementsByClassName('list-board-container')[0];
+          const element = document.getElementById("dropdown-modelBase");
+          const boardClone = element.cloneNode(true);
+
+          /* define element title */ 
+          //boardClone.getElementsByClassName("title-list-board-container")[0].querySelector("span").textContent = newBoardName  // the box with title, items and plus button, then setting an specific span inside 
+          boardClone.getElementsByClassName("title-list-board-container")[0].querySelector("span").textContent = board.name  // the box with title, items and plus button, then setting an specific span inside 
+          boardClone.getElementsByClassName("title-list-board-container")[0].setAttribute('key', 'board'+board.id)
+    
+
+          /* define as a sortable */ 
+          // Sortable.create(boardClone.getElementsByClassName("list-items-board")[0], { 
+          Sortable.create(boardClone.getElementsByClassName("list-items-board-child")[0], {  // box just with the items
+            animation: 150,
+            group: 'shared-items',
+            ghostClass: 'hidden-placeholder',          
+          });
+
+
+          
+          /* generating id for dropdown*/
+          boardClone.getElementsByClassName('dropdown')[0].id = (Math.random() + 1).toString(36).substring(7)
+
+
+          boardClone.style.display = 'block';
+          boardParent.append(boardClone);
+        
 }

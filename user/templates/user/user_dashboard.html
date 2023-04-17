@@ -9,24 +9,13 @@
     <div class="dashboard-container  align-items-start justify-content-start">
                
         <div id="parent-container" class="row align-items-start justify-content-start" >
-            <!-- board model, not displayed -->            
-            {% include 'dashboard/board.html' with boardTitle='random' id='random'  hidden='true' %}             
+            <!-- board model, not displayed, using hidden='false' won't make appear, gotta delete the "hidden='false'"  -->            
+            {% include 'dashboard/board.html' with boardTitle='random' id='modelBase'  hidden='true' %}             
             
-            <!-- {/*% for project in projects %}
-                {/*% include 'dashboard/board.html' with boardTitle=project.name id=project.id %*/}             
-            {% endfor %*/} -->
-
-            <div id="bag" style="color: white;">
-                {% for project in projects %}
-                <h2>{{ project.name }}</h2>
-                    {% if project == projects[0] %}
-                        <script>
-                            selectProject("{{project}}", attribute=false);
-                        </script>
-                    {% endif%}
-                {% endfor %}
-            
-            </div>
+            {% for board in project.boards %}
+                {% include 'dashboard/board.html' with boardTitle=board.name id=board.id %}
+            {% endfor %}
+     
             
             <div class="list-board-plus" onclick="openNewBoarCreation()">
                 <div class="d-flex align-items-center justify-content-center">
@@ -67,6 +56,5 @@
         </div>
 
     </div>
-    
 </div>
 {% endblock content %}

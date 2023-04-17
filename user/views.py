@@ -4,7 +4,7 @@ from django.contrib.auth import login as auth_login, authenticate, logout as aut
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.forms.models import model_to_dict
-import json
+
 
 
 from .forms import UserForm
@@ -75,31 +75,48 @@ def login(request):
     context = {'page':page}
     return render(request, 'user/login.html', context)
 
-
-@login_required(login_url='register')
-def user_dashboard(request):    
-    projects = Project.objects.filter(user=request.user)
-
+@login_required(login_url='login')
+def user_dashboard(request):  
+    context = {}
     projects_list = []
-    for project in projects:
-        data = model_to_dict(project)        
-        boards_list = list(Board.objects.filter(project=project).values())
+
+
+    if request.method == 'GET':
+        projects = Project.objects.filter(user=request.user)
         
-        for board in boards_list:
-            board.pop("updated")
-            board.pop("created")
+        for project in projects:
+            data = model_to_dict(project)        
+            boards_list = list(Board.objects.filter(project=project).values())
 
-        data['boards'] = boards_list                
-        projects_list.append(data)
-    
-    
+            # eliminates the fields updated and created    
+            for board in boards_list:
+                board.pop("updated")
+                board.pop("created")
 
-    for i in projects_list:
-        print(i)
-        print('-'*20)
+            data['boards'] = boards_list                
+            projects_list.append(data)
+        
 
-    context = {'projects' : json.dumps(projects_list)}
+
+    context = {'projects' : projects_list, 'project': projects_list[0]}
     return render(request, 'user/user_dashboard.html', context)
+
+
+# def user_dashboard(request):
+#     project = Project.objects.filter(user=request.user)[0]
+#     dict_project = model_to_dict(project)
+#     boards_list = list(Board.objects.filter(project=project).values())
+
+#     for board in boards_list:
+#         board.pop("updated")
+#         board.pop("created")
+
+#     dict_project['boards'] = boards_list                
+
+#     context = {'project' : dict_project}
+#     return render(request, 'user/user_dashboard.html', context)
+
+
 
 
 @login_required(login_url='login')

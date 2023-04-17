@@ -11,6 +11,7 @@ document.addEventListener("click", function(event) {
         var dropdowns = document.querySelectorAll(".dropdown");
 
         dropdowns.forEach(function(dropdown) {
+            console.log(dropdown)
             if (event.target.closest("#" + dropdown.id) !== dropdown) {
                 dropdown.classList.remove("show");
             }

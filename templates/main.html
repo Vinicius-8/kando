@@ -122,7 +122,7 @@
         /* creating into the database */
         var newBoard = createNewBoard(newBoardName);
         newBoard.then(function(response) { // resolving the promise
-          console.log(response)          
+                 
           
           /* get container parent */
           const boardParent = document.getElementById("parent-container");
@@ -329,6 +329,7 @@
 
       <div id="createProjectEndpoint" data-endpoint="{% url 'create-project' %}"></div>
       <div id="getProjectsEndpoint" data-endpoint="{% url 'get-projects' %}"></div>
+      <div id="userDashboard" data-endpoint="{% url 'user-dashboard' %}"></div>
       <div id="csrfToken" data-token="{{csrf_token}}"></div>
       <div id="userId" data-user="{{user.id}}"></div>
         

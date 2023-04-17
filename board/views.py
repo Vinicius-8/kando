@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -61,7 +60,9 @@ def get_project(request, pk):
 
 def create_board(request):
     if request.method == 'POST':
-        project = Project.objects.get(id=1)
+        
+        project = Project.objects.get(id=request.POST.get('projectId'))
+        
         board = Board.objects.create(
             project = project,
             name = request.POST.get('boardName'),
