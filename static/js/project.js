@@ -58,13 +58,13 @@ function fetchProjects(){
     const endpoint = document.getElementById('getProjectsEndpoint').getAttribute('data-endpoint');
     var csrfToken = document.getElementById('csrfToken').getAttribute('data-token');
     var userId = document.getElementById('userId').getAttribute('data-user');
-
+    console.log(endpoint)
     // sets the token
     $.ajaxSetup({
         headers: { "X-CSRFToken": csrfToken }
       });
 
-    $.ajax({
+    return $.ajax({
         type: "POST",
         url: endpoint,
         headers: {
@@ -74,9 +74,7 @@ function fetchProjects(){
             'userId':userId
         }
                 
-    }).done(function(data) {        
-        return data;
-    });
+    })
 }
 
 
@@ -157,11 +155,11 @@ function fetchProject(projectId){
     });
 }
 
-function saveProjectsInSession(projects){
+function saveProjectsInSession(projects){    
     var replacedProject = projects.replace(/'/g, "\"");
-    
-    parsed_projects = JSON.parse(replacedProject);
-    sessionStorage.setItem("projects", JSON.stringify(parsed_projects));
+    // parsed_projects = JSON.parse(replacedProject);
+    sessionStorage.setItem("projects", replacedProject);
+    return JSON.stringify(replacedProject)
 }
 
 function loadSelectedProject(project){ 
@@ -195,6 +193,7 @@ function loadSelectedProject(project){
     //elementClone.textContent = newProjectName;                
     projectParent.append(elementClone);
 
+    // creates all the boards in the canvas
     project.boards.forEach(board => {
         loadBoardsOnHTML(board, elementClone)
     })
@@ -212,7 +211,7 @@ function loadBoardsOnHTML(board, container){
 
           /* Clone board element */
         //   const element = document.getElementsByClassName('list-board-container')[0];
-          const element = document.getElementById("dropdown-modelBase");
+          const element = document.getElementById("dropdown-modelBase").parentElement.parentElement;
           const boardClone = element.cloneNode(true);
 
           /* define element title */ 
@@ -232,7 +231,7 @@ function loadBoardsOnHTML(board, container){
 
           
           /* generating id for dropdown*/
-          boardClone.getElementsByClassName('dropdown')[0].id = (Math.random() + 1).toString(36).substring(7)
+          boardClone.getElementsByClassName('dropdown')[0].id = 'drpdwn'+(Math.random() + 1).toString(36).substring(7)
 
 
           boardClone.style.display = 'block';

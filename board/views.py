@@ -37,6 +37,8 @@ def get_projects(request):
         projects_list = []
         for project in projects:
             project_dict = model_to_dict(project)
+            boards_list = list(Board.objects.filter(project=project).values())
+            project_dict['boards'] = boards_list
             projects_list.append(project_dict)
 
         return JsonResponse({'projects': projects_list})

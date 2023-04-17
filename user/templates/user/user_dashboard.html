@@ -4,13 +4,13 @@
 <div>
     <div id="createBoardEndpoint" data-endpoint="{% url 'create-board' %}"></div>
     <div class="container-title-user-dashboard">        
-        <span class="span-title-user-dashboard" id="selectedProjectTitle">Example project</span>
+        <span class="span-title-user-dashboard" id="selectedProjectTitle">{{project.name}}</span>
     </div>
     <div class="dashboard-container  align-items-start justify-content-start">
-               
+        {% include 'dashboard/board.html' with boardTitle='random' id='modelBase'  hidden='true' %}   
         <div id="parent-container" class="row align-items-start justify-content-start" >
             <!-- board model, not displayed, using hidden='false' won't make appear, gotta delete the "hidden='false'"  -->            
-            {% include 'dashboard/board.html' with boardTitle='random' id='modelBase'  hidden='true' %}             
+                         
             
             {% for board in project.boards %}
                 {% include 'dashboard/board.html' with boardTitle=board.name id=board.id %}
@@ -54,6 +54,9 @@
             </div>
 
         </div>
+        <script>
+            saveProjectsInSession("{{projects|safe}}")                                
+        </script>
 
     </div>
 </div>

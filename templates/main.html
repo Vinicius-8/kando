@@ -154,6 +154,10 @@
 
           boardClone.style.display = 'block';
           boardParent.append(boardClone);
+          
+          fetchProjects().then(resp=>{
+            saveProjectsInSession(JSON.stringify(resp.projects))
+          })          
 
         })
         .catch(function(error) {
@@ -219,7 +223,7 @@
         itemClone.getElementsByClassName('simple-item')[0].textContent = newBoardItemName; 
         itemClone.style.display="flex";
 
-        itemClone.getElementsByClassName('dropdown')[0].id = newBoardItemName.split(' ').join(''); // set a new id for a child, with that the related function can find it
+        itemClone.getElementsByClassName('dropdown')[0].id = 'drpdwn'+newBoardItemName.split(' ').join(''); // set a new id for a child, with that the related function can find it
         
         projectParent.append(itemClone);
       
