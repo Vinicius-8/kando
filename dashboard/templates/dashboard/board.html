@@ -35,10 +35,10 @@
         <div class="list-items-board-child">
             <!-- simple item of an board -->
             
-            {% include 'dashboard/item.html' with id=id|add:id text='Crack it, Copy it, Paste it' %}
+            {% include 'dashboard/item.html' with id=id|add:id text='00' hidden='true' %}
             
         </div>
 
-        <div class="item-board text-center plus-item-board" onclick="openNewItemCreation(this)">+</div>
+        <div class="item-board text-center plus-item-board" style="cursor: pointer;" onclick="openNewItemCreation(this)">+</div>
     </div>
 </div>

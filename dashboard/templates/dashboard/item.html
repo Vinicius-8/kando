@@ -1,6 +1,11 @@
 {% load static %}
  <!-- simple item of an board -->
- <div class="item-board simple-item-box row">
+ {% if hidden %}
+ <div class="item-board simple-item-box row" style="display: none;">
+    {% else %}
+    <div class="item-board simple-item-box row">
+{% endif %}
+ 
     <div class="simple-item col-sm-10 d-flex align-items-center" style="overflow: hidden;">{{text}}</div>
     
     <!-- the ids and arguments should be created dinamically -->

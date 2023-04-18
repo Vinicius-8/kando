@@ -58,7 +58,7 @@ function fetchProjects(){
     const endpoint = document.getElementById('getProjectsEndpoint').getAttribute('data-endpoint');
     var csrfToken = document.getElementById('csrfToken').getAttribute('data-token');
     var userId = document.getElementById('userId').getAttribute('data-user');
-    console.log(endpoint)
+
     // sets the token
     $.ajaxSetup({
         headers: { "X-CSRFToken": csrfToken }
