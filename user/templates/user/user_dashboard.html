@@ -12,9 +12,9 @@
             <!-- board model, not displayed, using hidden='false' won't make appear, gotta delete the "hidden='false'"  -->            
                          
             
-            {% for board in project.boards %}
-                {% include 'dashboard/board.html' with boardTitle=board.name id=board.id %}
-            {% endfor %}
+            <!-- {/*% for board in project.boards %*/}
+                {/*% include 'dashboard/board.html' with boardTitle=board.name id=board.id %*/}
+            {/*% endfor %*/} -->
      
             
             <div class="list-board-plus" onclick="openNewBoarCreation()">
@@ -55,6 +55,19 @@
 
         </div>
         <script>
+            // load projec if in session            
+            if(sessionStorage.getItem("selectedProject") !== null && sessionStorage.getItem("projects") !== null ){
+                var sessionProject = JSON.stringify(sessionStorage.getItem("selectedProject"))
+                if(!jQuery.isEmptyObject(sessionProject)){
+                    console.log('enters anyway');
+                    //selectProject(sessionProject, attribute=false);
+                }
+                
+            }
+
+
+
+
             saveProjectsInSession("{{projects|safe}}")                                
         </script>
 
