@@ -55,18 +55,23 @@
 
         </div>
         <script>
-            // load projec if in session            
-            if(sessionStorage.getItem("selectedProject") !== null && sessionStorage.getItem("projects") !== null ){
-                var sessionProject = JSON.stringify(sessionStorage.getItem("selectedProject"))
-                if(!jQuery.isEmptyObject(sessionProject)){
-                    console.log('enters anyway');
-                    //selectProject(sessionProject, attribute=false);
+            function isObjEmpty (obj) {
+                return Object.keys(obj).length === 0;
+            }
+            
+            // load projec if in session                        
+            if(sessionStorage.getItem("selectedProject")){                
+                var sessionProject = sessionStorage.getItem("selectedProject");
+
+                if(!isObjEmpty(sessionProject)){                
+                    selectProject(sessionProject, attribute=false);
                 }
                 
+            }else if(sessionStorage.getItem('projects')){
+                var projs = JSON.parse(sessionStorage.getItem('projects'))
+                console.log(projs[0])
+                selectProject(projs[0], attribute=false)
             }
-
-
-
 
             saveProjectsInSession("{{projects|safe}}")                                
         </script>

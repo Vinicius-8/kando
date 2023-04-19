@@ -1,3 +1,6 @@
+var Sortable = document.createElement('script');  
+Sortable.setAttribute('src','https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js');
+document.head.appendChild(Sortable);
 
 function createNewProject(projectName){
     /**
@@ -42,7 +45,8 @@ function createNewProject(projectName){
         }
       };
 
-    //fetchProjects();
+    
+    saveProjectsInSession(fetchProjects())
 }
 
 function fetchProjects(){
@@ -98,6 +102,7 @@ function appendNewProjectToHTML(project){
 
 
 function selectProject(project, attribute=true){
+    console.log('minlio: ', project);
     if(attribute){
         const proj = loadProjectFromSession(project.getAttribute("key"));    
         document.getElementById("selectedProjectTitle").textContent = project.textContent;
@@ -106,23 +111,35 @@ function selectProject(project, attribute=true){
         // proj.then(resp=>{
         //     sessionStorage.setItem("selectedProject", JSON.stringify({id: resp.project.id, name: resp.project.name}));
         // })
+        loadSelectedProject(loadProjectFromSession(project.getAttribute("key")));
+    
     }else{       
         //gets a var called project, wich is a string and replace all the single apostrofe to a double apostrofe
-        var replacedProject = project.replace(/'/g, "\"");
-        
+        var replacedProject;
+        var parsed_project;
+       
+        replacedProject = project.replace(/'/g, "\"");    
         parsed_project = JSON.parse(replacedProject);
-        sessionStorage.setItem("selectedProject", JSON.stringify({id: parsed_project.id, name: parsed_project.name}));
-        document.getElementById("selectedProjectTitle").textContent = parsed_project.name;        
+        document.getElementById("selectedProjectTitle").textContent = parsed_project.name; 
+        loadSelectedProject(loadProjectFromSession(parsed_project.id));
+        
+        
+        sessionStorage.setItem("selectedProject", JSON.stringify(parsed_project));               
+       
+        
     }        
 
-    loadSelectedProject(loadProjectFromSession(project.getAttribute("key")));
+    
     closeNav();
     
 }
 
 function loadProjectFromSession(idProject){    
     var projects = JSON.parse(sessionStorage.getItem("projects"))    
-    return projects.find(proj => proj.id === parseInt(idProject));
+    var project =  projects.find(proj => proj.id === parseInt(idProject));
+    console.log('load id: ', idProject)
+    console.log('load: ', project)
+    return project;
 }
 
 
@@ -156,6 +173,7 @@ function fetchProject(projectId){
 }
 
 function saveProjectsInSession(projects){    
+    console.log('saveProjectsInSession;...')
     var replacedProject = projects.replace(/'/g, "\"");
     // parsed_projects = JSON.parse(replacedProject);
     sessionStorage.setItem("projects", replacedProject);
@@ -163,6 +181,7 @@ function saveProjectsInSession(projects){
 }
 
 function loadSelectedProject(project){ 
+    if(project === undefined) return
     
     /**
      * This function resets the canva for another project take place

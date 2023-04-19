@@ -24,6 +24,12 @@ def register(request): # ! todo: change the password to encrypted
             user.save()
             
             auth_login(request, user)
+
+            project = Project.objects.create(
+                user = request.user,
+                name = 'To do List',
+            )
+
             return redirect('user-dashboard')
             
         else:
@@ -98,7 +104,7 @@ def user_dashboard(request):
         
 
 
-    context = {'projects' : projects_list, 'project': projects_list[0]}
+    context = {'projects' : projects_list, 'project': [projects_list[0] if len(projects_list)>0 else []]}
     return render(request, 'user/user_dashboard.html', context)
 
 
