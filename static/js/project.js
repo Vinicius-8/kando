@@ -1,3 +1,4 @@
+// adding the Sortable lib to use with the boars
 var Sortable = document.createElement('script');  
 Sortable.setAttribute('src','https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js');
 document.head.appendChild(Sortable);
@@ -102,31 +103,40 @@ function appendNewProjectToHTML(project){
 
 
 function selectProject(project, attribute=true){
-    console.log('minlio: ', project);
+    /**
+     * Selects a project from a list of projecs in the session.
+     * 
+     * The first way uses the attribute of the html element selected (in this case in the list of projects in the nav bar)
+     * to get the key value wich is the db id, and loads the selected project.
+     * 
+     * The second way uses the attribute=false, if the user reloads the page the project selected in the session will be loaded
+     * if not, then the first project from the list of projects will be selected.
+     * 
+     * @param {project} the project to be selected, might be an object or an element html
+     * @param {attribute} its optional, true means that's a html element, false is an ojbect
+     * @returns {none}
+     */
+
     if(attribute){
         const proj = loadProjectFromSession(project.getAttribute("key"));    
         document.getElementById("selectedProjectTitle").textContent = project.textContent;
         sessionStorage.setItem("selectedProject", JSON.stringify({id: proj.id, name: proj.name}));
-
-        // proj.then(resp=>{
-        //     sessionStorage.setItem("selectedProject", JSON.stringify({id: resp.project.id, name: resp.project.name}));
-        // })
         loadSelectedProject(loadProjectFromSession(project.getAttribute("key")));
     
-    }else{       
-        //gets a var called project, wich is a string and replace all the single apostrofe to a double apostrofe
+    }else{               
         var replacedProject;
         var parsed_project;
-       
-        replacedProject = project.replace(/'/g, "\"");    
+        try {
+            //gets a var called project, wich is a string and replace all the single apostrofe to a double apostrofe
+            replacedProject = project.replace(/'/g, "\"");    
+        } catch (error) {
+            replacedProject = JSON.stringify(project);
+        }
+        
         parsed_project = JSON.parse(replacedProject);
-        document.getElementById("selectedProjectTitle").textContent = parsed_project.name; 
-        loadSelectedProject(loadProjectFromSession(parsed_project.id));
-        
-        
-        sessionStorage.setItem("selectedProject", JSON.stringify(parsed_project));               
-       
-        
+        document.getElementById("selectedProjectTitle").textContent = parsed_project.name; // defines the project title
+        loadSelectedProject(loadProjectFromSession(parsed_project.id));        
+        sessionStorage.setItem("selectedProject", JSON.stringify(parsed_project));                   
     }        
 
     
@@ -134,19 +144,22 @@ function selectProject(project, attribute=true){
     
 }
 
-function loadProjectFromSession(idProject){    
+function loadProjectFromSession(idProject){
+    /**
+     * Loads the project selecting it from the list of projects in the session
+     * 
+     * @param {idProject} id of an specifc project
+     * @returns {object} returns an project object
+     */    
     var projects = JSON.parse(sessionStorage.getItem("projects"))    
     var project =  projects.find(proj => proj.id === parseInt(idProject));
-    console.log('load id: ', idProject)
-    console.log('load: ', project)
     return project;
 }
 
 
-
 function fetchProject(projectId){
     /**
-     * fetch the backend and gets a specific project using its id
+     * fetch the backend using ajax and gets a specific project using its id
      * 
      * @param {number} projectId project id in the database
      * @returns {promise} returns a promise with the server response [project | none]
@@ -173,20 +186,32 @@ function fetchProject(projectId){
 }
 
 function saveProjectsInSession(projects){    
-    console.log('saveProjectsInSession;...')
-    var replacedProject = projects.replace(/'/g, "\"");
+    /**
+     * Gets the list of projects given by django, changes the apostrofe, sets in the session and return the list setted
+     * 
+     * @param {projects} list of projects stringified by django
+     * @return {replacedProjecs} list of altered projects
+     */
+    
+    var replacedProjects = projects.replace(/'/g, "\"");
     // parsed_projects = JSON.parse(replacedProject);
-    sessionStorage.setItem("projects", replacedProject);
-    return JSON.stringify(replacedProject)
+    sessionStorage.setItem("projects", replacedProjects);
+    return JSON.stringify(replacedProjects)
 }
 
+
 function loadSelectedProject(project){ 
-    if(project === undefined) return
-    
     /**
-     * This function resets the canva for another project take place
+     * This function resets the canva for another project take place. Creates all the elements necessary to render
+     * the project properly. Uses the project param to load its boards
+     * 
+     * @param {project} Project object with a list of boards in it to be interated through
+     * @returns {none}
      */
 
+    if(project === undefined) return
+    
+   
     /* get item parent */
     const projectParent = document.getElementsByClassName("dashboard-container")[0]         
 
@@ -219,41 +244,43 @@ function loadSelectedProject(project){
 
 }
 
-function loadBoardsOnHTML(board, container){
+
+function loadBoardsOnHTML(board, container){    
+    /**
+     * Uses a project canva to render a single board. Creates all the elements and append to the parent project
+     * 
+     * @param {board} A board object 
+     * @param {container} the parent element to the boards be rendered in
+     */
     
-        /* creating into the database */
-           
-          
-          /* get container parent */
-          const boardParent = container
-          boardParent.getElementsByClassName("list-items-board-child")[0].textContent = ""; // cleaning the items
-
-          /* Clone board element */
-        //   const element = document.getElementsByClassName('list-board-container')[0];
-          const element = document.getElementById("dropdown-modelBase").parentElement.parentElement;
-          const boardClone = element.cloneNode(true);
-
-          /* define element title */ 
-          //boardClone.getElementsByClassName("title-list-board-container")[0].querySelector("span").textContent = newBoardName  // the box with title, items and plus button, then setting an specific span inside 
-          boardClone.getElementsByClassName("title-list-board-container")[0].querySelector("span").textContent = board.name  // the box with title, items and plus button, then setting an specific span inside 
-          boardClone.getElementsByClassName("title-list-board-container")[0].setAttribute('key', 'board'+board.id)
     
+    /* get container parent */
+    const boardParent = container
+    boardParent.getElementsByClassName("list-items-board-child")[0].textContent = ""; // cleaning the items
 
-          /* define as a sortable */ 
-          // Sortable.create(boardClone.getElementsByClassName("list-items-board")[0], { 
-          Sortable.create(boardClone.getElementsByClassName("list-items-board-child")[0], {  // box just with the items
-            animation: 150,
-            group: 'shared-items',
-            ghostClass: 'hidden-placeholder',          
-          });
+    /* Clone board element */
+    const element = document.getElementById("dropdown-modelBase").parentElement.parentElement;
+    const boardClone = element.cloneNode(true);
 
-
-          
-          /* generating id for dropdown*/
-          boardClone.getElementsByClassName('dropdown')[0].id = 'drpdwn'+(Math.random() + 1).toString(36).substring(7)
+    /* define element title */ 
+    boardClone.getElementsByClassName("title-list-board-container")[0].querySelector("span").textContent = board.name  // the box with title, items and plus button, then setting an specific span inside 
+    boardClone.getElementsByClassName("title-list-board-container")[0].setAttribute('key', 'board' + board.id)
 
 
-          boardClone.style.display = 'block';
-          boardParent.append(boardClone);
-        
+    /* define as a sortable */ 
+    Sortable.create(boardClone.getElementsByClassName("list-items-board-child")[0], {  // box just with the items
+        animation: 150,
+        group: 'shared-items',
+        ghostClass: 'hidden-placeholder',          
+    });
+
+
+    
+    /* generating id for dropdown*/
+    boardClone.getElementsByClassName('dropdown')[0].id = 'drpdwn'+(Math.random() + 1).toString(36).substring(7)
+
+
+    boardClone.style.display = 'block';
+    boardParent.append(boardClone);
+
 }
