@@ -1,7 +1,7 @@
-// adding the Sortable lib to use with the boars
 var Sortable = document.createElement('script');  
 Sortable.setAttribute('src','https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js');
 document.head.appendChild(Sortable);
+// adding the Sortable lib to use with the boars
 
 function createNewProject(projectName){
     /**
@@ -49,6 +49,7 @@ function createNewProject(projectName){
     
     saveProjectsInSession(fetchProjects())
 }
+
 
 function fetchProjects(){
     /**
@@ -124,8 +125,7 @@ function selectProject(project, attribute=true){
         loadSelectedProject(loadProjectFromSession(project.getAttribute("key")));
     
     }else{               
-        var replacedProject;
-        var parsed_project;
+        var replacedProject;        
         try {
             //gets a var called project, wich is a string and replace all the single apostrofe to a double apostrofe
             replacedProject = project.replace(/'/g, "\"");    
@@ -133,7 +133,7 @@ function selectProject(project, attribute=true){
             replacedProject = JSON.stringify(project);
         }
         
-        parsed_project = JSON.parse(replacedProject);
+        var parsed_project = JSON.parse(replacedProject);
         document.getElementById("selectedProjectTitle").textContent = parsed_project.name; // defines the project title
         loadSelectedProject(loadProjectFromSession(parsed_project.id));        
         sessionStorage.setItem("selectedProject", JSON.stringify(parsed_project));                   
@@ -226,7 +226,8 @@ function loadSelectedProject(project){
     elementClone.style.display = 'flex';
     elementClone.id = 'parent-container'
 
-    const sortContainer = Sortable.create(elementClone, { // defining the boards inside the parent-container (boards list) as soartables
+    // defining the boards inside the parent-container (boards list) as soartables
+    const sortContainer = Sortable.create(elementClone, { 
             animation: 150,
             group: 'shared-boards',
             ghostClass: 'hidden-placeholder', 
@@ -283,4 +284,30 @@ function loadBoardsOnHTML(board, container){
     boardClone.style.display = 'block';
     boardParent.append(boardClone);
 
+}
+
+
+function deleteBoardRequest(boardId){
+    /**
+     * Makes a request to the deletion endpoint of boards
+     * 
+     * @param {boardId} the id in the database
+     * @returns {promise} returns a promise with the server response [board id | none]
+     */
+
+    const endpoint = document.getElementById('deleteBoardEndpoint').getAttribute('data-endpoint');
+    var csrfToken = document.getElementById('csrfToken').getAttribute('data-token');
+
+    $.ajaxSetup({
+        headers: { "X-CSRFToken": csrfToken }
+      });
+
+    return $.ajax({
+        type: "POST",
+        url: endpoint+'/'+boardId,
+        headers: {
+            'csrfmiddlewaretoken': csrfToken,           
+        }
+                
+    });
 }

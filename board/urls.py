@@ -8,5 +8,6 @@ urlpatterns = [
     path('projects/<str:pk>', views.get_project, name='get-project'),
 
     #board
-    path('board/create', views.create_board, name='create-board')
+    path('board/create', views.create_board, name='create-board'),
+    path('board/delete', views.delete_board, name='delete-board')
 ]

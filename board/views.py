@@ -74,3 +74,16 @@ def create_board(request):
             
 
     return HttpResponse('Cant create project', status_code=500)
+
+
+def delete_board(request, pk):
+    if request.method == 'POST':
+        if not pk:
+            return HttpResponseBadRequest("Not enough data provided")
+
+        Board.objects.filter(pk=pk).delete()
+        # add also the deletion of the items related
+
+        return JsonResponse({'delete_board_id': board_id})
+    
+    return HttpResponse('Can\'t delete the board', status_code=405)
