@@ -9,7 +9,7 @@ from django.forms.models import model_to_dict
 
 from .forms import UserForm
 from .models import User
-from board.models import Project, Board
+from board.models import Project, Board, Item
 
 @csrf_exempt # dev only---------------
 def register(request): # ! todo: change the password to encrypted
@@ -99,6 +99,15 @@ def user_dashboard(request):
                 board.pop("updated")
                 board.pop("created")
 
+                items_list = list(Item.objects.filter(board=board['id']).values())
+                
+                for item in items_list:                    
+                    item.pop("created")
+                    item.pop("updated")
+                
+                board['items'] = items_list
+
+
             data['boards'] = boards_list                
             projects_list.append(data)
         
@@ -106,23 +115,6 @@ def user_dashboard(request):
 
     context = {'projects' : projects_list, 'project': [projects_list[0] if len(projects_list)>0 else []]}
     return render(request, 'user/user_dashboard.html', context)
-
-
-# def user_dashboard(request):
-#     project = Project.objects.filter(user=request.user)[0]
-#     dict_project = model_to_dict(project)
-#     boards_list = list(Board.objects.filter(project=project).values())
-
-#     for board in boards_list:
-#         board.pop("updated")
-#         board.pop("created")
-
-#     dict_project['boards'] = boards_list                
-
-#     context = {'project' : dict_project}
-#     return render(request, 'user/user_dashboard.html', context)
-
-
 
 
 @login_required(login_url='login')

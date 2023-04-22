@@ -18,3 +18,10 @@ class Board(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
 
+
+class Item(models.Model):
+    name = models.CharField(max_length=205)
+    board = models.ForeignKey(Board, on_delete=models.CASCADE)
+
+    updated = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)

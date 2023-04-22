@@ -4,11 +4,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
 
-from .models import Project, User, Board
+from .models import Project, User, Board, Item
 
 
-
-@login_required(login_url='login')
 def create_project(request):
     if request.method == 'POST':
         project = Project.objects.create(
@@ -18,13 +16,10 @@ def create_project(request):
 
         return JsonResponse({'project': model_to_dict(project)})
         
-    
-
     return HttpResponse('Cant create project', status_code=500)
 
 
 
-@login_required(login_url='login')
 def get_projects(request):
     if request.method == 'POST':
         user_id = request.POST.get('userId')
@@ -46,7 +41,6 @@ def get_projects(request):
     return HttpResponse('Can\'t fetch projects', status_code=500)
 
 
-@login_required(login_url='login')
 def get_project(request, pk):
     if request.method == 'POST':
         # project_id = request.POST.get('projectId')
@@ -77,13 +71,27 @@ def create_board(request):
 
 
 def delete_board(request, pk):
-    if request.method == 'POST':
+    if request.method == 'DELETE':
         if not pk:
             return HttpResponseBadRequest("Not enough data provided")
 
-        Board.objects.filter(pk=pk).delete()
+        deleted_board = Board.objects.filter(pk=pk).delete()
         # add also the deletion of the items related
 
-        return JsonResponse({'delete_board_id': board_id})
+        return JsonResponse({'delete_board_id': deleted_board})
     
     return HttpResponse('Can\'t delete the board', status_code=405)
+
+
+
+def create_item(request):
+    if request.method == 'POST':
+        board = Board.objects.get(id=request.POST.get('boardId'))
+        
+        item = Item.objects.create(
+            board = board,
+            name = request.POST.get('itemName'),
+        )
+        return JsonResponse({'item': model_to_dict(item)})
+        
+    return HttpResponse('Cant create item', status_code=500)
