@@ -14,5 +14,6 @@ urlpatterns = [
     # item
     #create item
     path('item/create', views.create_item, name='create-item'),
+    path('item/delete/<str:pk>', views.delete_item, name='delete-item'),
 
 ]

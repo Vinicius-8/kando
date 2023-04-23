@@ -221,27 +221,20 @@
         /* creating into the database */
         var newItem = createNewItem(boardId, newBoardItemName);
         
-        console.log('Saving the igem;;;', context);
-
         newItem.then(function(response) {
-          console.log('1...', response);
+
           /* get item parent */
-                    
-          
           const boardParent = document.querySelector(`[key="board${response.item.board}"]`).parentElement.getElementsByClassName("list-items-board-child")[0]        
           
-          console.log('2...', boardParent);
-
           /* Clone item element */      
           const element = document.getElementsByClassName('simple-item-box')[0];
           const itemClone = element.cloneNode(true);
-          console.log('3...');
+
           /* define element title */ 
           itemClone.getElementsByClassName('simple-item')[0].textContent = newBoardItemName; 
           itemClone.style.display="flex";
-          console.log('4...');
+
           itemClone.getElementsByClassName('dropdown')[0].id = 'drpdwn'+ newBoardItemName.split(' ').join(''); // set a new id for a child, with that the related function can find it
-          console.log('5...');
           boardParent.append(itemClone);
 
         }).catch(function(error) {
@@ -256,6 +249,7 @@
         var id = element.parentElement.parentElement.id;
         var item = document.querySelector("#" + id);
         item.parentElement.remove();
+        deleteItemRequest(id);
       }
 
 

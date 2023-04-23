@@ -39,13 +39,14 @@ function deleteItemRequest(itemId){
     const endpoint = document.getElementById('deleteItemEndpoint').getAttribute('data-endpoint');
     var csrfToken = document.getElementById('csrfToken').getAttribute('data-token');
   
-    // removin the las item from object
+    // removin the last item from object
     var splited_endpoint = endpoint.split('/')
     splited_endpoint.pop()
     var joined_endpoint = splited_endpoint.join('/')
     
   
     console.log('hitting: ', joined_endpoint + '/' + itemId);
+
     $.ajaxSetup({
         headers: { "X-CSRFToken": csrfToken }
       });

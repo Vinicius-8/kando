@@ -6,7 +6,7 @@ from django.forms.models import model_to_dict
 
 from .models import Project, User, Board, Item
 
-
+# project
 def create_project(request):
     if request.method == 'POST':
         project = Project.objects.create(
@@ -19,7 +19,7 @@ def create_project(request):
     return HttpResponse('Cant create project', status_code=500)
 
 
-
+# project
 def get_projects(request):
     if request.method == 'POST':
         user_id = request.POST.get('userId')
@@ -41,6 +41,7 @@ def get_projects(request):
     return HttpResponse('Can\'t fetch projects', status_code=500)
 
 
+# project
 def get_project(request, pk):
     if request.method == 'POST':
         # project_id = request.POST.get('projectId')
@@ -54,6 +55,7 @@ def get_project(request, pk):
     return HttpResponse('Can\'t fetch projects', status_code=500)
 
 
+# board
 def create_board(request):
     if request.method == 'POST':
         
@@ -66,10 +68,10 @@ def create_board(request):
 
         return JsonResponse({'board': model_to_dict(board)})
             
-
     return HttpResponse('Cant create project', status_code=500)
 
 
+# board
 def delete_board(request, pk):
     if request.method == 'DELETE':
         if not pk:
@@ -83,7 +85,7 @@ def delete_board(request, pk):
     return HttpResponse('Can\'t delete the board', status_code=405)
 
 
-
+# item
 def create_item(request):
     if request.method == 'POST':
         board = Board.objects.get(id=request.POST.get('boardId'))
@@ -95,3 +97,15 @@ def create_item(request):
         return JsonResponse({'item': model_to_dict(item)})
         
     return HttpResponse('Cant create item', status_code=500)
+
+
+# item
+def delete_item(request, pk):
+    if request.method == 'DELETE':
+        if not pk:
+            return HttpResponseBadRequest('Not enough data provided')
+
+        deleted_item = Item.objects.filter(pk=pk).delete()
+        return JsonResponse({'deleted_item_id': deleted_item})
+
+        return HttpResponse('Can\'t delete item', status_code = 500)
