@@ -81,12 +81,11 @@ function loadBoardsOnHTML(board, container){
   boardClone.getElementsByClassName("title-list-board-container")[0].querySelector("span").textContent = board.name  // the box with title, items and plus button, then setting an specific span inside 
   boardClone.getElementsByClassName("title-list-board-container")[0].setAttribute('key', 'board' + board.id)
 
-
   /* define as a sortable */ 
   Sortable.create(boardClone.getElementsByClassName("list-items-board-child")[0], {  // box just with the items
       animation: 150,
       group: 'shared-items',
-      ghostClass: 'hidden-placeholder',          
+      // ghostClass: 'hidden-placeholder',          
   });
 
 
@@ -98,10 +97,14 @@ function loadBoardsOnHTML(board, container){
   boardClone.style.display = 'block';
   boardParent.append(boardClone);
 
+
   // boardClone is the parent of items
-  board.items.forEach(item => {
-    loadItemsOnBoard(item, boardClone)
-})
+  if(board.items){
+    board.items.forEach(item => {
+      loadItemsOnBoard(item, boardClone)
+    })
+  }
+  
 
 }
 
@@ -125,8 +128,6 @@ function deleteBoardRequest(boardId){
   splited_endpoint.pop()
   var joined_endpoint = splited_endpoint.join('/')
   
-
-  console.log('hitting: ', joined_endpoint + '/' + boardId);
   $.ajaxSetup({
       headers: { "X-CSRFToken": csrfToken }
     });

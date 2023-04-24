@@ -35,6 +35,10 @@
    
 }
 
+.list-items-board-child{
+    min-height: 20px;
+}
+
 .list-board-plus{
     position: absolute;    
     right: -315px;

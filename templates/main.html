@@ -130,34 +130,34 @@
           
           /* get container parent */
           const boardParent = document.getElementById("parent-container");
-          boardParent.getElementsByClassName("list-items-board-child")[0].textContent = ""; // cleaning the items
 
-          /* Clone board element */
-          const element = document.getElementsByClassName('list-board-container')[0];
-          const boardClone = element.cloneNode(true);
+          loadBoardsOnHTML(response.board, boardParent)
+          // boardParent.getElementsByClassName("list-items-board-child")[0].textContent = ""; // cleaning the items
 
-          /* define element title */ 
-          //boardClone.getElementsByClassName("title-list-board-container")[0].querySelector("span").textContent = newBoardName  // the box with title, items and plus button, then setting an specific span inside 
-          boardClone.getElementsByClassName("title-list-board-container")[0].querySelector("span").textContent = response.board.name  // the box with title, items and plus button, then setting an specific span inside 
-          boardClone.getElementsByClassName("title-list-board-container")[0].setAttribute('key', response.board.id)
+          // /* Clone board element */
+          // const element = document.getElementById("dropdown-modelBase").parentElement.parentElement;
+          // const boardClone = element.cloneNode(true);
+
+          // /* define element title */ 
+          // boardClone.getElementsByClassName("title-list-board-container")[0].querySelector("span").textContent = response.board.name  // the box with title, items and plus button, then setting an specific span inside 
+          // boardClone.getElementsByClassName("title-list-board-container")[0].setAttribute('key', 'board' + response.board.id)
     
 
-          /* define as a sortable */ 
-          // Sortable.create(boardClone.getElementsByClassName("list-items-board")[0], { 
-          Sortable.create(boardClone.getElementsByClassName("list-items-board-child")[0], {  // box just with the items
-            animation: 150,
-            group: 'shared-items',
-            ghostClass: 'hidden-placeholder',          
-          });
+          // /* define as a sortable */ 
+          // Sortable.create(boardClone.getElementsByClassName("list-items-board-child")[0], {  // box just with the items
+          //   animation: 150,
+          //   group: 'shared-items',
+          //   ghostClass: 'hidden-placeholder',          
+          // });
 
 
           
-          /* generating id for dropdown*/
-          boardClone.getElementsByClassName('dropdown')[0].id = (Math.random() + 1).toString(36).substring(7)
+          // /* generating id for dropdown*/
+          // boardClone.getElementsByClassName('dropdown')[0].id = 'first'+(Math.random() + 1).toString(36).substring(7)
 
 
-          boardClone.style.display = 'block';
-          boardParent.append(boardClone);
+          // boardClone.style.display = 'block';
+          // boardParent.append(boardClone);
           
           fetchProjects().then(resp=>{
             saveProjectsInSession(JSON.stringify(resp.projects))
@@ -294,7 +294,7 @@
         }
 
         /* get item parent */
-        const boardParent = document.getElementsByClassName("dashboard-container")[0]         
+        const projectParent = document.getElementsByClassName("dashboard-container")[0]         
 
         /* Clone item element */     
         const modelElement = document.getElementById('parent-container-model');
@@ -321,8 +321,7 @@
         closeNav();
       }
 
-    
-      
+        
     </script>
     
   </head>
@@ -425,7 +424,7 @@
 
     <script >
     
-      // var listBoardContainer = document.getElementsByClassName('dashboard-container');  // getting THE list container
+      //var listBoardContainer = document.getElementsByClassName('dashboard-container');  // getting THE list container
       var listBoardContainer = document.getElementsByClassName('dashboard-container')[0].firstElementChild;  // getting THE list container
       const sortContainer = Sortable.create(listBoardContainer, { 
             animation: 150,
@@ -438,12 +437,12 @@
       // var listItemsBoard = document.getElementsByClassName('list-items-board');    // getting the items list container
       var listItemsBoard = document.getElementsByClassName("list-items-board-child");    // getting the items list container - for plus
       
-    // defining all items lodaded as draggable 
+      // defining all items lodaded as draggable 
       for (let index = 0; index < listItemsBoard.length; index++) {
         Sortable.create(listItemsBoard[index], { 
           animation: 150,
           group: 'shared-items',
-          ghostClass: 'hidden-placeholder',
+          // ghostClass: 'hidden-placeholder',
           filter: ".plus-item-board",
           
         });

@@ -46,8 +46,10 @@ function createNewProject(projectName){
         }
       };
 
+      fetchProjects().then(resp=>{
+        saveProjectsInSession(JSON.stringify(resp.projects))
+      })    
     
-    saveProjectsInSession(fetchProjects())
 }
 
 

@@ -68,8 +68,7 @@
                 }
                 
             }else if(sessionStorage.getItem('projects')){
-                var projs = JSON.parse(sessionStorage.getItem('projects'))
-                console.log(projs[0])
+                var projs = JSON.parse(sessionStorage.getItem('projects'))                
                 selectProject(projs[0], attribute=false)
             }
 
