@@ -75,14 +75,24 @@
         document.getElementById("modalSmallMessage").textContent=""
         inputModalContent = document.getElementById("modalInput").value;
         document.getElementById("modalInput").value="";
+        var auth = "{{request.user.is_authenticated}}"      
 
         switch (type) {
-          case BOARD:
-            saveNewBoard();
+          case BOARD:            
+            if(auth === "True"){
+              saveNewBoard();
+            }else{
+              _saveNewBoard();
+            }
             break;
 
           case ITEM:
-            saveNewItem();
+            if(auth === "True"){
+              saveNewItem();
+            }else{
+              _saveNewItem();
+            }
+            
             break;
 
           case PROJECT:
@@ -132,32 +142,6 @@
           const boardParent = document.getElementById("parent-container");
 
           loadBoardsOnHTML(response.board, boardParent)
-          // boardParent.getElementsByClassName("list-items-board-child")[0].textContent = ""; // cleaning the items
-
-          // /* Clone board element */
-          // const element = document.getElementById("dropdown-modelBase").parentElement.parentElement;
-          // const boardClone = element.cloneNode(true);
-
-          // /* define element title */ 
-          // boardClone.getElementsByClassName("title-list-board-container")[0].querySelector("span").textContent = response.board.name  // the box with title, items and plus button, then setting an specific span inside 
-          // boardClone.getElementsByClassName("title-list-board-container")[0].setAttribute('key', 'board' + response.board.id)
-    
-
-          // /* define as a sortable */ 
-          // Sortable.create(boardClone.getElementsByClassName("list-items-board-child")[0], {  // box just with the items
-          //   animation: 150,
-          //   group: 'shared-items',
-          //   ghostClass: 'hidden-placeholder',          
-          // });
-
-
-          
-          // /* generating id for dropdown*/
-          // boardClone.getElementsByClassName('dropdown')[0].id = 'first'+(Math.random() + 1).toString(36).substring(7)
-
-
-          // boardClone.style.display = 'block';
-          // boardParent.append(boardClone);
           
           fetchProjects().then(resp=>{
             saveProjectsInSession(JSON.stringify(resp.projects))
@@ -168,6 +152,47 @@
         });
       }
       
+      /* Board */ 
+      function _saveNewBoard(){
+        const newBoardName = inputModalContent // using the content from the modal
+        if(""=== newBoardName){
+          alert("Can't be empty");
+          return          
+        }
+        
+                 
+          
+          /* get container parent */
+          const boardParent = document.getElementById("parent-container");
+
+          boardParent.getElementsByClassName("list-items-board-child")[0].textContent = ""; // cleaning the items
+
+          /* Clone board element */
+          const element = document.getElementsByClassName('list-board-container')[0];
+          const boardClone = element.cloneNode(true);
+
+          /* define element title */ 
+          boardClone.getElementsByClassName("title-list-board-container")[0].querySelector("span").textContent = newBoardName // the box with title, items and plus button, then setting an specific span inside 
+    
+
+          /* define as a sortable */ 
+          Sortable.create(boardClone.getElementsByClassName("list-items-board-child")[0], {  // box just with the items
+            animation: 150,
+            group: 'shared-items',
+            ghostClass: 'hidden-placeholder',          
+          });
+
+
+          
+          /* generating id for dropdown*/
+          boardClone.getElementsByClassName('dropdown')[0].id = 'first'+(Math.random() + 1).toString(36).substring(7)
+
+
+          boardClone.style.display = 'block';
+          boardParent.append(boardClone);
+                   
+      }
+
       /* Board */
       function openEditBoard(board){
         document.getElementById("exampleModalLabel").textContent="Edit Board"             
@@ -207,7 +232,40 @@
       }
 
       /* item */
-      function saveNewItem(){        
+      function _saveNewItem(){
+          /**
+           * Save item with a unauthenticate user
+           */        
+          const newBoardItemName = inputModalContent // using the content from the modal
+          
+          if(""=== newBoardItemName){
+            alert("Can't be empty");
+            return          
+          }
+
+          /* get item parent */
+          const boardParent = context.parentElement.getElementsByClassName("list-items-board-child")[0]        
+          
+          /* Clone item element */      
+          const element = document.getElementsByClassName('simple-item-box')[0];
+          const itemClone = element.cloneNode(true);
+
+          /* define element title */ 
+          itemClone.getElementsByClassName('simple-item')[0].textContent = newBoardItemName; 
+          itemClone.style.display="flex";
+          
+
+          itemClone.getElementsByClassName('dropdown')[0].id = 'drpdwn'+ newBoardItemName.split(' ').join(''); // set a new id for a child, with that the related function can find it
+          boardParent.append(itemClone);
+
+        
+      }
+      
+      /* item */
+      function saveNewItem(){
+        /**
+         * Save item with a authenticade user
+         */        
         const newBoardItemName = inputModalContent // using the content from the modal
         
         if(""=== newBoardItemName){
@@ -217,7 +275,7 @@
 
         // getting the board id from html
         var boardId = context.parentElement.parentElement.getElementsByClassName('title-list-board-container')[0].getAttribute("key").replace("board","")
-      
+
         /* creating into the database */
         var newItem = createNewItem(boardId, newBoardItemName);
         
@@ -233,24 +291,33 @@
           /* define element title */ 
           itemClone.getElementsByClassName('simple-item')[0].textContent = newBoardItemName; 
           itemClone.style.display="flex";
+          itemClone.setAttribute("key", response.item.id)
 
           itemClone.getElementsByClassName('dropdown')[0].id = 'drpdwn'+ newBoardItemName.split(' ').join(''); // set a new id for a child, with that the related function can find it
           boardParent.append(itemClone);
 
+          fetchProjects().then(resp=>{
+            saveProjectsInSession(JSON.stringify(resp.projects))
+          })   
+
         }).catch(function(error) {
           console.log(error);
         });
-      
+
       }
-      
+
 
       /* item */
       function deleteItem(element){
         var id = element.parentElement.parentElement.id;
         var item = document.querySelector("#" + id);
         item.parentElement.remove();
+
+        var auth = "{{request.user.is_authenticated}}"
+        if(auth === "True"){
+          deleteItemRequest(item.parentElement.getAttribute("key"));
+        }
         
-        deleteItemRequest(item.parentElement.getAttribute("key"));
       }
 
 
@@ -319,6 +386,9 @@
         //elementClone.textContent = newProjectName;                
         projectParent.append(elementClone);
         createNewProject(newProjectName);
+        // fetchProjects().then(resp=>{
+        //     saveProjectsInSession(JSON.stringify(resp.projects))
+        // })   
         closeNav();
       }
 
@@ -329,8 +399,9 @@
           return
         }
 
-        var projectId = element.getAttribute("key");
-        console.log('deleting... ', projectId)
+        var projectId = element.parentElement.getAttribute("key");
+        deleteProjectRequest(projectId);
+        // fazer algo apos delete
       }
 
     </script>
@@ -370,11 +441,11 @@
         <div id="projectsListContainer">
         <!-- <a  href="#">Macaco</a> -->
           {% for project in projects %}
-          <div style="display: flex; justify-content: space-between;" onclick="deleteProject(this)" key="{{project.id}}">
+          <div style="display: flex; justify-content: space-between;"  key="{{project.id}}">
             <a  href="#" key="{{project.id}}" onclick="selectProject(this)">{{ project.name }}</a>
             
             <div style="color: white; width: 30px; margin-right: 10px; cursor: pointer;"
-            class=" d-flex justify-content-center align-items-center">
+            class=" d-flex justify-content-center align-items-center" onclick="deleteProject(this)">
               {% include 'icons/delete_icon.html' %}
             </div>
           </div>

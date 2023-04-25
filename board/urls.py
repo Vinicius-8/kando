@@ -6,6 +6,7 @@ urlpatterns = [
     path('create', views.create_project, name='create-project'),
     path('projects', views.get_projects, name='get-projects'),
     path('projects/<str:pk>', views.get_project, name='get-project'),
+    path('projects/delete/<str:pk>', views.delete_project, name='delete-project'),
 
     # board
     path('board/create', views.create_board, name='create-board'),

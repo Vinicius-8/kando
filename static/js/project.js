@@ -248,3 +248,35 @@ function loadSelectedProject(project){
 }
 
 
+function deleteProjectRequest(projectId){
+    /**
+     * Makes a request to the deletion endpoint of project
+     * 
+     * @param {projectId} the id in the database
+     * @returns {promise} returns a promise with the server response [item id | none]
+     */
+  
+    const endpoint = document.getElementById('deleteProjectEndpoint').getAttribute('data-endpoint');
+    var csrfToken = document.getElementById('csrfToken').getAttribute('data-token');
+  
+    // removin the last item from object
+    var splited_endpoint = endpoint.split('/')
+    splited_endpoint.pop()
+    var joined_endpoint = splited_endpoint.join('/')
+    
+
+    $.ajaxSetup({
+        headers: { "X-CSRFToken": csrfToken }
+      });
+  
+    return $.ajax({
+        type: "DELETE",
+        url: joined_endpoint + '/' + projectId,
+        headers: {
+            'csrfmiddlewaretoken': csrfToken,           
+        }
+                
+    });
+}
+
+

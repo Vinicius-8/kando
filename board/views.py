@@ -20,6 +20,19 @@ def create_project(request):
 
 
 # project
+def delete_project(request, pk):
+    if request.method == 'DELETE':
+        if not pk:  
+            return HttpResponseBadRequest('Not enough data provided')
+        
+        deleted_project = Project.objects.filter(pk=pk).delete()
+        return JsonResponse({'deleted_project_id': deleted_project})
+    
+    return HttpResponse('Can\'t delete project', status_code = 500)
+
+
+
+# project
 def get_projects(request):
     if request.method == 'POST':
         user_id = request.POST.get('userId')
@@ -33,6 +46,19 @@ def get_projects(request):
         for project in projects:
             project_dict = model_to_dict(project)
             boards_list = list(Board.objects.filter(project=project).values())
+            # eliminates the fields updated and created    
+            for board in boards_list:
+                board.pop("updated")
+                board.pop("created")
+
+                items_list = list(Item.objects.filter(board=board['id']).values())
+                
+                for item in items_list:                    
+                    item.pop("created")
+                    item.pop("updated")
+
+                board['items'] = items_list
+                
             project_dict['boards'] = boards_list
             projects_list.append(project_dict)
 
@@ -108,4 +134,7 @@ def delete_item(request, pk):
         deleted_item = Item.objects.filter(pk=pk).delete()
         return JsonResponse({'deleted_item_id': deleted_item})
 
-        return HttpResponse('Can\'t delete item', status_code = 500)
+    return HttpResponse('Can\'t delete item', status_code = 500)
+
+
+

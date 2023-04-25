@@ -44,8 +44,6 @@ function deleteItemRequest(itemId){
     splited_endpoint.pop()
     var joined_endpoint = splited_endpoint.join('/')
     
-  
-    console.log('hitting: ', joined_endpoint + '/' + itemId);
 
     $.ajaxSetup({
         headers: { "X-CSRFToken": csrfToken }
@@ -87,3 +85,5 @@ function loadItemsOnBoard(item, container){
   boardParent.append(itemClone);
 
 }
+
+
