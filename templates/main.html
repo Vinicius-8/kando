@@ -249,7 +249,8 @@
         var id = element.parentElement.parentElement.id;
         var item = document.querySelector("#" + id);
         item.parentElement.remove();
-        deleteItemRequest(id);
+        
+        deleteItemRequest(item.parentElement.getAttribute("key"));
       }
 
 
@@ -321,7 +322,17 @@
         closeNav();
       }
 
-        
+      
+      /* project */
+      function deleteProject(element){
+        if(!confirm("Delete project? ")){
+          return
+        }
+
+        var projectId = element.getAttribute("key");
+        console.log('deleting... ', projectId)
+      }
+
     </script>
     
   </head>
@@ -359,7 +370,14 @@
         <div id="projectsListContainer">
         <!-- <a  href="#">Macaco</a> -->
           {% for project in projects %}
-          <a  href="#" key="{{project.id}}" onclick="selectProject(this)">{{ project.name }}</a>
+          <div style="display: flex; justify-content: space-between;" onclick="deleteProject(this)" key="{{project.id}}">
+            <a  href="#" key="{{project.id}}" onclick="selectProject(this)">{{ project.name }}</a>
+            
+            <div style="color: white; width: 30px; margin-right: 10px; cursor: pointer;"
+            class=" d-flex justify-content-center align-items-center">
+              {% include 'icons/delete_icon.html' %}
+            </div>
+          </div>
           {% empty %}
               <!-- ------------- test user without project -->
               

@@ -80,6 +80,7 @@ function loadItemsOnBoard(item, container){
   /* define element title */ 
   itemClone.getElementsByClassName('simple-item')[0].textContent = item.name; 
   itemClone.style.display="flex";
+  itemClone.setAttribute("key", item.id);
 
 
   itemClone.getElementsByClassName('dropdown')[0].id = 'drpdwn'+item.name.split(' ').join(''); // set a new id for a child, with that the related function can find it          
