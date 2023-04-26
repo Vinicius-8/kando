@@ -24,8 +24,8 @@ def delete_project(request, pk):
     if request.method == 'DELETE':
         if not pk:  
             return HttpResponseBadRequest('Not enough data provided')
-        
-        deleted_project = Project.objects.filter(pk=pk).delete()
+        get(id=id)
+        # deleted_project = Project.objects.filter(pk=pk).delete()
         return JsonResponse({'deleted_project_id': deleted_project})
     
     return HttpResponse('Can\'t delete project', status_code = 500)
