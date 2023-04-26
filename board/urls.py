@@ -11,6 +11,7 @@ urlpatterns = [
     # board
     path('board/create', views.create_board, name='create-board'),
     path('board/delete/<str:pk>', views.delete_board, name='delete-board'),
+    path('board/update', views.update_board, name='update-board'),
 
     # item
     #create item

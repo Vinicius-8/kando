@@ -109,9 +109,6 @@ function loadBoardsOnHTML(board, container){
 }
 
 
-
-
-
 function deleteBoardRequest(boardId){
   /**
    * Makes a request to the deletion endpoint of boards
@@ -142,5 +139,33 @@ function deleteBoardRequest(boardId){
   });
 }
 
+
+function updateBoardNameRequest(newName, boardId){
+  /**
+   * Makes a request to the update endpoint of boards to update the name of the board
+   * @param {newName} the new Name of board 
+   * @param {boardId} the id of the board
+   * @returns {promise} returns a promise with the server response [board id | none]
+   */
+
+  const endpoint = document.getElementById('updateBoardEndpoint').getAttribute('data-endpoint');
+  var csrfToken = document.getElementById('csrfToken').getAttribute('data-token');
+
+  
+  $.ajaxSetup({
+      headers: { "X-CSRFToken": csrfToken }
+    });
+
+  return $.ajax({
+      type: "PUT",
+      url: endpoint,     
+      data: {
+        boardId: boardId,
+        newName: newName
+      }
+              
+  });
+
+}
 
 

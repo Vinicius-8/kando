@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse, QueryDict
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
@@ -115,6 +115,22 @@ def delete_board(request, pk):
     
     return HttpResponse('Can\'t delete the board', status=405)
 
+# board
+def update_board(request):
+    if request.method == 'PUT':
+        put = QueryDict(request.body)
+        board_id = put.get('boardId')
+        new_name = put.get('newName')
+
+        if not board_id or not new_name:
+            return HttpResponseBadRequest("Not enough data provided")
+
+        board = Board.objects.get(id=board_id)
+        board.name = new_name
+        board.save()
+
+        return JsonResponse({'updated_board_id': board.id})
+    return HttpResponse('Can\'t update board', status=500)
 
 # item
 def create_item(request):

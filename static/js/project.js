@@ -130,9 +130,9 @@ function appendNewProjectToProjectsInSession(project){
      * @returns {none}   
      * */
     
-    var list_projects = JSON.parse(sessionStorage.getItem("projects"));
-    list_projects.push(project)
-    sessionStorage.setItem("projects", JSON.stringify(list_projects))
+    var projectsList = JSON.parse(sessionStorage.getItem("projects"));
+    projectsList.push(project)
+    sessionStorage.setItem("projects", JSON.stringify(projectsList))
 }
 
 
@@ -187,6 +187,11 @@ function loadProjectFromSession(idProject){
     var projects = JSON.parse(sessionStorage.getItem("projects"))    
     var project =  projects.find(proj => proj.id === parseInt(idProject));
     return project;
+}
+
+function loadFirstProjectFromSession(){
+    projectsList = JSON.parse(sessionStorage.getItem("projects"))
+    selectProject(projectsList[0], attribute=false);
 }
 
 
@@ -272,9 +277,11 @@ function loadSelectedProject(project){
     projectParent.append(elementClone);
 
     // creates all the boards in the canvas
-    project.boards.forEach(board => {
-        loadBoardsOnHTML(board, elementClone)
-    })
+    if(project.boards){
+        project.boards.forEach(board => {
+            loadBoardsOnHTML(board, elementClone)
+        })
+    }
 
 }
 
