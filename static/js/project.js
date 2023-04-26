@@ -39,18 +39,18 @@ function createNewProject(projectName){
           
           const data = JSON.parse(request.response);             
           // function that appends the new project to the list of projecs in the navbar 
-          appendNewProjectToHTML(data.project)
-          
+          appendNewProjectToHTML(data.project);
+          appendNewProjectToProjectsInSession(data.project);
+          //append the project to the list of projects in session
+        
         } else {
           console.log(`Error: ${request.status}`);
         }
-      };
-
-      fetchProjects().then(resp=>{
-        saveProjectsInSession(JSON.stringify(resp.projects))
-      })    
+      };  
     
 }
+
+
 
 
 function fetchProjects(){
@@ -94,14 +94,45 @@ function appendNewProjectToHTML(project){
      * @returns {none}
      */
 
+    /*
     const projectsContainer = document.getElementById("projectsListContainer");
     var aElement = document.createElement("a");
     aElement.setAttribute('href', "#") // adding this makes the item color change to white ??
     aElement.setAttribute('key', project.id)
     aElement.setAttribute('onClick', "selectProject(this)")
     aElement.textContent = project.name;
-    projectsContainer.append(aElement)
+    projectsContainer.append(aElement)*/
 
+
+    var projectsList = document.getElementById("projectsListContainer");
+
+    var firstElement = projectsList.firstElementChild;
+    var newElement = firstElement.cloneNode(true);
+    
+    newElement.setAttribute('key', project.id)
+    
+    var aElement = newElement.querySelector("a");
+    aElement.setAttribute('key', project.id)
+    aElement.textContent = project.name;
+    projectsList.append(newElement)
+
+
+
+
+}
+
+function appendNewProjectToProjectsInSession(project){    
+    /**
+     * Recieves the new project and appends to the existing JSON object of projecs in the session
+     *
+     *  
+     * @param {object} project Objet project that contains the id, name and user (project owner)
+     * @returns {none}   
+     * */
+    
+    var list_projects = JSON.parse(sessionStorage.getItem("projects"));
+    list_projects.push(project)
+    sessionStorage.setItem("projects", JSON.stringify(list_projects))
 }
 
 

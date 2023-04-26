@@ -27,7 +27,7 @@ def register(request): # ! todo: change the password to encrypted
 
             project = Project.objects.create(
                 user = request.user,
-                name = 'To do List',
+                name = 'To Do List',
             )
 
             return redirect('user-dashboard')

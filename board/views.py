@@ -16,19 +16,24 @@ def create_project(request):
 
         return JsonResponse({'project': model_to_dict(project)})
         
-    return HttpResponse('Cant create project', status_code=500)
+    return HttpResponse('Cant create project', status=500)
 
 
 # project
 def delete_project(request, pk):
+
     if request.method == 'DELETE':
         if not pk:  
             return HttpResponseBadRequest('Not enough data provided')
-        get(id=id)
-        # deleted_project = Project.objects.filter(pk=pk).delete()
-        return JsonResponse({'deleted_project_id': deleted_project})
-    
-    return HttpResponse('Can\'t delete project', status_code = 500)
+        
+        project = Project.objects.get(id=str(pk))
+        
+        if not project.name.lower() == 'to do list':
+            project.delete()                        
+            # deleted_project = Project.objects.filter(pk=pk).delete()            
+            return JsonResponse({'deleted_project_id': project.id})
+            
+    return HttpResponse('Can\'t delete project',status=501)
 
 
 
@@ -64,7 +69,7 @@ def get_projects(request):
 
         return JsonResponse({'projects': projects_list})
 
-    return HttpResponse('Can\'t fetch projects', status_code=500)
+    return HttpResponse('Can\'t fetch projects', status=500)
 
 
 # project
@@ -78,7 +83,7 @@ def get_project(request, pk):
 
         return JsonResponse({'project': model_to_dict(project)})
 
-    return HttpResponse('Can\'t fetch projects', status_code=500)
+    return HttpResponse('Can\'t fetch projects', status=500)
 
 
 # board
@@ -94,7 +99,7 @@ def create_board(request):
 
         return JsonResponse({'board': model_to_dict(board)})
             
-    return HttpResponse('Cant create project', status_code=500)
+    return HttpResponse('Cant create project', status=500)
 
 
 # board
@@ -108,7 +113,7 @@ def delete_board(request, pk):
 
         return JsonResponse({'delete_board_id': deleted_board})
     
-    return HttpResponse('Can\'t delete the board', status_code=405)
+    return HttpResponse('Can\'t delete the board', status=405)
 
 
 # item
@@ -122,7 +127,7 @@ def create_item(request):
         )
         return JsonResponse({'item': model_to_dict(item)})
         
-    return HttpResponse('Cant create item', status_code=500)
+    return HttpResponse('Cant create item', status=500)
 
 
 # item
@@ -134,7 +139,7 @@ def delete_item(request, pk):
         deleted_item = Item.objects.filter(pk=pk).delete()
         return JsonResponse({'deleted_item_id': deleted_item})
 
-    return HttpResponse('Can\'t delete item', status_code = 500)
+    return HttpResponse('Can\'t delete item', status = 500)
 
 
 

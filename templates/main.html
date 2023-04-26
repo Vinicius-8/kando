@@ -382,13 +382,12 @@
               filter: ".list-board-plus", // bypass the plus button                                   
         }); 
 
-        /* define element title */ 
-        //elementClone.textContent = newProjectName;                
+        /* define element title */         
+        document.getElementById("selectedProjectTitle").textContent = newProjectName
+
+                    
         projectParent.append(elementClone);
-        createNewProject(newProjectName);
-        // fetchProjects().then(resp=>{
-        //     saveProjectsInSession(JSON.stringify(resp.projects))
-        // })   
+        createNewProject(newProjectName);           
         closeNav();
       }
 
