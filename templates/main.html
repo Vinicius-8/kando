@@ -100,7 +100,7 @@
             break;
           
           case EDIT_ITEM:
-            saveEditedItem();
+            saveEditedItem();            
             break;
 
           case EDIT_BOARD:
@@ -339,7 +339,13 @@
       function openEditItem(item){
         document.getElementById("exampleModalLabel").textContent="Edit item"             
         document.getElementById("modalSmallMessage").textContent="Change the item's name"
-        openModal();
+        
+        var auth = "{{request.user.is_authenticated}}"    
+        if(auth == "True"){
+          $('#modalItem').modal('show');          
+        }else{
+          openModal();
+        }
 
         context = item;
         type = EDIT_ITEM;
@@ -354,7 +360,7 @@
         }
 
         context.parentElement.parentElement.parentElement.getElementsByClassName('simple-item')[0].textContent=editedItemName
-      }
+      }        
 
 
       /* project */
@@ -498,6 +504,7 @@
       </div>
     </div>
 
+    {% include 'dashboard/modal_item.html' %}
  
 
 

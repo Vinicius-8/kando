@@ -87,3 +87,33 @@ function loadItemsOnBoard(item, container){
 }
 
 
+function updateItemRequest(itemId, item){
+  /**
+   * Makes a request to the update endpoint of items to update the the item
+   * @param {itemId} the id of the item
+   * @param {newItemName} the item 
+   * @returns {promise} returns a promise with the server response [item id | none]
+   */
+
+  const endpoint = document.getElementById('updateItemEndpoint').getAttribute('data-endpoint');
+  var csrfToken = document.getElementById('csrfToken').getAttribute('data-token');
+
+  
+  $.ajaxSetup({
+      headers: { "X-CSRFToken": csrfToken }
+    });
+
+  return $.ajax({
+      type: "PUT",
+      url: endpoint,     
+      data: {
+        itemId: itemId,
+        data: data
+      }
+              
+  });
+
+}
+
+
+

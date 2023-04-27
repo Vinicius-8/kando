@@ -217,7 +217,7 @@ function fetchProject(projectId){
             'csrfmiddlewaretoken': csrfToken,           
         },
         data:{
-            'projectId':projectId
+            'projectId' : projectId
         }
                 
     });

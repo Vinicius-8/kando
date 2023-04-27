@@ -158,4 +158,23 @@ def delete_item(request, pk):
     return HttpResponse('Can\'t delete item', status = 500)
 
 
+# item 
+def update_item(request):
+    if request.method == 'PUT':
+        put = QueryDict(request.body)
+        
+        item_id = put.get('itemId')
+        new_name = put.get('newName')
+
+        if not item_id or not new_name:
+            return HttpResponseBadRequest("Not enough data provided")
+
+        item = Item.objects.get(id=item_id)
+        item.name = new_name
+        item.save()
+
+        return JsonResponse({'updated_item_id': item.id})
+
+    return HttpResponse('Can\'t update item', status = 500)
+
 
