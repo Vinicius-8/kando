@@ -162,34 +162,34 @@
         
                  
           
-          /* get container parent */
-          const boardParent = document.getElementById("parent-container");
+        /* get container parent */
+        const boardParent = document.getElementById("parent-container");
 
-          boardParent.getElementsByClassName("list-items-board-child")[0].textContent = ""; // cleaning the items
+        boardParent.getElementsByClassName("list-items-board-child")[0].textContent = ""; // cleaning the items
 
-          /* Clone board element */
-          const element = document.getElementsByClassName('list-board-container')[0];
-          const boardClone = element.cloneNode(true);
+        /* Clone board element */
+        const element = document.getElementsByClassName('list-board-container')[0];
+        const boardClone = element.cloneNode(true);
 
-          /* define element title */ 
-          boardClone.getElementsByClassName("title-list-board-container")[0].querySelector("span").textContent = newBoardName // the box with title, items and plus button, then setting an specific span inside 
-    
+        /* define element title */ 
+        boardClone.getElementsByClassName("title-list-board-container")[0].querySelector("span").textContent = newBoardName // the box with title, items and plus button, then setting an specific span inside 
+  
 
-          /* define as a sortable */ 
-          Sortable.create(boardClone.getElementsByClassName("list-items-board-child")[0], {  // box just with the items
-            animation: 150,
-            group: 'shared-items',
-            ghostClass: 'hidden-placeholder',          
-          });
-
-
-          
-          /* generating id for dropdown*/
-          boardClone.getElementsByClassName('dropdown')[0].id = 'first'+(Math.random() + 1).toString(36).substring(7)
+        /* define as a sortable */ 
+        Sortable.create(boardClone.getElementsByClassName("list-items-board-child")[0], {  // box just with the items
+          animation: 150,
+          group: 'shared-items',
+          ghostClass: 'hidden-placeholder',          
+        });
 
 
-          boardClone.style.display = 'block';
-          boardParent.append(boardClone);
+        
+        /* generating id for dropdown*/
+        boardClone.getElementsByClassName('dropdown')[0].id = 'first'+(Math.random() + 1).toString(36).substring(7)
+
+
+        boardClone.style.display = 'block';
+        boardParent.append(boardClone);
                    
       }
 
@@ -216,7 +216,7 @@
           var boardId = key.replace("board","");
           updateBoardNameRequest(editedBoardName, boardId).then(resp=>{
             
-            console.log('Alterado');
+            //console.log('Alterado');
 
           }).catch(err=>{
             console.log(err);
@@ -271,7 +271,6 @@
 
           itemClone.getElementsByClassName('dropdown')[0].id = 'drpdwn'+ newBoardItemName.split(' ').join(''); // set a new id for a child, with that the related function can find it
           boardParent.append(itemClone);
-
         
       }
       
@@ -334,19 +333,40 @@
         
       }
 
-
       /* item */
       function openEditItem(item){
-        document.getElementById("exampleModalLabel").textContent="Edit item"             
-        document.getElementById("modalSmallMessage").textContent="Change the item's name"
+        document.getElementById("exampleModalLabelItem").textContent="Edit item"             
+        document.getElementById("modalSmallMessage2").textContent="Change the item's name"
         
         var auth = "{{request.user.is_authenticated}}"    
+
         if(auth == "True"){
-          $('#modalItem').modal('show');          
+
+          $('#modalItem').modal('show');
+          // get item id
+          var itemId = item.parentElement.parentElement.parentElement.getAttribute("key")
+                    
+          // load item data
+          getItem(itemId).then(resp=>{
+            //get modal placeholder for data
+            var itemModal = document.getElementById("modalItem");
+            //set modal input title
+            document.getElementById("modalInputItem").value = resp.item.name;
+  
+            // set modal input description
+            if(resp.item.description){
+              itemModal.getElementById("modalDescInput").value = resp.item.description;
+            }
+            // set modal input color            
+            
+          })          
+                  
+          
         }else{
           openModal();
         }
 
+        
         context = item;
         type = EDIT_ITEM;
       }
@@ -354,12 +374,32 @@
       /* item */
       function saveEditedItem(){
         const editedItemName = inputModalContent
-        if(""=== editedItemName){
-          alert("Can't be empty");
-          return          
+        var auth = "{{request.user.is_authenticated}}"
+        
+        if(auth === "False"){
+        
+          if(""=== editedItemName){
+            alert("Can't be empty");
+            return          
+          }
+          context.parentElement.parentElement.parentElement.getElementsByClassName('simple-item')[0].textContent = editedItemName
+
+        } else {
+          // get value from input text modalInputItem
+          var newName = document.getElementById("modalInputItem").value;
+
+          var itemId = context.parentElement.parentElement.parentElement.getAttribute("key");
+
+          updateItemRequest(itemId, {name: newName}).then(resp=>{
+            // pass context to this scope
+            
+            $('#modalItem').modal('hide');            
+
+          })
+          context.parentElement.parentElement.parentElement.getElementsByClassName('simple-item')[0].textContent = newName;                      
         }
 
-        context.parentElement.parentElement.parentElement.getElementsByClassName('simple-item')[0].textContent=editedItemName
+        
       }        
 
 

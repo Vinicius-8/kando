@@ -51,11 +51,7 @@ function deleteItemRequest(itemId){
   
     return $.ajax({
         type: "DELETE",
-        url: joined_endpoint + '/' + itemId,
-        headers: {
-            'csrfmiddlewaretoken': csrfToken,           
-        }
-                
+        url: joined_endpoint + '/' + itemId,                
     });
 }
 
@@ -98,6 +94,10 @@ function updateItemRequest(itemId, item){
   const endpoint = document.getElementById('updateItemEndpoint').getAttribute('data-endpoint');
   var csrfToken = document.getElementById('csrfToken').getAttribute('data-token');
 
+  var payload = JSON.stringify({
+    itemId: itemId,
+    data: item
+  })
   
   $.ajaxSetup({
       headers: { "X-CSRFToken": csrfToken }
@@ -105,12 +105,37 @@ function updateItemRequest(itemId, item){
 
   return $.ajax({
       type: "PUT",
-      url: endpoint,     
-      data: {
-        itemId: itemId,
-        data: data
-      }
+      url: endpoint,           
+      data: payload
               
+  });
+}
+
+function getItem(itemId){
+  /**
+   * Makes a request to backend to get an specific item with its id
+   * 
+   * @param {itemId} the item id in the database
+   * @returns {object} the item with all its data
+  */
+
+  const endpoint = document.getElementById('getItemEndpoint').getAttribute('data-endpoint');
+  var csrfToken = document.getElementById('csrfToken').getAttribute('data-token');
+
+    // removin the last item from object
+    var splited_endpoint = endpoint.split('/')
+    splited_endpoint.pop()
+    var joined_endpoint = splited_endpoint.join('/')
+  
+
+  $.ajaxSetup({
+    headers: { "X-CSRFToken": csrfToken }
+  });
+
+  return $.ajax({
+      type: "GET",
+      url: joined_endpoint + '/' + itemId,
+                    
   });
 
 }

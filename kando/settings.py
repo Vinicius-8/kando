@@ -133,4 +133,6 @@ CSRF_TRUSTED_ORIGINS=[
     'https://8000-vinicius8-kando-42wp3jkwfvn.ws-us93.gitpod.io',
     'https://8000-vinicius8-kando-ya1qj27zt9g.ws-us93.gitpod.io',
     'https://8000-vinicius8-kando-ya1qj27zt9g.ws-us94.gitpod.io',
-    'https://8000-vinicius8-kando-ya1qj27zt9g.ws-us95.gitpod.io']
+    'https://8000-vinicius8-kando-ya1qj27zt9g.ws-us95.gitpod.io',
+    'https://8000-vinicius8-kando-ya1qj27zt9g.ws-us96b.gitpod.io',
+    'https://8000-vinicius8-kando-ya1qj27zt9g.ws-us96.gitpod.io']

@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse, Quer
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import get_object_or_404
 from django.forms.models import model_to_dict
+import json
 
 from .models import Project, User, Board, Item
 
@@ -75,7 +76,7 @@ def get_projects(request):
 # project
 def get_project(request, pk):
     if request.method == 'POST':
-        # project_id = request.POST.get('projectId')
+
         if not pk:
             return HttpResponseBadRequest("Not enough data provided")
         
@@ -161,16 +162,18 @@ def delete_item(request, pk):
 # item 
 def update_item(request):
     if request.method == 'PUT':
-        put = QueryDict(request.body)
-        
-        item_id = put.get('itemId')
-        new_name = put.get('newName')
+        # put = QueryDict()
 
-        if not item_id or not new_name:
+        put = json.loads(request.body)
+                
+        item_id = put['itemId']
+        itemData = put['data']
+
+        if not item_id or not itemData:
             return HttpResponseBadRequest("Not enough data provided")
 
         item = Item.objects.get(id=item_id)
-        item.name = new_name
+        item.name = itemData['name']
         item.save()
 
         return JsonResponse({'updated_item_id': item.id})
@@ -178,3 +181,12 @@ def update_item(request):
     return HttpResponse('Can\'t update item', status = 500)
 
 
+def get_item(request, pk):
+    if request.method == 'GET':
+        if not pk:
+            return HttpResponseBadRequest("Not enough data provided")
+
+        item = Item.objects.get(id=pk)
+        return JsonResponse({'item': model_to_dict(item)})
+
+    return HttpResponse('Can\'t read item', status = 500)
