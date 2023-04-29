@@ -174,6 +174,7 @@ def update_item(request):
 
         item = Item.objects.get(id=item_id)
         item.name = itemData['name']
+        item.description = itemData['description']
         item.save()
 
         return JsonResponse({'updated_item_id': item.id})

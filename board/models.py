@@ -21,6 +21,8 @@ class Board(models.Model):
 
 class Item(models.Model):
     name = models.CharField(max_length=205)
+    description = models.CharField(max_length=800, blank=True, default='null')
+    color = models.CharField(max_length=20, blank=True, default='null')
     board = models.ForeignKey(Board, on_delete=models.CASCADE)
 
     updated = models.DateTimeField(auto_now=True)

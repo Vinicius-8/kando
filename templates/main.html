@@ -348,14 +348,13 @@
                     
           // load item data
           getItem(itemId).then(resp=>{
-            //get modal placeholder for data
-            var itemModal = document.getElementById("modalItem");
+            
             //set modal input title
             document.getElementById("modalInputItem").value = resp.item.name;
   
             // set modal input description
-            if(resp.item.description){
-              itemModal.getElementById("modalDescInput").value = resp.item.description;
+            if(resp.item.description !== 'null'){              
+              document.getElementById("modalDescInputItem").value = resp.item.description;
             }
             // set modal input color            
             
@@ -388,9 +387,12 @@
           // get value from input text modalInputItem
           var newName = document.getElementById("modalInputItem").value;
 
+          // get the description
+          var newDesc = document.getElementById("modalDescInputItem").value;
+
           var itemId = context.parentElement.parentElement.parentElement.getAttribute("key");
 
-          updateItemRequest(itemId, {name: newName}).then(resp=>{
+          updateItemRequest(itemId, {name: newName, description: newDesc }).then(resp=>{
             // pass context to this scope
             
             $('#modalItem').modal('hide');            
