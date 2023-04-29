@@ -168,6 +168,9 @@ def update_item(request):
                 
         item_id = put['itemId']
         itemData = put['data']
+        
+        if itemData['color']:
+            print('Color: ', itemData['color'])
 
         if not item_id or not itemData:
             return HttpResponseBadRequest("Not enough data provided")
@@ -175,6 +178,7 @@ def update_item(request):
         item = Item.objects.get(id=item_id)
         item.name = itemData['name']
         item.description = itemData['description']
+        item.color = itemData['color']
         item.save()
 
         return JsonResponse({'updated_item_id': item.id})

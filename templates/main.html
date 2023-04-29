@@ -356,7 +356,13 @@
             if(resp.item.description !== 'null'){              
               document.getElementById("modalDescInputItem").value = resp.item.description;
             }
-            // set modal input color            
+
+            // set modal input color     
+            if(resp.item.color !== 'null'){                          
+              $(document).ready(function() {
+                $('#selectColor').val(resp.item.color).prop('selected', true);
+              });
+            }
             
           })          
                   
@@ -390,9 +396,12 @@
           // get the description
           var newDesc = document.getElementById("modalDescInputItem").value;
 
+          // get the color
+          let selectedColor = $('#selectColor').find(":selected").val();
+
           var itemId = context.parentElement.parentElement.parentElement.getAttribute("key");
 
-          updateItemRequest(itemId, {name: newName, description: newDesc }).then(resp=>{
+          updateItemRequest(itemId, {name: newName, description: newDesc, color: selectedColor }).then(resp=>{
             // pass context to this scope
             
             $('#modalItem').modal('hide');            

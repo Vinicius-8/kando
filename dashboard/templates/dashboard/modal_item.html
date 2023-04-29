@@ -16,8 +16,19 @@
           <small id="modalSmallMessage3" class="form-text text-muted">Description</small>
           
           <textarea name="Text1" class="form-control" id="modalDescInputItem" cols="40" rows="5"></textarea>
+          
+          <small id="modalSmallMessage4" class="form-text text-muted">Color</small>
+          <select class="form-select" aria-label="Select a color" id="selectColor">
+            <option selected>Color</option>
+            <option value="green">Green</option>
+            <option value="yellow">Yellow</option>
+            <option value="red">Red</option>
+            <option value="blue">Blue</option>
+            <option value="black">Black</option>
+          </select>
         </div>
         
+
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#modalItem').modal('hide'); ">Close</button>
           <button type="button" class="btn btn-primary" onclick="saveModalContent()">Save changes</button>
