@@ -400,6 +400,8 @@
           let selectedColor = $('#selectColor').find(":selected").val();
 
           var itemId = context.parentElement.parentElement.parentElement.getAttribute("key");
+          // change the color 
+          context.parentElement.parentElement.parentElement.style.borderBottom  = "3px solid "+ selectedColor;
 
           updateItemRequest(itemId, {name: newName, description: newDesc, color: selectedColor }).then(resp=>{
             // pass context to this scope

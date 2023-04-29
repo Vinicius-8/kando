@@ -76,6 +76,10 @@ function loadItemsOnBoard(item, container){
   itemClone.style.display="flex";
   itemClone.setAttribute("key", item.id);
 
+  if(item.color !== "null"){
+    itemClone.style.borderBottom  = "3px solid "+item.color;
+  }
+
 
   itemClone.getElementsByClassName('dropdown')[0].id = 'drpdwn'+item.name.split(' ').join(''); // set a new id for a child, with that the related function can find it          
   boardParent.append(itemClone);
