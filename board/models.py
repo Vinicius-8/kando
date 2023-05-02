@@ -24,6 +24,7 @@ class Item(models.Model):
     description = models.CharField(max_length=800, blank=True, default='null')
     color = models.CharField(max_length=20, blank=True, default='null')
     board = models.ForeignKey(Board, on_delete=models.CASCADE)
-
+    position = models.IntegerField(null=True, default=0) # item position in the board
+    
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)

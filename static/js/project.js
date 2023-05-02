@@ -129,7 +129,7 @@ function appendNewProjectToProjectsInSession(project){
      * @param {object} project Objet project that contains the id, name and user (project owner)
      * @returns {none}   
      * */
-    
+    console.log(sessionStorage.getItem("projects"));
     var projectsList = JSON.parse(sessionStorage.getItem("projects"));
     projectsList.push(project)
     sessionStorage.setItem("projects", JSON.stringify(projectsList))

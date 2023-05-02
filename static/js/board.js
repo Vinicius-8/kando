@@ -169,3 +169,47 @@ function updateBoardNameRequest(newName, boardId){
 }
 
 
+function getItemsPositionOnCanvas(board){
+  /**
+   * Gets an specific board an its items, then each items position in the board
+   * 
+   * @param {none}
+   * @returns {list} list of keys and indexes of the items 
+   *  
+   */
+  
+  const container = board.parentElement.parentElement.parentElement.parentElement;
+  const children = Array.from(container.querySelectorAll(".item-board"));
+  
+  // Sort the elements by the value of the propriety top of getBoundingClientRect()
+  const sortedChildren = children.sort((a, b) => {
+    const rectA = a.getBoundingClientRect();
+    const rectB = b.getBoundingClientRect();
+    return rectA.top - rectB.top;
+  });
+  
+
+  // removes the top and end from the list
+  sortedChildren.shift(); // removes the + element
+  sortedChildren.pop(); // removes the item model defined as none
+
+  var dataList = [];
+
+  
+  sortedChildren.forEach((child, index) => {
+    //console.log(`Elemento ${index + 1}: ${child.textContent.trim()}`);
+    
+    var key = child.getAttribute('key');
+    console.log(`db: ${key} - index: ${index}`);
+
+    // create a list of objects with key and index
+    dataList.push({
+      'dbKey': key,
+      'htmlIndex': index
+    }); 
+    
+  });
+
+  return dataList;
+}
+
