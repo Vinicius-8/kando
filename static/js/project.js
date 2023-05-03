@@ -51,8 +51,6 @@ function createNewProject(projectName){
 }
 
 
-
-
 function fetchProjects(){
     /**
      * Get all projects from a specific user at the backend django
@@ -94,15 +92,6 @@ function appendNewProjectToHTML(project){
      * @returns {none}
      */
 
-    /*
-    const projectsContainer = document.getElementById("projectsListContainer");
-    var aElement = document.createElement("a");
-    aElement.setAttribute('href', "#") // adding this makes the item color change to white ??
-    aElement.setAttribute('key', project.id)
-    aElement.setAttribute('onClick', "selectProject(this)")
-    aElement.textContent = project.name;
-    projectsContainer.append(aElement)*/
-
 
     var projectsList = document.getElementById("projectsListContainer");
 
@@ -128,8 +117,7 @@ function appendNewProjectToProjectsInSession(project){
      *  
      * @param {object} project Objet project that contains the id, name and user (project owner)
      * @returns {none}   
-     * */
-    console.log(sessionStorage.getItem("projects"));
+     * */    
     var projectsList = JSON.parse(sessionStorage.getItem("projects"));
     projectsList.push(project)
     sessionStorage.setItem("projects", JSON.stringify(projectsList))
@@ -190,6 +178,7 @@ function loadProjectFromSession(idProject){
 }
 
 function loadFirstProjectFromSession(){
+    
     projectsList = JSON.parse(sessionStorage.getItem("projects"))
     selectProject(projectsList[0], attribute=false);
 }
@@ -263,13 +252,18 @@ function loadSelectedProject(project){
 
     elementClone.style.display = 'flex';
     elementClone.id = 'parent-container'
+    elementClone.setAttribute("key", project.id)
 
     // defining the boards inside the parent-container (boards list) as soartables
     const sortContainer = Sortable.create(elementClone, { 
             animation: 150,
             group: 'shared-boards',
             ghostClass: 'hidden-placeholder', 
-            filter: ".list-board-plus", // bypass the plus button                                   
+            filter: ".list-board-plus", // bypass the plus button
+
+            onEnd: function(evt){
+                onChangeItem(evt, ".list-board-container","board")
+            }                                   
     }); 
 
     /* define element title */ 

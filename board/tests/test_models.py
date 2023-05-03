@@ -40,4 +40,28 @@ class ItemTestCase(TestCase):
     def test_cascade_deletion(self):
         self.board.delete()
         self.assertEqual(Item.objects.filter(name='Item de teste').count(), 0)
-        
+    
+
+# test class for Board
+
+class BoardTestCase(TestCase):
+    def setUp(self):
+        self.user = User.objects.create(name = 'User 1', email = 'user@gmail.com')
+        self.project = Project.objects.create(name = 'Project 1', user = self.user)
+        self.board = Board.objects.create(name = "Board 1", project = self.project)
+
+    def test_creation(self):
+        self.assertEqual(self.board.name, "Board 1")
+        self.assertEqual(self.board.project, self.project)
+        self.assertEqual(self.board.position, 0)
+        self.assertEqual(self.board.project, self.project)
+
+
+    def test_update(self):
+        self.board.name = 'New Name'
+        self.board.save()
+        self.assertEqual(self.board.name, 'New Name')
+
+        self.board.position = 4
+        self.board.save()
+        self.assertEqual(self.board.position, 4)

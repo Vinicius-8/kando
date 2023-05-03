@@ -64,15 +64,18 @@ def get_projects(request):
                     item.pop("created")
                     item.pop("updated")
 
-                for item in items_list:
-                    print(item.position)
 
                 items_list.sort(key=lambda x: x['position'])                
 
                 board['items'] = items_list
-                
+        
+            boards_list.sort(key=lambda x: x['position'])
+
+
             project_dict['boards'] = boards_list
             projects_list.append(project_dict)
+            
+        
 
         return JsonResponse({'projects': projects_list})
 
@@ -174,9 +177,7 @@ def update_item(request):
                 
         item_id = put['itemId']
         itemData = put['data']
-        
-        if itemData['color']:
-            print('Color: ', itemData['color'])
+    
 
         if not item_id or not itemData:
             return HttpResponseBadRequest("Not enough data provided")
@@ -226,5 +227,31 @@ def update_items_position(request):
             item_db.save()
     
         return JsonResponse({'updated_items': items_data})
+
+    return HttpResponse('Can\'t update item', status = 500)
+
+
+
+def update_boards_position(request):
+    if request.method == 'PUT':        
+
+        put = json.loads(request.body)
+    
+        actual_project = put['actualProjectId']                       
+        boards_data = put['data']
+        
+
+        if not boards_data:
+            return HttpResponseBadRequest("Not enough data provided")
+                
+        project = Project.objects.get(id = int(actual_project))
+        
+        for board in boards_data:            
+            board_db = Board.objects.get(id = int(board['dbKey']))
+            board_db.position = board['htmlIndex']
+            board_db.project = project
+            board_db.save()
+    
+        return JsonResponse({'updated_boards': boards_data})
 
     return HttpResponse('Can\'t update item', status = 500)

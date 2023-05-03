@@ -109,6 +109,7 @@ def user_dashboard(request):
                 
                 board['items'] = items_list
 
+            boards_list.sort(key=lambda x: x['position'])
 
             data['boards'] = boards_list                
             projects_list.append(data)

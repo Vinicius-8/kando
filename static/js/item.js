@@ -145,7 +145,7 @@ function getItem(itemId){
 }
 
 
-function onChangeItem(event){  
+function onChangeItem(event, classFilter, type){  
   /**
    * This function is called when the item is droped within a list/boad in the project
    * 
@@ -159,24 +159,49 @@ function onChangeItem(event){
     .parentElement // .list-items-board-child
     .parentElement // .list-items-board 
     .parentElement // .list-board-container
+    
+    ,classFilter,
+    type
     ); 
+
 
   if(position.length <= 1 && event.from === event.to){ // in case only one element is changed, no need to update db with that
     return
   }
 
 
-  var actualBoardId = event.to.parentElement.parentElement.getElementsByClassName("title-list-board-container")[0].getAttribute("key").replace("board", "")
+  var actualBoardId;
+  var actualProjectId; 
+  var endpoint;
+  var payload;
 
-  // makes a request to backend to update the items position
+  //checks if type is equal to item the gets the endpoint from updateItemsEndpoint or if equal to board the gets endpoint from updateBoardsEndpoint
+  if(type === "item"){
+    
+    endpoint = document.getElementById('updateItemsEndpoint').getAttribute('data-endpoint');
+    actualBoardId = event.to.parentElement.parentElement.getElementsByClassName("title-list-board-container")[0].getAttribute("key").replace("board", "")
+    payload = JSON.stringify({
+      actualBoardId: actualBoardId,
+      data: position
+    })
 
-  const endpoint = document.getElementById('updateItemsEndpoint').getAttribute('data-endpoint');
+  }else if(type === "board"){
+  
+    endpoint = document.getElementById('updateBoardsEndpoint').getAttribute('data-endpoint');
+    actualProjectId = event.item.parentElement.getAttribute("key");
+    payload = JSON.stringify({
+      actualProjectId: actualProjectId,
+      data: position
+    })
+  
+  }else{
+    console.log('Cant obtain an endpoint');
+  }
+  
+
   var csrfToken = document.getElementById('csrfToken').getAttribute('data-token');
 
-  var payload = JSON.stringify({
-    actualBoardId: actualBoardId,
-    data: position
-  })
+  
   
   $.ajaxSetup({
       headers: { "X-CSRFToken": csrfToken }

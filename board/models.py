@@ -13,6 +13,7 @@ class Project(models.Model):
 class Board(models.Model):
     name = models.CharField(max_length=205)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
+    position = models.IntegerField(null=True, default=0) # item position in the project
 
     updated = models.DateTimeField(auto_now=True)
     created = models.DateTimeField(auto_now_add=True)

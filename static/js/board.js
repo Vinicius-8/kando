@@ -81,12 +81,14 @@ function loadBoardsOnHTML(board, container){
   boardClone.getElementsByClassName("title-list-board-container")[0].querySelector("span").textContent = board.name  // the box with title, items and plus button, then setting an specific span inside 
   boardClone.getElementsByClassName("title-list-board-container")[0].setAttribute('key', 'board' + board.id)
 
-  /* define board as a sortable */ 
+  /* define items board as a sortable */ 
  Sortable.create(boardClone.getElementsByClassName("list-items-board-child")[0], {  // box just with the items
       animation: 150,
       group: 'shared-items',
       // ghostClass: 'hidden-placeholder',               
-      onEnd: onChangeItem // function tha handles if the item is switched between list or the order changes
+      onEnd: function(evt){
+        onChangeItem(evt, ".item-board","item")
+      } // function tha handles if the item is switched between list or the order changes
 
   });
 
@@ -170,7 +172,7 @@ function updateBoardNameRequest(newName, boardId){
 }
 
 
-function getItemsPositionOnCanvas(board){
+function getItemsPositionOnCanvas(board, classFilter, type){
   /**
    * Gets an specific board an its items, then each items position in the board
    * 
@@ -180,7 +182,7 @@ function getItemsPositionOnCanvas(board){
    */
   
   const container = board
-  const children = Array.from(container.querySelectorAll(".item-board"));
+  const children = Array.from(container.querySelectorAll(classFilter));
   
   // Sort the elements by the value of the propriety top of getBoundingClientRect()
   const sortedChildren = children.sort((a, b) => {
@@ -191,18 +193,38 @@ function getItemsPositionOnCanvas(board){
   
 
   // removes the top and end from the list
-  sortedChildren.shift(); // removes the + element
-  sortedChildren.pop(); // removes the item model defined as none
+  sortedChildren.shift(); // removes the item/board model defined as none
+
+  if(type === "item"){
+    sortedChildren.pop(); // removes the + element from list of items
+  }else{
+    sortedChildren.shift(); // remove 2 more boards
+    sortedChildren.shift();
+  }
+
 
   var dataList = [];
-
   
   sortedChildren.forEach((child, index) => {
-    //console.log(`Elemento ${index + 1}: ${child.textContent.trim()}`);
     
-    var key = child.getAttribute('key');
-    //console.log(`db: ${key} - index: ${index}`);
+    // db key that's on html
+    var key;
 
+    // if-esle to get the key depending if item or board
+    if (type === "item"){
+      key = child.getAttribute('key');
+      // console.log(`Elemento ${index + 1}: ${child.textContent.trim()}`)
+    
+    }else if(type === "board"){
+      // getting the attribute and checking if exists 
+      att = child.getElementsByClassName("title-list-board-container")[0].getAttribute('key');
+      if(!att){
+        return
+      }
+      
+      key = att.replace("board","")
+    }
+    
     // create a list of objects with key and index
     dataList.push({
       'dbKey': key,
