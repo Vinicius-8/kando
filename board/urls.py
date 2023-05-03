@@ -18,5 +18,7 @@ urlpatterns = [
     path('item/delete/<str:pk>', views.delete_item, name='delete-item'),
     path('item/update', views.update_item, name='update-item'),
     path('item/<str:pk>', views.get_item, name='get-item'),
+    path('items/update', views.update_items_position, name='update-items'),
+    
 
 ]

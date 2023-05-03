@@ -145,4 +145,50 @@ function getItem(itemId){
 }
 
 
+function onChangeItem(event){  
+  /**
+   * This function is called when the item is droped within a list/boad in the project
+   * 
+   * @param {event} event contais information as from, to, element and others 
+   * @returns {none}
+  */  
+
+  var position = getItemsPositionOnCanvas(
+    event
+    .item // .item-board
+    .parentElement // .list-items-board-child
+    .parentElement // .list-items-board 
+    .parentElement // .list-board-container
+    ); 
+
+  if(position.length <= 1 && event.from === event.to){ // in case only one element is changed, no need to update db with that
+    return
+  }
+
+
+  var actualBoardId = event.to.parentElement.parentElement.getElementsByClassName("title-list-board-container")[0].getAttribute("key").replace("board", "")
+
+  // makes a request to backend to update the items position
+
+  const endpoint = document.getElementById('updateItemsEndpoint').getAttribute('data-endpoint');
+  var csrfToken = document.getElementById('csrfToken').getAttribute('data-token');
+
+  var payload = JSON.stringify({
+    actualBoardId: actualBoardId,
+    data: position
+  })
+  
+  $.ajaxSetup({
+      headers: { "X-CSRFToken": csrfToken }
+    });
+
+  return $.ajax({
+      type: "PUT",
+      url: endpoint,           
+      data: payload              
+  });
+  
+
+}
+
 

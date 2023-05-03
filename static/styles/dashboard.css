@@ -36,7 +36,9 @@
 }
 
 .list-items-board-child{
+    padding-bottom: 5px;
     min-height: 20px;
+    
 }
 
 .list-board-plus{

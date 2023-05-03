@@ -51,7 +51,8 @@ def get_projects(request):
         projects_list = []
         for project in projects:
             project_dict = model_to_dict(project)
-            boards_list = list(Board.objects.filter(project=project).values())
+            boards_list = list(Board.objects.filter(project = project).values())
+            
             # eliminates the fields updated and created    
             for board in boards_list:
                 board.pop("updated")
@@ -62,6 +63,11 @@ def get_projects(request):
                 for item in items_list:                    
                     item.pop("created")
                     item.pop("updated")
+
+                for item in items_list:
+                    print(item.position)
+
+                items_list.sort(key=lambda x: x['position'])                
 
                 board['items'] = items_list
                 
@@ -187,6 +193,7 @@ def update_item(request):
 
 
 def get_item(request, pk):
+
     if request.method == 'GET':
         if not pk:
             return HttpResponseBadRequest("Not enough data provided")
@@ -195,3 +202,29 @@ def get_item(request, pk):
         return JsonResponse({'item': model_to_dict(item)})
 
     return HttpResponse('Can\'t read item', status = 500)
+
+
+def update_items_position(request):
+    if request.method == 'PUT':
+        # put = QueryDict()
+
+        put = json.loads(request.body)
+    
+        actual_board = put['actualBoardId']                       
+        items_data = put['data']
+        
+
+        if not items_data:
+            return HttpResponseBadRequest("Not enough data provided")
+                
+        board = Board.objects.get(id = int(actual_board))
+        
+        for item in items_data:            
+            item_db = Item.objects.get(id = int(item['dbKey']))
+            item_db.position = item['htmlIndex']
+            item_db.board = board
+            item_db.save()
+    
+        return JsonResponse({'updated_items': items_data})
+
+    return HttpResponse('Can\'t update item', status = 500)

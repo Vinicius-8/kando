@@ -202,7 +202,15 @@
         context = board;
         type = EDIT_BOARD;
 
-        getItemsPositionOnCanvas(board);
+        var val = getItemsPositionOnCanvas(
+          board // 
+          .parentElement // .item-board                
+          .parentElement // .list-items-board-child
+          .parentElement // .list-items-board 
+          .parentElement // .list-board-container
+          
+          );
+        console.log(val)
       }
 
       /* Board */

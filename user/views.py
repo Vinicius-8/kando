@@ -104,6 +104,8 @@ def user_dashboard(request):
                 for item in items_list:                    
                     item.pop("created")
                     item.pop("updated")
+
+                items_list.sort(key=lambda x: x['position'])
                 
                 board['items'] = items_list
 

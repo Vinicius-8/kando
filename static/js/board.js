@@ -81,15 +81,16 @@ function loadBoardsOnHTML(board, container){
   boardClone.getElementsByClassName("title-list-board-container")[0].querySelector("span").textContent = board.name  // the box with title, items and plus button, then setting an specific span inside 
   boardClone.getElementsByClassName("title-list-board-container")[0].setAttribute('key', 'board' + board.id)
 
-  /* define as a sortable */ 
-  Sortable.create(boardClone.getElementsByClassName("list-items-board-child")[0], {  // box just with the items
+  /* define board as a sortable */ 
+ Sortable.create(boardClone.getElementsByClassName("list-items-board-child")[0], {  // box just with the items
       animation: 150,
       group: 'shared-items',
-      // ghostClass: 'hidden-placeholder',          
+      // ghostClass: 'hidden-placeholder',               
+      onEnd: onChangeItem // function tha handles if the item is switched between list or the order changes
+
   });
 
-
-  
+ 
   /* generating id for dropdown*/
   boardClone.getElementsByClassName('dropdown')[0].id = 'drpdwn'+(Math.random() + 1).toString(36).substring(7)
 
@@ -178,7 +179,7 @@ function getItemsPositionOnCanvas(board){
    *  
    */
   
-  const container = board.parentElement.parentElement.parentElement.parentElement;
+  const container = board
   const children = Array.from(container.querySelectorAll(".item-board"));
   
   // Sort the elements by the value of the propriety top of getBoundingClientRect()
@@ -200,7 +201,7 @@ function getItemsPositionOnCanvas(board){
     //console.log(`Elemento ${index + 1}: ${child.textContent.trim()}`);
     
     var key = child.getAttribute('key');
-    console.log(`db: ${key} - index: ${index}`);
+    //console.log(`db: ${key} - index: ${index}`);
 
     // create a list of objects with key and index
     dataList.push({
