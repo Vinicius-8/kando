@@ -5,7 +5,8 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- <link rel="shortcut icon" href="assets/favicon.ico" type="image/x-icon" /> -->
+    <link rel="shortcut icon" href="{% static 'favicon.ico' %}" type="image/x-icon" />
+    
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <title>KanDo</title>
@@ -17,8 +18,12 @@
     <link rel="stylesheet" href="{% static 'styles/dropdown.css' %}" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
 
-    
+    <script src="{% static 'js/item.js' %}"></script> 
+    <script src="{% static 'js/board.js' %}"></script> 
+    <script src="{% static 'js/project.js' %}"></script> 
+  
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js" ></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script> 
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <script>
@@ -70,14 +75,24 @@
         document.getElementById("modalSmallMessage").textContent=""
         inputModalContent = document.getElementById("modalInput").value;
         document.getElementById("modalInput").value="";
+        var auth = "{{request.user.is_authenticated}}"      
 
         switch (type) {
-          case BOARD:
-            saveNewBoard();
+          case BOARD:            
+            if(auth === "True"){
+              saveNewBoard();
+            }else{
+              _saveNewBoard();
+            }
             break;
 
           case ITEM:
-            saveNewItem();
+            if(auth === "True"){
+              saveNewItem();
+            }else{
+              _saveNewItem();
+            }
+            
             break;
 
           case PROJECT:
@@ -85,7 +100,7 @@
             break;
           
           case EDIT_ITEM:
-            saveEditedItem();
+            saveEditedItem();            
             break;
 
           case EDIT_BOARD:
@@ -117,9 +132,39 @@
           alert("Can't be empty");
           return          
         }
+        
+        /* creating into the database */
+        var newBoard = createNewBoard(newBoardName);
+        newBoard.then(function(response) { // resolving the promise
+                 
+          
+          /* get container parent */
+          const boardParent = document.getElementById("parent-container");
 
+          loadBoardsOnHTML(response.board, boardParent)
+          
+          fetchProjects().then(resp=>{
+            saveProjectsInSession(JSON.stringify(resp.projects))
+          })          
+
+        }).catch(function(error) {
+          console.log(error);
+        });
+      }
+      
+      /* Board */ 
+      function _saveNewBoard(){
+        const newBoardName = inputModalContent // using the content from the modal
+        if(""=== newBoardName){
+          alert("Can't be empty");
+          return          
+        }
+        
+                 
+          
         /* get container parent */
         const boardParent = document.getElementById("parent-container");
+
         boardParent.getElementsByClassName("list-items-board-child")[0].textContent = ""; // cleaning the items
 
         /* Clone board element */
@@ -127,12 +172,10 @@
         const boardClone = element.cloneNode(true);
 
         /* define element title */ 
-        boardClone.getElementsByClassName("title-list-board-container")[0].querySelector("span").textContent = newBoardName  // the box with title, items and plus button, then setting an specific span inside 
-        
+        boardClone.getElementsByClassName("title-list-board-container")[0].querySelector("span").textContent = newBoardName // the box with title, items and plus button, then setting an specific span inside 
   
 
         /* define as a sortable */ 
-        // Sortable.create(boardClone.getElementsByClassName("list-items-board")[0], { 
         Sortable.create(boardClone.getElementsByClassName("list-items-board-child")[0], {  // box just with the items
           animation: 150,
           group: 'shared-items',
@@ -142,12 +185,12 @@
 
         
         /* generating id for dropdown*/
-        boardClone.getElementsByClassName('dropdown')[0].id = (Math.random() + 1).toString(36).substring(7)
+        boardClone.getElementsByClassName('dropdown')[0].id = 'first'+(Math.random() + 1).toString(36).substring(7)
 
 
         boardClone.style.display = 'block';
         boardParent.append(boardClone);
-
+                   
       }
 
       /* Board */
@@ -158,6 +201,16 @@
 
         context = board;
         type = EDIT_BOARD;
+
+        var val = getItemsPositionOnCanvas(
+          board // 
+          .parentElement // .item-board                
+          .parentElement // .list-items-board-child
+          .parentElement // .list-items-board 
+          .parentElement // .list-board-container
+          
+          );
+        console.log(val)
       }
 
       /* Board */
@@ -168,12 +221,28 @@
           return          
         }
 
+        var key =  context.parentElement.parentElement.parentElement.getAttribute("key")
+        if(key){
+          var boardId = key.replace("board","");
+          updateBoardNameRequest(editedBoardName, boardId).then(resp=>{
+            
+            //console.log('Alterado');
+
+          }).catch(err=>{
+            console.log(err);
+          })
+        }
+
+
         context.parentElement.parentElement.parentElement.querySelector("span").textContent = editedBoardName
+
       }
 
       /* Board */
       function deleteBoard(board){
-        board.parentElement.parentElement.parentElement.parentElement.remove()      
+        board.parentElement.parentElement.parentElement.parentElement.remove()  
+        var idBoard = board.parentElement.parentElement.parentElement.getAttribute("key").replace("board","")      
+        deleteBoardRequest(idBoard)    
       }
 
       /* item */
@@ -187,7 +256,39 @@
       }
 
       /* item */
-      function saveNewItem(){        
+      function _saveNewItem(){
+          /**
+           * Save item with a unauthenticate user
+           */        
+          const newBoardItemName = inputModalContent // using the content from the modal
+          
+          if(""=== newBoardItemName){
+            alert("Can't be empty");
+            return          
+          }
+
+          /* get item parent */
+          const boardParent = context.parentElement.getElementsByClassName("list-items-board-child")[0]        
+          
+          /* Clone item element */      
+          const element = document.getElementsByClassName('simple-item-box')[0];
+          const itemClone = element.cloneNode(true);
+
+          /* define element title */ 
+          itemClone.getElementsByClassName('simple-item')[0].textContent = newBoardItemName; 
+          itemClone.style.display="flex";
+          
+
+          itemClone.getElementsByClassName('dropdown')[0].id = 'drpdwn'+ newBoardItemName.split(' ').join(''); // set a new id for a child, with that the related function can find it
+          boardParent.append(itemClone);
+        
+      }
+      
+      /* item */
+      function saveNewItem(){
+        /**
+         * Save item with a authenticade user
+         */        
         const newBoardItemName = inputModalContent // using the content from the modal
         
         if(""=== newBoardItemName){
@@ -195,40 +296,92 @@
           return          
         }
 
-        /* get item parent */
-        const projectParent = context.parentElement.getElementsByClassName("list-items-board-child")[0]         
+        // getting the board id from html
+        var boardId = context.parentElement.parentElement.getElementsByClassName('title-list-board-container')[0].getAttribute("key").replace("board","")
 
-        /* Clone item element */      
-        // const element = document.getElementsByClassName('simple-item')[0]; 1
-        const element = document.getElementsByClassName('simple-item-box')[0];
-        const itemClone = element.cloneNode(true);
-
-        /* define element title */ 
-        // itemClone.textContent = newBoardItemName; 1
-        itemClone.getElementsByClassName('simple-item')[0].textContent = newBoardItemName; 
-        itemClone.style.display="flex";
-
-        itemClone.getElementsByClassName('dropdown')[0].id = newBoardItemName.split(' ').join(''); // set a new id for a child, with that the related function can find it
+        /* creating into the database */
+        var newItem = createNewItem(boardId, newBoardItemName);
         
-        projectParent.append(itemClone);
-      
+        newItem.then(function(response) {
+
+          /* get item parent */
+          const boardParent = document.querySelector(`[key="board${response.item.board}"]`).parentElement.getElementsByClassName("list-items-board-child")[0]        
+          
+          /* Clone item element */      
+          const element = document.getElementsByClassName('simple-item-box')[0];
+          const itemClone = element.cloneNode(true);
+
+          /* define element title */ 
+          itemClone.getElementsByClassName('simple-item')[0].textContent = newBoardItemName; 
+          itemClone.style.display="flex";
+          itemClone.setAttribute("key", response.item.id)
+
+          itemClone.getElementsByClassName('dropdown')[0].id = 'drpdwn'+ newBoardItemName.split(' ').join(''); // set a new id for a child, with that the related function can find it
+          boardParent.append(itemClone);
+
+          fetchProjects().then(resp=>{
+            saveProjectsInSession(JSON.stringify(resp.projects))
+          })   
+
+        }).catch(function(error) {
+          console.log(error);
+        });
+
       }
-      
+
 
       /* item */
       function deleteItem(element){
         var id = element.parentElement.parentElement.id;
         var item = document.querySelector("#" + id);
         item.parentElement.remove();
-      }
 
+        var auth = "{{request.user.is_authenticated}}"
+        if(auth === "True"){
+          deleteItemRequest(item.parentElement.getAttribute("key"));
+        }
+        
+      }
 
       /* item */
       function openEditItem(item){
-        document.getElementById("exampleModalLabel").textContent="Edit item"             
-        document.getElementById("modalSmallMessage").textContent="Change the item's name"
-        openModal();
+        document.getElementById("exampleModalLabelItem").textContent="Edit item"             
+        document.getElementById("modalSmallMessage2").textContent="Change the item's name"
+        
+        var auth = "{{request.user.is_authenticated}}"    
 
+        if(auth == "True"){
+
+          $('#modalItem').modal('show');
+          // get item id
+          var itemId = item.parentElement.parentElement.parentElement.getAttribute("key")
+                    
+          // load item data
+          getItem(itemId).then(resp=>{
+            
+            //set modal input title
+            document.getElementById("modalInputItem").value = resp.item.name;
+  
+            // set modal input description
+            if(resp.item.description !== 'null'){              
+              document.getElementById("modalDescInputItem").value = resp.item.description;
+            }
+
+            // set modal input color     
+            if(resp.item.color !== 'null'){                          
+              $(document).ready(function() {
+                $('#selectColor').val(resp.item.color).prop('selected', true);
+              });
+            }
+            
+          })          
+                  
+          
+        }else{
+          openModal();
+        }
+
+        
         context = item;
         type = EDIT_ITEM;
       }
@@ -236,13 +389,46 @@
       /* item */
       function saveEditedItem(){
         const editedItemName = inputModalContent
-        if(""=== editedItemName){
-          alert("Can't be empty");
-          return          
+        var auth = "{{request.user.is_authenticated}}"
+        
+        if(auth === "False"){
+        
+          if(""=== editedItemName){
+            alert("Can't be empty");
+            return          
+          }
+          context.parentElement.parentElement.parentElement.getElementsByClassName('simple-item')[0].textContent = editedItemName
+
+        } else {
+          // get value from input text modalInputItem
+          var newName = document.getElementById("modalInputItem").value;
+
+          if(!newName){
+            alert("Can't be empty");
+            return
+          }
+
+          // get the description
+          var newDesc = document.getElementById("modalDescInputItem").value;
+
+          // get the color
+          let selectedColor = $('#selectColor').find(":selected").val();
+
+          var itemId = context.parentElement.parentElement.parentElement.getAttribute("key");
+          // change the color 
+          context.parentElement.parentElement.parentElement.style.borderBottom  = "3px solid "+ selectedColor;
+
+          updateItemRequest(itemId, {name: newName, description: newDesc, color: selectedColor }).then(resp=>{
+            // pass context to this scope
+            
+            $('#modalItem').modal('hide');            
+
+          })
+          context.parentElement.parentElement.parentElement.getElementsByClassName('simple-item')[0].textContent = newName;                      
         }
 
-        context.parentElement.parentElement.parentElement.getElementsByClassName('simple-item')[0].textContent=editedItemName
-      }
+        
+      }        
 
 
       /* project */
@@ -284,14 +470,33 @@
               filter: ".list-board-plus", // bypass the plus button                                   
         }); 
 
-        /* define element title */ 
-        //elementClone.textContent = newProjectName;                
+        /* define element title */         
+        document.getElementById("selectedProjectTitle").textContent = newProjectName
+
+                    
         projectParent.append(elementClone);
+        createNewProject(newProjectName);                
         closeNav();
       }
 
-
       
+      /* project */
+      function deleteProject(element){
+        if(!confirm("Delete project? ")){
+          return
+        }
+
+        var projectId = element.parentElement.getAttribute("key");
+        deleteProjectRequest(projectId).then(resp=>{
+          element.parentElement.remove();
+          loadFirstProjectFromSession();   
+        }).catch(function(error) {
+          console.log(error);
+        });
+
+        
+      }
+
     </script>
     
   </head>
@@ -314,7 +519,35 @@
         
       {% endif %}
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-      <a href="#" onclick="openNewProjectCreation()">Create Project</a>
+
+      <div id="createProjectEndpoint" data-endpoint="{% url 'create-project' %}"></div>
+      <div id="getProjectsEndpoint" data-endpoint="{% url 'get-projects' %}"></div>
+
+      <div id="userDashboard" data-endpoint="{% url 'user-dashboard' %}"></div>
+            
+
+
+      <div id="csrfToken" data-token="{{csrf_token}}"></div>
+      <div id="userId" data-user="{{user.id}}"></div>
+        
+      <a href="#" onclick="openNewProjectCreation()" style="border-bottom: 1px solid;">Create Project</a>
+        <div id="projectsListContainer">
+        <!-- <a  href="#">Macaco</a> -->
+          {% for project in projects %}
+          <div style="display: flex; justify-content: space-between;"  key="{{project.id}}">
+            <a  href="#" key="{{project.id}}" onclick="selectProject(this)">{{ project.name }}</a>
+            
+            <div style="color: white; width: 30px; margin-right: 10px; cursor: pointer;"
+            class=" d-flex justify-content-center align-items-center" onclick="deleteProject(this)">
+              {% include 'icons/delete_icon.html' %}
+            </div>
+          </div>
+          {% empty %}
+              <!-- ------------- test user without project -->
+              
+          {% endfor %}
+        </div>
+
     </div>
 
     <!-- Modal -->
@@ -339,6 +572,7 @@
       </div>
     </div>
 
+    {% include 'dashboard/modal_item.html' %}
  
 
 
@@ -362,6 +596,7 @@
     
     
     <script src="{% static 'js/dropdown.js' %}"></script> 
+
     
 
     <!-- references
@@ -372,7 +607,7 @@
 
     <script >
     
-      // var listBoardContainer = document.getElementsByClassName('dashboard-container');  // getting THE list container
+      //var listBoardContainer = document.getElementsByClassName('dashboard-container');  // getting THE list container
       var listBoardContainer = document.getElementsByClassName('dashboard-container')[0].firstElementChild;  // getting THE list container
       const sortContainer = Sortable.create(listBoardContainer, { 
             animation: 150,
@@ -385,12 +620,12 @@
       // var listItemsBoard = document.getElementsByClassName('list-items-board');    // getting the items list container
       var listItemsBoard = document.getElementsByClassName("list-items-board-child");    // getting the items list container - for plus
       
-    // defining all items lodaded as draggable 
+      // defining all items lodaded as draggable 
       for (let index = 0; index < listItemsBoard.length; index++) {
         Sortable.create(listItemsBoard[index], { 
           animation: 150,
           group: 'shared-items',
-          ghostClass: 'hidden-placeholder',
+          // ghostClass: 'hidden-placeholder',
           filter: ".plus-item-board",
           
         });

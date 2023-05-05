@@ -1,12 +1,16 @@
-<div class="list-board-container">
-    <div class="title-list-board-container d-flex align-items-center justify-content-center">
+{% if hidden %}
+<div class="list-board-container" style="display: none;">
+    {% else %}
+<div class="list-board-container" >
+{% endif %}
+    <div class="title-list-board-container d-flex align-items-center justify-content-center" >
         <div class="col-sm-2">                    
         </div>
         
         <span class="col-sm-8 d-flex align-items-center justify-content-center">{{boardTitle}}</span>
         
         <!-- the ids need to be generated random, because wont be accessible to the function if more than one exists  -->
-        <div class="col-sm-1 dropdown col-sm-2" id="{{id}}" onclick="toggleDropdown(this.id)">
+        <div class="col-sm-1 dropdown col-sm-2" id="dropdown-{{id}}" onclick="toggleDropdown(this.id)">
             <button class="btn btn-box  align-items-center" style="color: whitesmoke;">
                 {% include 'icons/config_icon.html' %}
             </button>
@@ -28,13 +32,12 @@
     </div>
     
     <div class="list-items-board flex-row align-items-center justify-content-center">
-        <div class="list-items-board-child">
-            <!-- simple item of an board -->
+        <div class="list-items-board-child">            
             
-            {% include 'dashboard/item.html' with id=id|add:id text='Crack it, Copy it, Paste it' %}
+            {% include 'dashboard/item.html' with id=id|add:id text='00' hidden='true' %}
             
         </div>
-
-        <div class="item-board text-center plus-item-board" onclick="openNewItemCreation(this)">+</div>
+        
+        <div class="item-board text-center plus-item-board" style="cursor: pointer;" onclick="openNewItemCreation(this)">+</div>
     </div>
 </div>

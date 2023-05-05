@@ -11,26 +11,7 @@
         <div id="parent-container" class="row align-items-start justify-content-start" >
             
             <!-- board model -->
-            {% include 'dashboard/board.html' with boardTitle='random' id='random' %}
-            <!-- <div class="list-board-container" style="display: none"> 
-                <div class="title-list-board-container d-flex align-items-center justify-content-center" >
-                    <div class="col-sm-2">
-                        
-                    </div>
-                    <span class="col-sm-8 d-flex align-items-center justify-content-center">To Do</span>
-                    <div class="col-sm-1">
-                        {/*% include 'icons/delete_icon.html' %*/}
-                    </div>
-                </div>
-                
-                <div class="list-items-board flex-row align-items-center justify-content-center">
-                    <div class="list-items-board-child">
-                        {/*% include 'dashboard/item.html' with id='random' text='random' %*/}
-                    </div>
-                    <div class="item-board text-center plus-item-board" onclick="openNewItemCreation(this)">+</div>
-                </div>
-            </div> -->
-            
+            {% include 'dashboard/board.html' with boardTitle='random' id='random' hidden='true' %}            
 
             <!-- board element  -->
             <div class="list-board-container">
@@ -39,17 +20,32 @@
                         
                     </div>
                     <span class="col-sm-8 d-flex align-items-center justify-content-center">To Do</span>
-                    <div class="col-sm-1">
-                        {% include 'icons/delete_icon.html' %}
+                    <div class="col-sm-1 dropdown col-sm-2" id="dropdown-{{id}}" onclick="toggleDropdown(this.id)">
+                        <button class="btn btn-box  align-items-center" style="color: whitesmoke;">
+                            {% include 'icons/config_icon.html' %}
+                        </button>
+                        <div class="dropdown-content">
+                            <a href="#" onclick="openEditBoard(this)">
+                                <div class="col-sm-2 d-flex align-items-center item-board-delete-button">
+                                    {% include 'icons/edit_icon.html' %}
+                                </div>
+                            </a>
+                            <a href="#" onclick="deleteBoard(this)">
+                                <div class="col-sm-2 d-flex align-items-center item-board-delete-button">
+                                    {% include 'icons/delete_icon.html' %}
+                                </div>
+                            </a>
+                
+                        </div>
                     </div>
                 </div>
                 
                 <div class="list-items-board flex-row align-items-center justify-content-center">
                     <div class="list-items-board-child">
 
-                        {% include 'dashboard/item.html' with id='menu1' text='Build' %}
+                        {% include 'dashboard/item.html' with id='menu1' text='Task nº 1' %}
                         
-                        {% include 'dashboard/item.html' with id='menu2' text='Burn it, fix it, trash it' %}
+                        {% include 'dashboard/item.html' with id='menu2' text='Task nº 2' %}
                         
                                                                                                                            
 
@@ -65,29 +61,10 @@
             {% include 'dashboard/board.html' with boardTitle='Doing' id='bor2' %}
 
 
-            <!-- <div class="list-board-container">
-                <div class="title-list-board-container d-flex align-items-center justify-content-center">
-                    <span>Done</span>
-                </div>
-                
-                <div class="list-items-board flex-row align-items-center justify-content-center">
-                    <div class="list-items-board-child">
-                          simple item of an board  
-                        
-                        {/*% include 'dashboard/item.html' with id='menu3' text='Crack it, Copy it, Paste it' %*/}
-                        
-                        
-                    </div>
-
-                    <div class="item-board text-center plus-item-board" onclick="openNewItemCreation(this)">+</div>
-                </div>
-            </div> -->
-
             <!-- board element  -->
             
             {% include 'dashboard/board.html' with boardTitle='Done' id='bor3' %}
-            
-
+        
                       
             
             <div class="list-board-plus" onclick="openNewBoarCreation()">
