@@ -2,58 +2,28 @@
 
 {% block content %}
 <div>
-    <div class="container-title-user-dashboard">
-        <span class="span-title-user-dashboard">Example project</span>
+    
+    <div id="createBoardEndpoint" data-endpoint="{% url 'create-board' %}"></div>
+    <div id="deleteBoardEndpoint" data-endpoint="{% url 'delete-board' 0 %}"></div>
+    <div id="updateBoardEndpoint" data-endpoint="{% url 'update-board' %}"></div>
+    <div id="updateBoardsEndpoint" data-endpoint="{% url 'update-boards' %}"></div>
+    
+    
+    <div id="getItemEndpoint" data-endpoint="{% url 'get-item' 0 %}"></div>
+    <div id="createItemEndpoint" data-endpoint="{% url 'create-item' %}"></div>
+    <div id="deleteItemEndpoint" data-endpoint="{% url 'delete-item' 0 %}"></div>
+    <div id="updateItemEndpoint" data-endpoint="{% url 'update-item' %}"></div>
+    <div id="updateItemsEndpoint" data-endpoint="{% url 'update-items' %}"></div>
+    
+    <div id="deleteProjectEndpoint" data-endpoint="{% url 'delete-project' 0 %}"></div>
+
+    <div class="container-title-user-dashboard">        
+        <span class="span-title-user-dashboard" id="selectedProjectTitle">{{project.name}}</span>
     </div>
     <div class="dashboard-container  align-items-start justify-content-start">
-               
+        {% include 'dashboard/board.html' with boardTitle='random' id='modelBase'  hidden='true' %}   
         <div id="parent-container" class="row align-items-start justify-content-start" >
-            
-            <!-- board model -->
-            <div class="list-board-container" style="display: none"> 
-                <div class="title-list-board-container d-flex align-items-center justify-content-center" >
-                    <span></span>
-                </div>
-                
-                <div class="list-items-board flex-row align-items-center justify-content-center">
-                    <div class="list-items-board-child">
-                    </div>
-                    <div class="item-board text-center plus-item-board" onclick="openNewItemCreation(this)">+</div>
-                </div>
-            </div>
-
-            <div class="list-board-container">
-                <div class="title-list-board-container d-flex align-items-center justify-content-center">
-                    <span>To Do</span>
-                </div>
-                
-                <div class="list-items-board flex-row align-items-center justify-content-center">
-                    <div class="list-items-board-child">
-                        <div class="item-board simple-item d-flex align-items-center">Build</div>
-                        <div class="item-board simple-item d-flex align-items-center">Build format it copy delete burn paste</div>
-                        
-                    </div>
-
-                    <div class="item-board text-center plus-item-board" onclick="openNewItemCreation(this)">+</div>
-                </div>
-            </div>
-
-            <div class="list-board-container">
-                <div class="title-list-board-container d-flex align-items-center justify-content-center">
-                    <span>Done</span>
-                </div>
-                
-                <div class="list-items-board flex-row align-items-center justify-content-center">
-                    <div class="list-items-board-child">
-                        <div class="item-board simple-item d-flex align-items-center">Testing</div>
-                        
-                    </div>
-
-                    <div class="item-board text-center plus-item-board" onclick="openNewItemCreation(this)">+</div>
-                </div>
-            </div>
- 
-                      
+                              
             
             <div class="list-board-plus" onclick="openNewBoarCreation()">
                 <div class="d-flex align-items-center justify-content-center">
@@ -92,8 +62,27 @@
             </div>
 
         </div>
+        <script>
+            function isObjEmpty (obj) {
+                return Object.keys(obj).length === 0;
+            }
+            saveProjectsInSession("{{projects|safe}}")
+            // load projec if in session                        
+            if(sessionStorage.getItem("selectedProject")){ 
+                var sessionProject = sessionStorage.getItem("selectedProject");
+
+                if(!isObjEmpty(sessionProject)){                
+                    selectProject(sessionProject, attribute=false);
+                }
+                
+            }else if(sessionStorage.getItem('projects')){
+                var projs = JSON.parse(sessionStorage.getItem('projects'))                
+                selectProject(projs[0], attribute=false)
+            }
+
+                                            
+        </script>
 
     </div>
-    
 </div>
 {% endblock content %}

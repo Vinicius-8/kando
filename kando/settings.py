@@ -9,8 +9,13 @@ https://docs.djangoproject.com/en/4.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
-
 from pathlib import Path
+
+import os
+from dotenv import load_dotenv
+import dj_database_url
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,10 +25,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-6#-f4^(#u$9+h+c-2^c29cm(-j9_j!4llq@-(qom)vvwq7_lph"
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG')
 
 ALLOWED_HOSTS = []
 
@@ -38,7 +43,8 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "dashboard",
-    "user"
+    "user",
+    "board"
 ]
 
 AUTH_USER_MODEL = 'user.User'  # to use the user class
@@ -79,12 +85,37 @@ WSGI_APPLICATION = "kando.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
+
+# config 2 types of DB, one for debug and the other for production
+DEBUG_DB = {
+    'ENGINE': 'django.db.backends.sqlite3',
+    'NAME': BASE_DIR / 'db.sqlite3',
 }
+
+PRODUCTION_DB = {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),    
+}
+
+
+
+
+# set the correct DB acording to the debug env var
+if os.getenv('DEBUG'):
+    DATABASES = {
+        'default': DEBUG_DB
+    }
+else:
+    # DATABASES = {
+    #     'default': PRODUCTION_DB
+    # }
+    DATABASES = {
+        'default': dj_database_url.config(default=os.getenv('DATABASE_URL')),
+    }
 
 
 # Password validation
@@ -126,8 +157,12 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-
+# developing gitpod
 CSRF_TRUSTED_ORIGINS=[
     'https://8000-vinicius8-kando-c34a0b7kzva.ws-us92.gitpod.io',
     'https://8000-vinicius8-kando-42wp3jkwfvn.ws-us93.gitpod.io',
-    'http://127.0.0.0:8000']
+    'https://8000-vinicius8-kando-ya1qj27zt9g.ws-us93.gitpod.io',
+    'https://8000-vinicius8-kando-ya1qj27zt9g.ws-us94.gitpod.io',
+    'https://8000-vinicius8-kando-ya1qj27zt9g.ws-us95.gitpod.io',
+    'https://8000-vinicius8-kando-ya1qj27zt9g.ws-us96b.gitpod.io',
+    'https://8000-vinicius8-kando-ya1qj27zt9g.ws-us96.gitpod.io']

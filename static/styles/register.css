@@ -32,3 +32,34 @@
 .register-title{
     font-size: 20pt;
 }
+
+.login-container-parent{
+    border: 1px solid #000000;
+    /* box shadow */
+    /* box-shadow: 1px 1px 10px 2px #000000; */
+}
+
+.login-container{
+    background-color:    rgb(70, 82, 71);
+    border-radius: 10px;
+    color: whitesmoke;
+    /* border width with colors and 2px*/
+
+    
+}
+.login-container input{
+    background-color:    rgb(139, 160, 140);
+    /* remove border from input */
+    border: none;
+
+    
+
+}
+.login-container input:focus{
+    background-color: rgb(139, 160, 140);
+    color: whitesmoke;
+}
+
+.footer-text{
+    color: whitesmoke;
+}

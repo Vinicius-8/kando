@@ -1,17 +1,40 @@
-body{
-    background-color: black;
+@font-face {
+    font-family: "Neon Tubes";
+    src: url("/static/fonts/NeonTubes2.otf");
 }
 
+
+
 .header-container{
-    background-color: #dfdfdf;
+    /* background-color: #dfdfdf; */
     height: 70px;
     color: rgb(0, 0, 0);
     position: fixed;
     z-index: 1;
     top: 0;
     left: 0;
-    width: 101%;
+    width: 101%;    
+
+    background-color: rgb(43, 43, 43);
+
+    /* Define a cor do texto com a fonte personalizada */
+    color: #fff;
+    font-family: "Neon Tubes", sans-serif;
+    /* Adiciona uma sombra para criar o efeito de néon */
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #00ff00, 0 0 70px #00ff00, 0 0 80px #00ff00, 0 0 100px #00ff00, 0 0 150px #00ff00;
+
+
+    /* Define o tamanho e o espaçamento do texto */
+    
+    letter-spacing: 0.1rem;
+    line-height: 1.2;
+
+    transition: background-color 0.3s ease-in-out;
+    overflow: hidden;
 }
+
+
+
 
 #sidenav{
     z-index: 2;
@@ -41,36 +64,44 @@ body{
     height: 40px;
 }
 
-
-.menu-button-container{
-    background-color: #dfdfdf;
+.title-div h2:hover{
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #00ff00, 0 0 35px #00ff00, 0 0 50px #00ff00, 0 0 60px #00ff00, 0 0 75px #00ff00;
 }
+
+
+/* .menu-button-container{
+     background-color: #dfdfdf; 
+} */
 
 
 .menu-button{
     width: 100px;
     height: 70px;
-    background-color: #dfdfdf;
+    /* background-color: #dfdfdf; */
+    transition: background-color 0.3s ease-in-out;
     
 }
 
 .menu-button:hover{
     width: 100px;
     height: 70px;
-    background-color: #c5c5c5;
+    /* background-color: #c5c5c5; */
+    background-color: rgb(56, 56, 56);
     cursor: pointer;
 }
 
 .header-login-button-container{
     height: 70px;
     width: 120px; 
-    background-color: #dfdfdf; 
+    /* background-color: #dfdfdf;  */
 }
 
 .header-login-button-container:hover{
     height: 70px;
-    background-color: #c5c5c5;
+    /* background-color: #c5c5c5; */
     cursor: pointer;
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #00ff00, 0 0 35px #00ff00, 0 0 50px #00ff00, 0 0 60px #00ff00, 0 0 75px #00ff00;
+
 }
 
 .header-login-button-container span{
