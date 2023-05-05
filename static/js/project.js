@@ -105,9 +105,6 @@ function appendNewProjectToHTML(project){
     aElement.textContent = project.name;
     projectsList.append(newElement)
 
-
-
-
 }
 
 function appendNewProjectToProjectsInSession(project){    
@@ -178,6 +175,12 @@ function loadProjectFromSession(idProject){
 }
 
 function loadFirstProjectFromSession(){
+    /**
+     * Loads the first project from the list of projects in the session
+     * 
+     * @param {none}
+     * @returns {none}
+     */    
     
     projectsList = JSON.parse(sessionStorage.getItem("projects"))
     selectProject(projectsList[0], attribute=false);

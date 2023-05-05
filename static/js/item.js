@@ -25,7 +25,7 @@ function createNewItem(boardId, itemName){
             }                  
       });
     
-  }
+}
 
 
 function deleteItemRequest(itemId){
@@ -75,6 +75,9 @@ function loadItemsOnBoard(item, container){
   itemClone.getElementsByClassName('simple-item')[0].textContent = item.name; 
   itemClone.style.display="flex";
   itemClone.setAttribute("key", item.id);
+
+  const desc = item.description !== 'null'  ?  item.description  : " "
+  itemClone.setAttribute("title", item.name + "\n" + desc);
 
   if(item.color !== "null"){
     itemClone.style.borderBottom  = "3px solid "+item.color;

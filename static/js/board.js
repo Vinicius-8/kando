@@ -60,12 +60,25 @@ function createNewBoard(boardName){
   });
 }
 
+// // test the function createNewBoard with Jest
+
+// test('createNewBoard', async () => {
+//   const board = await createNewBoard('test');
+//   expect(board.name).toBe('test');
+// }
+
+
+
+
+
+
 function loadBoardsOnHTML(board, container){    
   /**
    * Uses a project canva to render a single board. Creates all the elements and append to the parent project
    * 
    * @param {board} A board object 
    * @param {container} the parent element to the boards be rendered in
+   * @returns {none}
    */
   
   

@@ -403,6 +403,11 @@
           // get value from input text modalInputItem
           var newName = document.getElementById("modalInputItem").value;
 
+          if(!newName){
+            alert("Can't be empty");
+            return
+          }
+
           // get the description
           var newDesc = document.getElementById("modalDescInputItem").value;
 
