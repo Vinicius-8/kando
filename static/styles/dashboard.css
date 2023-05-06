@@ -159,3 +159,9 @@ body{
     color: whitesmoke;
     font-size: 20pt;
 }
+
+
+.in-bound-text {
+    white-space: nowrap; 
+    overflow: hidden;
+}

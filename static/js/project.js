@@ -40,8 +40,10 @@ function createNewProject(projectName){
           const data = JSON.parse(request.response);             
           // function that appends the new project to the list of projecs in the navbar 
           appendNewProjectToHTML(data.project);
-          appendNewProjectToProjectsInSession(data.project);
+
           //append the project to the list of projects in session
+          appendNewProjectToProjectsInSession(data.project);                      
+          selectProject(data.project, attribute=false)
         
         } else {
           console.log(`Error: ${request.status}`);

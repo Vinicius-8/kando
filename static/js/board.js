@@ -89,7 +89,8 @@ function loadBoardsOnHTML(board, container){
  Sortable.create(boardClone.getElementsByClassName("list-items-board-child")[0], {  // box just with the items
       animation: 150,
       group: 'shared-items',
-      // ghostClass: 'hidden-placeholder',               
+      // ghostClass: 'hidden-placeholder',       
+      filter: ".dropdown",        
       onEnd: function(evt){
         onChangeItem(evt, ".item-board","item")
       } // function tha handles if the item is switched between list or the order changes
@@ -99,6 +100,7 @@ function loadBoardsOnHTML(board, container){
  
   /* generating id for dropdown*/
   boardClone.getElementsByClassName('dropdown')[0].id = 'drpdwn'+(Math.random() + 1).toString(36).substring(7)
+  // boardClone.getElementsByClassName('dropdown')[0].id = 'drpdwn'+board.name.split(' ').join('');
 
 
   boardClone.style.display = 'block';
