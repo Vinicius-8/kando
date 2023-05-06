@@ -27,7 +27,7 @@ function createNewProject(projectName){
 
     const data = new FormData();
     data.append('id', userId);
-    data.append('projectName', projectName);
+    data.append('projectName', projectName.replace(/[\n\t\r]/g, ''));
     data.append('csrfmiddlewaretoken', csrfToken);
     data.append('action', 'POST');
 
@@ -169,7 +169,8 @@ function loadProjectFromSession(idProject){
      * @param {idProject} id of an specifc project
      * @returns {object} returns an project object
      */    
-    var projects = JSON.parse(sessionStorage.getItem("projects"))    
+    
+    var projects = JSON.parse(sessionStorage.getItem("projects").replace(/[\n\t\r]/g, ''))    
     var project =  projects.find(proj => proj.id === parseInt(idProject));
     return project;
 }
@@ -182,7 +183,7 @@ function loadFirstProjectFromSession(){
      * @returns {none}
      */    
     
-    projectsList = JSON.parse(sessionStorage.getItem("projects"))
+    projectsList = JSON.parse(sessionStorage.getItem("projects").replace(/[\n\t\r]/g, ''))
     selectProject(projectsList[0], attribute=false);
 }
 
@@ -225,7 +226,7 @@ function saveProjectsInSession(projects){
     
     var replacedProjects = projects.replace(/'/g, "\"");
     // parsed_projects = JSON.parse(replacedProject);
-    sessionStorage.setItem("projects", replacedProjects);
+    sessionStorage.setItem("projects", replacedProjects.replace(/[\n\t\r]/g, ''));
     return JSON.stringify(replacedProjects)
 }
 

@@ -20,7 +20,7 @@ function createNewItem(boardId, itemName){
           type: "POST",
           url: endpoint,
           data: {
-            'itemName': itemName,
+            'itemName': itemName.replace(/[\n\t\r]/g, ''),
             'boardId': boardId,
             }                  
       });

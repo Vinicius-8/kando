@@ -30,7 +30,7 @@ function createNewBoard(boardName){
 
     const data = new FormData();
     data.append('projectId', project.id);
-    data.append('boardName', boardName);
+    data.append('boardName', boardName.replace(/[\n\t\r]/g, ''));
     data.append('csrfmiddlewaretoken', csrfToken);
     data.append('action', 'POST');
 
@@ -60,15 +60,6 @@ function createNewBoard(boardName){
   });
 }
 
-// // test the function createNewBoard with Jest
-
-// test('createNewBoard', async () => {
-//   const board = await createNewBoard('test');
-//   expect(board.name).toBe('test');
-// }
-
-
-
 
 
 
@@ -91,7 +82,7 @@ function loadBoardsOnHTML(board, container){
   const boardClone = element.cloneNode(true);
 
   /* define element title */ 
-  boardClone.getElementsByClassName("title-list-board-container")[0].querySelector("span").textContent = board.name  // the box with title, items and plus button, then setting an specific span inside 
+  boardClone.getElementsByClassName("title-list-board-container")[0].querySelector("span").textContent = board.name.replace(/[\n\t\r]/g, '')  // the box with title, items and plus button, then setting an specific span inside 
   boardClone.getElementsByClassName("title-list-board-container")[0].setAttribute('key', 'board' + board.id)
 
   /* define items board as a sortable */ 
