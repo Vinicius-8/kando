@@ -7,10 +7,10 @@
         <div class="col-sm-2">                    
         </div>
         
-        <span class="col-sm-8 d-flex align-items-center justify-content-center">{{boardTitle}}</span>
+        <span class="col-sm-8 d-flex align-items-center justify-content-center in-bound-text">{{boardTitle}}</span>
         
         <!-- the ids need to be generated random, because wont be accessible to the function if more than one exists  -->
-        <div class="col-sm-1 dropdown col-sm-2" id="dropdown-{{id}}" onclick="toggleDropdown(this.id)">
+        <div class="col-sm-1 dropdown col-sm-2" id="dropdown-{{id}}" onclick="toggleDropdown(this.id)" >
             <button class="btn btn-box  align-items-center" style="color: whitesmoke;">
                 {% include 'icons/config_icon.html' %}
             </button>

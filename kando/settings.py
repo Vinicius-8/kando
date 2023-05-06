@@ -86,39 +86,16 @@ WSGI_APPLICATION = "kando.wsgi.application"
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 
-# config 2 types of DB, one for debug and the other for production
-DEBUG_DB = {
-    'ENGINE': 'django.db.backends.sqlite3',
-    'NAME': BASE_DIR / 'db.sqlite3',
-}
-
-PRODUCTION_DB = {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME'),
-        'USER': os.getenv('DB_USER'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),
-        'PORT': os.getenv('DB_PORT'),    
-}
+# DATABASES = {
+#     'default':{
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 
-
-
-# set the correct DB acording to the debug env var
-#if os.getenv('DEBUG'):
-#    DATABASES = {
-#        'default': DEBUG_DB
-#    }
-#else:
-    # DATABASES = {
-    #     'default': PRODUCTION_DB
-    # }
-#    DATABASES = {
-#        'default': dj_database_url.config(default=os.getenv('DATABASE_URL')),
-#    }
-
-
-DATABASES = {
+# production database
+DATABASES = { 
 	'default': dj_database_url.config(default=os.getenv('DATABASE_URL')),
 }
 

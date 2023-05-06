@@ -30,7 +30,7 @@ function createNewBoard(boardName){
 
     const data = new FormData();
     data.append('projectId', project.id);
-    data.append('boardName', boardName);
+    data.append('boardName', boardName.replace(/[\n\t\r]/g, ''));
     data.append('csrfmiddlewaretoken', csrfToken);
     data.append('action', 'POST');
 
@@ -60,15 +60,6 @@ function createNewBoard(boardName){
   });
 }
 
-// // test the function createNewBoard with Jest
-
-// test('createNewBoard', async () => {
-//   const board = await createNewBoard('test');
-//   expect(board.name).toBe('test');
-// }
-
-
-
 
 
 
@@ -91,14 +82,15 @@ function loadBoardsOnHTML(board, container){
   const boardClone = element.cloneNode(true);
 
   /* define element title */ 
-  boardClone.getElementsByClassName("title-list-board-container")[0].querySelector("span").textContent = board.name  // the box with title, items and plus button, then setting an specific span inside 
+  boardClone.getElementsByClassName("title-list-board-container")[0].querySelector("span").textContent = board.name.replace(/[\n\t\r]/g, '')  // the box with title, items and plus button, then setting an specific span inside 
   boardClone.getElementsByClassName("title-list-board-container")[0].setAttribute('key', 'board' + board.id)
 
   /* define items board as a sortable */ 
  Sortable.create(boardClone.getElementsByClassName("list-items-board-child")[0], {  // box just with the items
       animation: 150,
       group: 'shared-items',
-      // ghostClass: 'hidden-placeholder',               
+      // ghostClass: 'hidden-placeholder',       
+      filter: ".dropdown",        
       onEnd: function(evt){
         onChangeItem(evt, ".item-board","item")
       } // function tha handles if the item is switched between list or the order changes
@@ -108,6 +100,7 @@ function loadBoardsOnHTML(board, container){
  
   /* generating id for dropdown*/
   boardClone.getElementsByClassName('dropdown')[0].id = 'drpdwn'+(Math.random() + 1).toString(36).substring(7)
+  // boardClone.getElementsByClassName('dropdown')[0].id = 'drpdwn'+board.name.split(' ').join('');
 
 
   boardClone.style.display = 'block';
