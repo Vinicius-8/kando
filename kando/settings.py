@@ -30,7 +30,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DEBUG')
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['django-kando.fly.dev']
 
 
 # Application definition
@@ -105,17 +105,25 @@ PRODUCTION_DB = {
 
 
 # set the correct DB acording to the debug env var
-if os.getenv('DEBUG'):
-    DATABASES = {
-        'default': DEBUG_DB
-    }
-else:
+#if os.getenv('DEBUG'):
+#    DATABASES = {
+#        'default': DEBUG_DB
+#    }
+#else:
     # DATABASES = {
     #     'default': PRODUCTION_DB
     # }
-    DATABASES = {
-        'default': dj_database_url.config(default=os.getenv('DATABASE_URL')),
-    }
+#    DATABASES = {
+#        'default': dj_database_url.config(default=os.getenv('DATABASE_URL')),
+#    }
+
+
+DATABASES = {
+	'default': dj_database_url.config(default=os.getenv('DATABASE_URL')),
+}
+
+
+
 
 
 # Password validation
@@ -159,10 +167,5 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 # developing gitpod
 CSRF_TRUSTED_ORIGINS=[
-    'https://8000-vinicius8-kando-c34a0b7kzva.ws-us92.gitpod.io',
-    'https://8000-vinicius8-kando-42wp3jkwfvn.ws-us93.gitpod.io',
-    'https://8000-vinicius8-kando-ya1qj27zt9g.ws-us93.gitpod.io',
-    'https://8000-vinicius8-kando-ya1qj27zt9g.ws-us94.gitpod.io',
-    'https://8000-vinicius8-kando-ya1qj27zt9g.ws-us95.gitpod.io',
-    'https://8000-vinicius8-kando-ya1qj27zt9g.ws-us96b.gitpod.io',
-    'https://8000-vinicius8-kando-ya1qj27zt9g.ws-us96.gitpod.io']
+'https://django-kando.fly.dev'
+]
