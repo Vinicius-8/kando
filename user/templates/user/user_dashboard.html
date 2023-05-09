@@ -20,6 +20,7 @@
     <div class="container-title-user-dashboard">        
         <span class="span-title-user-dashboard" id="selectedProjectTitle">{{project.name}}</span>
     </div>
+
     <div class="dashboard-container  align-items-start justify-content-start">
         {% include 'dashboard/board.html' with boardTitle='random' id='modelBase'  hidden='true' %}   
         <div id="parent-container" class="row align-items-start justify-content-start" >
@@ -66,20 +67,26 @@
             function isObjEmpty (obj) {
                 return Object.keys(obj).length === 0;
             }
-            saveProjectsInSession("{{projects|safe}}")
-            // load projec if in session                        
-            if(sessionStorage.getItem("selectedProject")){ 
-                var sessionProject = sessionStorage.getItem("selectedProject");
 
-                if(!isObjEmpty(sessionProject)){                
-                    selectProject(sessionProject, attribute=false);
-                }
+            saveProjectsFromRequest().then(()=>{
                 
-            }else if(sessionStorage.getItem('projects')){
-                var projs = JSON.parse(sessionStorage.getItem('projects'))                
-                selectProject(projs[0], attribute=false)
-            }
+                //load projec if in session
+                if(sessionStorage.getItem("selectedProject")){ 
+                    var sessionProject = sessionStorage.getItem("selectedProject");                
+                    if(!isObjEmpty(sessionProject)){                                    
+                        selectProject(sessionProject, attribute=false);
+                    }
+                    
+                }else if(sessionStorage.getItem('projects')){
 
+                    var projs = JSON.parse(sessionStorage.getItem('projects'));                 
+                    loadSelectedProject(loadProjectFromSession(projs[0].id));
+                    sessionStorage.setItem("selectedProject", JSON.stringify({id:projs[0].id, name: projs[0].name}));
+                }
+
+            }).catch(err=>{
+                console.log('Cant safe Projects from request in user_dashboard');
+            })                          
                                             
         </script>
 

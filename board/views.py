@@ -8,6 +8,7 @@ import json
 from .models import Project, User, Board, Item
 
 # project
+@login_required(login_url='/user/login')
 def create_project(request):
     """
     This view creates a kanban project
@@ -36,6 +37,7 @@ def create_project(request):
 
 
 # project
+@login_required(login_url='/user/login')
 def delete_project(request, pk):    
     """
     This view deletes a kanban project
@@ -58,17 +60,19 @@ def delete_project(request, pk):
             return HttpResponseBadRequest('Not enough data provided')
         
         project = Project.objects.get(id=str(pk))
-        
-        if not project.name.lower() == 'to do list':
-            project.delete()                        
-            # deleted_project = Project.objects.filter(pk=pk).delete()            
-            return JsonResponse({'deleted_project_id': project.id})
+
+        if project.user.id == request.user.id:
+            
+            if not project.name.lower() == 'to do list':
+                project.delete()                        
+                # deleted_project = Project.objects.filter(pk=pk).delete()            
+                return JsonResponse({'deleted_project_id': project.id})
             
     return HttpResponse('Can\'t delete project',status=501)
 
 
-
 # project
+@login_required(login_url='/user/login')
 def get_projects(request):    
     """
     Get all projects.
@@ -81,17 +85,19 @@ def get_projects(request):
         JsonResponse: A list of all projects converted to dict
             
     Example Usage:
-        To get all projects, make a POST request to '/project/projects'                
+        To get all projects, make a GET request to '/project/projects'                
 
-    """
-
-    if request.method == 'POST':
-        user_id = request.POST.get('userId')
-        if not user_id:
-            return HttpResponseBadRequest("Not enough data provided")
-            
-        user = get_object_or_404(User, pk=user_id)          
-        projects = Project.objects.filter(user=user)
+    """    
+    
+    if request.method == 'GET':
+        # user_id = request.GET.get('userId')
+        #if not user_id:
+        #    return HttpResponseBadRequest("Not enough data provided")                
+        
+        # user = get_object_or_404(User, pk=user_id)                      
+        # projects = Project.objects.filter(user=user)
+        
+        projects = Project.objects.filter(user = request.user)
 
         projects_list = []
         for project in projects:
@@ -128,6 +134,7 @@ def get_projects(request):
 
 
 # project
+@login_required(login_url='/user/login')
 def get_project(request, pk):
     """
     Get a project.
@@ -150,14 +157,14 @@ def get_project(request, pk):
         if not pk:
             return HttpResponseBadRequest("Not enough data provided")
         
-        project = get_object_or_404(Project, pk=pk)
-
+        project = get_object_or_404(Project, pk=pk)        
         return JsonResponse({'project': model_to_dict(project)})
 
     return HttpResponse('Can\'t fetch projects', status=500)
 
 
 # board
+@login_required(login_url='/user/login')
 def create_board(request):
     """
     This view creates a board inside a project
@@ -177,17 +184,22 @@ def create_board(request):
         
         project = Project.objects.get(id=request.POST.get('projectId'))
         
-        board = Board.objects.create(
-            project = project,
-            name = request.POST.get('boardName'),
-        )
+        # gets the project id
 
-        return JsonResponse({'board': model_to_dict(board)})
+        if project.user.id == request.user.id:                
+
+            board = Board.objects.create(
+                project = project,
+                name = request.POST.get('boardName'),
+            )
+
+            return JsonResponse({'board': model_to_dict(board)})
             
     return HttpResponse('Cant create project', status=500)
 
 
 # board
+@login_required(login_url='/user/login')
 def delete_board(request, pk):
     """
     This view deletes a board inside a project
@@ -209,14 +221,21 @@ def delete_board(request, pk):
         if not pk:
             return HttpResponseBadRequest("Not enough data provided")
 
-        deleted_board = Board.objects.filter(pk=pk).delete()
-        # add also the deletion of the items related
+        
+        deleted_board = Board.objects.get(id = pk)
+        project = Project.objects.get(id = deleted_board.project.id)
 
-        return JsonResponse({'delete_board_id': deleted_board})
+        if project.user.id == request.user.id:
+            board_id = deleted_board.id
+            deleted_board.delete()   
+                
+            # add also the deletion of the items related
+            return JsonResponse({'delete_board_id': board_id})
     
     return HttpResponse('Can\'t delete the board', status=405)
 
 # board
+@login_required(login_url='/user/login')
 def update_board(request):
     """
     This view updates a board inside a project
@@ -244,23 +263,32 @@ def update_board(request):
 
 
     if request.method == 'PUT':
+
         put = QueryDict(request.body)
+
         board_id = put.get('boardId')
         new_name = put.get('newName')
 
         if not board_id or not new_name:
             return HttpResponseBadRequest("Not enough data provided")
+        
+        # check if the board belongs to a project of the user
+        board = Board.objects.get( id = board_id)
+        project = Project.objects.get(id = board.project.id)
 
-        board = Board.objects.get(id=board_id)
-        board.name = new_name
-        board.save()
+        if project.user.id == request.user.id:        
+            board.name = new_name
+            board.save()
 
-        return JsonResponse({'updated_board_id': board.id})
+            return JsonResponse({'updated_board_id': board.id})
+        
+
     return HttpResponse('Can\'t update board', status=500)
 
 
 
 # item
+@login_required(login_url='/user/login')
 def create_item(request):
     """
     This view creates an item inside a board
@@ -284,17 +312,21 @@ def create_item(request):
 
     if request.method == 'POST':
         board = Board.objects.get(id=request.POST.get('boardId'))
+        project = Project.objects.get(id = board.project.id)
         
-        item = Item.objects.create(
-            board = board,
-            name = request.POST.get('itemName'),
-        )
-        return JsonResponse({'item': model_to_dict(item)})
+        if project.user.id == request.user.id:                
+            
+            item = Item.objects.create(
+                board = board,
+                name = request.POST.get('itemName'),
+            )
+            return JsonResponse({'item': model_to_dict(item)})
         
     return HttpResponse('Cant create item', status=500)
 
 
 # item
+@login_required(login_url='/user/login')
 def delete_item(request, pk):
     """
     This view deletes an item inside a board
@@ -315,14 +347,23 @@ def delete_item(request, pk):
     if request.method == 'DELETE':
         if not pk:
             return HttpResponseBadRequest('Not enough data provided')
+        
+        
 
-        deleted_item = Item.objects.filter(pk=pk).delete()
-        return JsonResponse({'deleted_item_id': deleted_item})
+        deleted_item = Item.objects.get(id=pk)
+        project = Project.objects.get(id = deleted_item.board.project.id)
+        
+        if project.user.id == request.user.id:       
+            item_id = deleted_item.id 
+            deleted_item.delete()
+
+            return JsonResponse({'deleted_item_id': item_id})
 
     return HttpResponse('Can\'t delete item', status = 500)
 
 
 # item 
+@login_required(login_url='/user/login')
 def update_item(request):
     """
     This view updates an item inside a board
@@ -361,18 +402,19 @@ def update_item(request):
             return HttpResponseBadRequest("Not enough data provided")
 
         item = Item.objects.get(id=item_id)
-        item.name = itemData['name']
-        item.description = itemData['description']
-        item.color = itemData['color']
-        item.save()
 
-        return JsonResponse({'updated_item_id': item.id})
+        if request.user.id == item.board.project.user.id:
+            item.name = itemData['name']
+            item.description = itemData['description']
+            item.color = itemData['color']
+            item.save()
+
+            return JsonResponse({'updated_item_id': item.id})
 
     return HttpResponse('Can\'t update item', status = 500)
 
-
+@login_required(login_url='/user/login')
 def get_item(request, pk):
-    # documentation
     """
     This view gets an item from a board
 
@@ -393,12 +435,14 @@ def get_item(request, pk):
             return HttpResponseBadRequest("Not enough data provided")
 
         item = Item.objects.get(id=pk)
-        return JsonResponse({'item': model_to_dict(item)})
+        
+        if request.user.id == item.board.project.user.id:
+            return JsonResponse({'item': model_to_dict(item)})
 
     return HttpResponse('Can\'t read item', status = 500)
 
 
-
+@login_required(login_url='/user/login')
 def update_items_position(request):
     """
     This view updates the position of items inside a board
@@ -453,19 +497,23 @@ def update_items_position(request):
             return HttpResponseBadRequest("Not enough data provided")
                 
         board = Board.objects.get(id = int(actual_board))
+
+        if request.user.id == board.project.user.id:
         
-        for item in items_data:            
-            item_db = Item.objects.get(id = int(item['dbKey']))
-            item_db.position = item['htmlIndex']
-            item_db.board = board
-            item_db.save()
-    
-        return JsonResponse({'updated_items': items_data})
+            for item in items_data:            
+                item_db = Item.objects.get(id = int(item['dbKey']))
+
+                if item_db.board.project.user.id == request.user.id:
+                    item_db.position = item['htmlIndex']
+                    item_db.board = board
+                    item_db.save()
+        
+            return JsonResponse({'updated_items': items_data})
 
     return HttpResponse('Can\'t update item', status = 500)
 
 
-
+@login_required(login_url='/user/login')
 def update_boards_position(request):
     """
     This view updates the position of boards inside a project
@@ -507,8 +555,6 @@ def update_boards_position(request):
 
     """
     
-    
-    
     if request.method == 'PUT':        
 
         put = json.loads(request.body)
@@ -521,13 +567,17 @@ def update_boards_position(request):
             return HttpResponseBadRequest("Not enough data provided")
                 
         project = Project.objects.get(id = int(actual_project))
+
+        if request.user.id == project.user.id:
+                
+            for board in boards_data:            
+                board_db = Board.objects.get(id = int(board['dbKey']))
+
+                if board_db.project.user.id == request.user.id:                    
+                    board_db.position = board['htmlIndex']
+                    board_db.project = project
+                    board_db.save()
         
-        for board in boards_data:            
-            board_db = Board.objects.get(id = int(board['dbKey']))
-            board_db.position = board['htmlIndex']
-            board_db.project = project
-            board_db.save()
-    
-        return JsonResponse({'updated_boards': boards_data})
+            return JsonResponse({'updated_boards': boards_data})
 
     return HttpResponse('Can\'t update item', status = 500)
