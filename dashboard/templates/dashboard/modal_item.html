@@ -5,7 +5,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabelItem">Modal title</h5>
-          <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close" onclick="$('#modalItem').modal('hide'); ">
+          <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close" onclick="closeModalItem()">
             <!-- <span aria-hidden="true">&times;</span> -->
           </button>
         </div>
@@ -30,7 +30,7 @@
         
 
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="$('#modalItem').modal('hide'); ">Close</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModalItem()">Close</button>
           <button type="button" class="btn btn-primary" onclick="saveModalContent()">Save changes</button>
         </div>
       </div>

@@ -423,13 +423,20 @@
             
             $('#modalItem').modal('hide');            
 
-          })
+          });
           context.parentElement.parentElement.parentElement.getElementsByClassName('simple-item')[0].textContent = newName;                      
         }
 
         
       }        
 
+
+      /* item */
+      function closeModalItem(){
+        // reset the color before hiding the modal
+        $('#selectColor').val('transparent').prop('selected', true);
+        $('#modalItem').modal('hide');
+      }
 
       /* project */
       function openNewProjectCreation(){
