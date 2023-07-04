@@ -80,7 +80,7 @@ function loadItemsOnBoard(item, container){
   itemClone.setAttribute("title", item.name + "\n" + desc);
 
   if(item.color !== "null"){
-    itemClone.style.borderBottom  = "3px solid "+item.color;
+    itemClone.style.borderBottom  = "3px solid " + item.color;
   }
 
 
