@@ -67,13 +67,13 @@ function fetchProjects(){
     var csrfToken = document.getElementById('csrfToken').getAttribute('data-token');
     var userId = document.getElementById('userId').getAttribute('data-user');
 
-    // sets the token
+    //sets the token
     $.ajaxSetup({
         headers: { "X-CSRFToken": csrfToken }
       });
 
     return $.ajax({
-        type: "POST",
+        type: "GET",
         url: endpoint,
         headers: {
             'csrfmiddlewaretoken': csrfToken,           
@@ -170,9 +170,8 @@ function loadProjectFromSession(idProject){
      * 
      * @param {idProject} id of an specifc project
      * @returns {object} returns an project object
-     */    
-    
-    var projects = JSON.parse(sessionStorage.getItem("projects").replace(/[\n\t\r]/g, ''))    
+     */        
+    var projects = JSON.parse(sessionStorage.getItem("projects").replace(/[\n\t\r]/g, ''))       
     var project =  projects.find(proj => proj.id === parseInt(idProject));
     return project;
 }
@@ -224,14 +223,42 @@ function saveProjectsInSession(projects){
      * 
      * @param {projects} list of projects stringified by django
      * @return {replacedProjecs} list of altered projects
-     */
+     */    
     
-    var replacedProjects = projects.replace(/'/g, "\"");
-    // parsed_projects = JSON.parse(replacedProject);
-    sessionStorage.setItem("projects", replacedProjects.replace(/[\n\t\r]/g, ''));
-    return JSON.stringify(replacedProjects)
+    if(typeof projects === 'string'){    
+        var replacedProjects = projects.replace(/'/g, "\"");
+        sessionStorage.setItem("projects", replacedProjects.replace(/[\n\t\r]/g, ''));
+        return JSON.stringify(replacedProjects);
+
+    }else{
+    
+        sessionStorage.setItem("projects", JSON.stringify(projects));
+        return JSON.stringify(projects);
+    }
+    
 }
 
+
+function saveProjectsFromRequest() {
+    /**
+     * Gets the list of projects from the server and saves it in the session,
+     * @param {none}
+     * @returns {Promise} - the promise is resolved after the projects are saved in the session
+     *
+    **/
+
+    return new Promise((resolve, reject) => {
+        fetchProjects()
+            .then(resp => {
+                saveProjectsInSession(resp.projects)
+                resolve();
+            })
+            .catch(err => {
+                console.log('Fail to saveProjectsFromRequest', err)
+                reject(err);
+            })
+    })
+}
 
 function loadSelectedProject(project){ 
     /**
