@@ -362,7 +362,7 @@
             //set modal input title
             document.getElementById("modalInputItem").value = resp.item.name;
   
-            // set modal input description
+            // set modal input description          
             if(resp.item.description !== 'null'){              
               document.getElementById("modalDescInputItem").value = resp.item.description;
             }
@@ -435,6 +435,7 @@
       function closeModalItem(){
         // reset the color before hiding the modal
         $('#selectColor').val('transparent').prop('selected', true);
+        $('#modalDescInputItem').val('');
         $('#modalItem').modal('hide');
       }
 
