@@ -1,30 +1,26 @@
-# base image
-FROM python:3.8.12-bullseye 
+# Base image
+FROM python:3.9-slim
 
-# woriking directory for the app
-WORKDIR /app 
+# Define o diretório de trabalho
+WORKDIR /app
 
-# gets the requirements from the location of the dockerfile and copies to the app dir (.)
+# Copia o arquivo de dependências para o contêiner
 COPY requirements.txt .
 
-# install the requirements
-RUN pip3 install --no-cache-dir -r requirements.txt 
+# Instala dependências do Python
+RUN pip install --no-cache-dir -r requirements.txt
 
-# gets all the files from dockerfile location and copies to the
-COPY . /app 
+# Copia todo o código para o diretório do app no contêiner
+COPY . .
 
-ENV DEBUG=False
+# Define variáveis de ambiente para produção
 ENV PYTHONUNBUFFERED=1
 
+# Coleta os arquivos estáticos para o diretório 'staticfiles'
+RUN python manage.py collectstatic --noinput
 
-# defines the type of command
-ENTRYPOINT ["python3"] 
- 
-# collect the static files
-# RUN python manage.py collectstatic --noinput 
- 
-# exposes the 8000 door 
-EXPOSE 8000 
+# Expõe a porta 8000
+EXPOSE 8000
 
-# defines the args to the entrypoint
-CMD ["manage.py", "runserver", "0.0.0.0:8000"] 
+# Comando para iniciar o Gunicorn no modo produção
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "kando.wsgi:application"]
